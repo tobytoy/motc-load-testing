@@ -247,20 +247,37 @@ with st.sidebar:
     st.markdown("### 🎯 測試目標 API")
 
     BASE_URL = cfg["tdx"]["base_url"]
-    default_city = cfg["tdx"].get("default_city", "Taipei")
+    default_city_cfg = cfg["tdx"].get("default_city", "Tainan")
     tra_origin   = cfg["tdx"].get("default_tra_origin", "0900")
     tra_dest     = cfg["tdx"].get("default_tra_dest",   "1000")
+
+    # 選擇縣市（提醒：公車 v3 API 目前 OAS 規範限定為 Tainan）
+    city_options = ["Tainan", "Taipei", "Taichung", "NewTaipei", "Kaohsiung", "HualienCounty"]
+    selected_city = st.selectbox(
+        "選擇測試縣市 ({City})",
+        options=city_options,
+        index=0,
+        help="💡 備註：公車 v3 API 依 OAS 規範限定只能使用 Tainan",
+        key="city_select"
+    )
 
     # 從 config.yaml 建立端點選項
     def _resolve_path(raw_path: str) -> str:
         """展開路徑中的 {City}、{OriginStationID}、{DestinationStationID} 佔位符"""
         return (
             raw_path
-            .replace("{City}", default_city)
+            .replace("{City}", selected_city)
             .replace("{OriginStationID}", tra_origin)
             .replace("{DestinationStationID}", tra_dest)
             .replace("{RouteName}", "0")  # 預設路線名
             .replace("{StationID}", tra_origin)
+            .replace("{AirportIATA}", "TPE")
+            .replace("{CCTVID}", "N1-N-00020-M")
+            .replace("{CMSID}", "N1-N-00020-M")
+            .replace("{VDID}", "N1-N-00020-M")
+            .replace("{ETagGantryID}", "01F0009N")
+            .replace("{ETagPairID}", "01F0009N")
+            .replace("{SectionID}", "N1-N-00020-000000-001000-M")
         )
 
     endpoint_options = {
@@ -433,6 +450,180 @@ def run_k6_test(script_content: str, token: str, log_queue: queue.Queue) -> tupl
         return process.returncode, stdout_text, "", summary_data
 
 
+def markdown_to_pdf_html(md_content: str, title: str = "TDX 壓力測試報告") -> str:
+    """將 Markdown 內容轉換為套用高質感藍色系 CSS 樣式的完全自包含 HTML 檔案"""
+    import markdown
+    
+    body_html = markdown.markdown(md_content, extensions=['tables', 'fenced_code', 'toc'])
+    
+    css_style = """
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Roboto+Mono:wght@400;600&display=swap');
+
+    @page {
+        size: A4 portrait;
+        margin: 20mm 15mm 20mm 15mm;
+        @top-right {
+            content: "MOTC TDX 壓力測試報告";
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 8.5pt;
+            color: #64748b;
+        }
+        @bottom-center {
+            content: "頁次 " counter(page) " / " counter(pages);
+            font-family: 'Noto Sans TC', sans-serif;
+            font-size: 8.5pt;
+            color: #94a3b8;
+        }
+    }
+
+    body {
+        font-family: 'Noto Sans TC', -apple-system, sans-serif;
+        color: #1e293b;
+        background-color: #ffffff;
+        line-height: 1.6;
+        font-size: 10.5pt;
+    }
+
+    h1 {
+        font-size: 18pt;
+        font-weight: 700;
+        background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #2563eb 100%);
+        color: #ffffff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        margin-top: 0;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        font-size: 13.5pt;
+        font-weight: 700;
+        color: #1e3a8a;
+        border-bottom: 2.5px solid #2563eb;
+        padding-bottom: 6px;
+        margin-top: 22px;
+        margin-bottom: 12px;
+    }
+
+    h3 {
+        font-size: 11.5pt;
+        font-weight: 600;
+        color: #1e40af;
+        margin-top: 16px;
+        margin-bottom: 8px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 16px 0;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 1px solid #cbd5e1;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+        background-color: #1e3a8a;
+        color: #ffffff;
+        font-weight: 600;
+        text-align: left;
+        padding: 10px 12px;
+        font-size: 9.5pt;
+        letter-spacing: 0.5px;
+    }
+
+    td {
+        padding: 8px 12px;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 9.5pt;
+    }
+
+    tr:nth-child(even) td {
+        background-color: #f8fafc;
+    }
+
+    tr:last-child td {
+        border-bottom: none;
+    }
+
+    blockquote {
+        background-color: #eff6ff;
+        border-left: 4px solid #2563eb;
+        margin: 16px 0;
+        padding: 12px 16px;
+        color: #1e40af;
+        border-radius: 0 6px 6px 0;
+    }
+
+    code {
+        font-family: 'Roboto Mono', monospace;
+        background-color: #f1f5f9;
+        color: #0f172a;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: 9pt;
+        border: 1px solid #e2e8f0;
+    }
+
+    pre {
+        background-color: #0f172a;
+        color: #f8fafc;
+        padding: 14px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-size: 9pt;
+        line-height: 1.45;
+    }
+
+    pre code {
+        background-color: transparent;
+        color: inherit;
+        border: none;
+        padding: 0;
+    }
+
+    ul, ol {
+        padding-left: 20px;
+        margin: 10px 0;
+    }
+
+    li {
+        margin-bottom: 4px;
+    }
+
+    hr {
+        border: none;
+        border-top: 1px solid #cbd5e1;
+        margin: 20px 0;
+    }
+
+    strong {
+        color: #0f172a;
+    }
+    """
+
+    return f"""<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <title>{title}</title>
+    <style>{css_style}</style>
+</head>
+<body>
+{body_html}
+</body>
+</html>"""
+
+
+def convert_html_to_pdf(html_text: str) -> bytes:
+    """使用 WeasyPrint 將 HTML 轉為高品質 PDF 二進位檔"""
+    from weasyprint import HTML
+    return HTML(string=html_text).write_pdf()
+
+
 def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None, mode_label: str, target_url: str = ""):
     """解析 k6 summary 並呈現測試結果，且自動生成詳細 Markdown 報告與下載按鈕"""
     metrics = summary.get("metrics", {})
@@ -530,7 +721,9 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
 
     # ── 產生 Markdown 測試報告 ─────────────────────────────────────
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    report_filename = f"TDX_LoadTest_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+    timestamp_suffix = datetime.now().strftime('%Y%m%d_%H%M%S')
+    report_filename_md = f"TDX_LoadTest_Report_{timestamp_suffix}.md"
+    report_filename_pdf = f"TDX_LoadTest_Report_{timestamp_suffix}.pdf"
 
     # 失敗原因列表
     failure_reasons = []
@@ -575,7 +768,7 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
 
 ---
 
-## 📊 核心效能指標 summary
+## 📊 核心效能指標 Summary
 
 | 指標名稱 | 實測數值 | SLA / SLO 門檻規範 | 單項判定 |
 |---------|---------|------------------|---------|
@@ -607,16 +800,31 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
 
     st.markdown("---")
     st.markdown("### 📥 下載測試報告")
-    c_dl, c_pv = st.columns([1, 3])
-    with c_dl:
+    c_md, c_pdf = st.columns(2)
+    with c_md:
         st.download_button(
             label="📝 下載 Markdown 報告 (.md)",
             data=report_md,
-            file_name=report_filename,
+            file_name=report_filename_md,
             mime="text/markdown",
-            type="primary",
+            type="secondary",
             use_container_width=True,
         )
+    with c_pdf:
+        try:
+            # 轉換成藍色系風格 HTML 與 PDF
+            html_doc = markdown_to_pdf_html(report_md, title=f"TDX 壓測報告_{timestamp_suffix}")
+            pdf_bytes = convert_html_to_pdf(html_doc)
+            st.download_button(
+                label="📄 下載專業 PDF 報告 (.pdf)",
+                data=pdf_bytes,
+                file_name=report_filename_pdf,
+                mime="application/pdf",
+                type="primary",
+                use_container_width=True,
+            )
+        except Exception as pdf_err:
+            st.error(f"⚠️ 產生 PDF 報告時發生錯誤：{pdf_err}")
 
     with st.expander("📄 預覽完整 Markdown 報告"):
         st.code(report_md, language="markdown")

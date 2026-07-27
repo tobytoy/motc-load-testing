@@ -6,8 +6,8 @@
 tdx:
   base_url: "https://tdx.transportdata.tw/api/basic"
   auth_url: "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
-  # 預設測試縣市（用於有 {City} 參數的端點）
-  default_city: "Taipei"
+  # 預設測試縣市（用於有 {City} 參數的端點，公車 v3 限定 Tainan）
+  default_city: "Tainan"
   # 預設 TRA 車站 ID（用於臺鐵 OD 票價測試）
   default_tra_origin: "0900"    # 台北
   default_tra_dest:   "1000"    # 板橋
