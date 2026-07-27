@@ -433,8 +433,8 @@ def run_k6_test(script_content: str, token: str, log_queue: queue.Queue) -> tupl
         return process.returncode, stdout_text, "", summary_data
 
 
-def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None, mode_label: str):
-    """解析 k6 summary 並呈現測試結果"""
+def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None, mode_label: str, target_url: str = ""):
+    """解析 k6 summary 並呈現測試結果，且自動生成詳細 Markdown 報告與下載按鈕"""
     metrics = summary.get("metrics", {})
 
     http_reqs     = metrics.get("http_reqs", {}).get("values", {}).get("count", 0)
@@ -452,6 +452,8 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
     max_rt   = req_duration.get("max", 0)
     fail_rate = req_failed.get("rate", 0) * 100
     data_mb  = data_recv / 1024 / 1024
+    avg_bytes_per_req = (data_recv / http_reqs) if http_reqs > 0 else 0
+    avg_kbit = avg_bytes_per_req * 8 / 1000
 
     # ── KPI Cards ──────────────────────────────────────────
     st.markdown('<p class="section-title">📊 核心效能指標</p>', unsafe_allow_html=True)
@@ -477,7 +479,8 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
 
     is_rt_pass    = avg_rt <= target_rt_ms
     is_error_pass = fail_rate < 1.0
-    overall_pass  = is_rt_pass and is_error_pass
+    size_pass     = (avg_kbit <= size_limit_kbit) if size_limit_kbit else True
+    overall_pass  = is_rt_pass and is_error_pass and size_pass
 
     col_v, col_i = st.columns([1, 2])
     with col_v:
@@ -493,9 +496,6 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
             ("請求錯誤率", f"{fail_rate:.2f}%", "< 1%", "✅" if is_error_pass else "❌"),
         ]
         if size_limit_kbit:
-            avg_bytes = (data_recv / http_reqs) if http_reqs > 0 else 0
-            avg_kbit  = avg_bytes * 8 / 1000
-            size_pass = avg_kbit <= size_limit_kbit
             rows.append((f"平均 Payload 大小", f"{avg_kbit:.2f} Kbit", f"<= {size_limit_kbit} Kbit", "✅" if size_pass else "❌"))
 
         df = pd.DataFrame(rows, columns=["指標", "實測值", "門檻", "結果"])
@@ -525,8 +525,101 @@ def render_results(summary: dict, target_rt_ms: int, size_limit_kbit: int | None
         | 總 Iteration 數 | {int(iterations):,} |
         | 總請求次數 | {int(http_reqs):,} |
         | 已接收資料量 | {data_mb:.3f} MB |
-        | 平均每次 Payload | {(data_recv/http_reqs/1024) if http_reqs>0 else 0:.2f} KB |
+        | 平均每次 Payload | {avg_bytes_per_req/1024:.2f} KB ({avg_kbit:.2f} Kbit) |
         """)
+
+    # ── 產生 Markdown 測試報告 ─────────────────────────────────────
+    now_str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    report_filename = f"TDX_LoadTest_Report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+
+    # 失敗原因列表
+    failure_reasons = []
+    if not is_rt_pass:
+        failure_reasons.append(f"- ❌ **平均回應時間過高**：實測 `{avg_rt:.2f} ms`（要求 `< {target_rt_ms} ms`）")
+    if not is_error_pass:
+        failure_reasons.append(f"- ❌ **請求錯誤率過高**：實測 `{fail_rate:.2f}%`（要求 `< 1%`）")
+    if size_limit_kbit and not size_pass:
+        failure_reasons.append(f"- ❌ **Payload 大小超標**：實測 `{avg_kbit:.2f} Kbit`（要求 `<= {size_limit_kbit} Kbit`）")
+
+    if not overall_pass:
+        failure_analysis_md = f"""## 🚨 測試失敗根因分析 (Failure Analysis)
+
+### 關鍵死因：
+{chr(10).join(failure_reasons)}
+
+### 💡 除錯與診斷指引：
+1. **HTTP Error (狀態碼非 200)**：
+   - **401 Unauthorized / 403 Forbidden**：Client ID 或 Secret 無效，或 Token 授權範圍不包含該 API。
+   - **404 Not Found**：請求路徑錯誤（如版本號 `/v2/` 與 `/v3/` 錯置，或缺少子路徑）。
+   - **400 Bad Request**：缺少必要的 Query/Path 參數，或預設值無效。
+   - **429 Too Many Requests**：已觸發伺服器流量限流機制。
+2. **回應時間過長**：
+   - 數據量過大，或資料庫查詢效能不足，建議檢查端點是否有 `$top` 限流或啟用 Gzip 壓縮。
+"""
+    else:
+        failure_analysis_md = """## 🎉 合規性驗證分析 (Success Analysis)
+
+- **回應時間**：符合 SLA 規範（低於門檻）。
+- **請求成功率**：高達 99% 以上，連線穩定。
+- **Payload 限制**：符合預期頻寬規範。
+"""
+
+    url_info = f"`{target_url}`" if target_url else "未指定"
+
+    report_md = f"""# 🚌 TDX API 壓力測試報告 (Load Test Report)
+
+- **報告生成時間**：{now_str}
+- **測試模式**：{mode_label}
+- **測試目標端點**：{url_info}
+- **整體結果判定**：**{"✅ PASS" if overall_pass else "❌ FAIL"}**
+
+---
+
+## 📊 核心效能指標 summary
+
+| 指標名稱 | 實測數值 | SLA / SLO 門檻規範 | 單項判定 |
+|---------|---------|------------------|---------|
+| **平均回應時間 (Avg RT)** | **{avg_rt:.2f} ms** | `< {target_rt_ms} ms` | {"✅ PASS" if is_rt_pass else "❌ FAIL"} |
+| **P95 回應時間** | **{p95_rt:.2f} ms** | - | - |
+| **請求錯誤率 (Fail Rate)** | **{fail_rate:.2f}%** | `< 1.0%` | {"✅ PASS" if is_error_pass else "❌ FAIL"} |
+| **平均 Payload 大小** | **{avg_kbit:.2f} Kbit** | {f"<= {size_limit_kbit} Kbit" if size_limit_kbit else "無限制"} | {("✅ PASS" if size_pass else "❌ FAIL") if size_limit_kbit else "N/A"} |
+| **總請求數 (Total Reqs)** | {int(http_reqs):,} 次 | - | - |
+| **最大併發數 (Max VUs)** | {int(vus_max):,} VU | - | - |
+| **總接收資料量** | {data_mb:.3f} MB | - | - |
+
+---
+
+## 🔍 詳細回應時間百分位數 (Percentiles)
+
+- **Min (最小值)**：{min_rt:.2f} ms
+- **Med / P50 (中位數)**：{med_rt:.2f} ms
+- **P90**：{p90_rt:.2f} ms
+- **P95**：{p95_rt:.2f} ms
+- **Max (最大值)**：{max_rt:.2f} ms
+
+---
+
+{failure_analysis_md}
+
+---
+*Report generated automatically by MOTC TDX Load Testing Platform*
+"""
+
+    st.markdown("---")
+    st.markdown("### 📥 下載測試報告")
+    c_dl, c_pv = st.columns([1, 3])
+    with c_dl:
+        st.download_button(
+            label="📝 下載 Markdown 報告 (.md)",
+            data=report_md,
+            file_name=report_filename,
+            mime="text/markdown",
+            type="primary",
+            use_container_width=True,
+        )
+
+    with st.expander("📄 預覽完整 Markdown 報告"):
+        st.code(report_md, language="markdown")
 
 
 # ─────────────────────────────────────────────────────────
@@ -629,6 +722,7 @@ with tab_single:
                         target_rt_ms=3000,
                         size_limit_kbit=20 if s_size_limit else None,
                         mode_label="單次自訂測試",
+                        target_url=full_url,
                     )
                 else:
                     st.error("⚠️ k6 未能輸出摘要 JSON，請確認 k6 已正確安裝。")
@@ -748,6 +842,7 @@ with tab_sla:
                         target_rt_ms=sla_rt_ms,
                         size_limit_kbit=sla_size,
                         mode_label=sla_label,
+                        target_url=full_url,
                     )
                 else:
                     st.error("⚠️ k6 未能輸出摘要 JSON，請確認 k6 已正確安裝。")
