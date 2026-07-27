@@ -1,0 +1,111 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "氣象資料開放鏈結服務",
+    "description": "交通部中央氣象署將氣象開放資料與其他政府單位的開放資料API進行鏈結，提供一站式獲得多元整合資料的服務，提升跨域加值應用之便利性。<BR>\n包含指定縣市回傳天氣預報、日出日沒時刻、觀光景點、臺鐵車站資訊；指定路段編碼回傳最接近之雨量觀測資料；指定經緯度回傳最接近之天氣預報、氣象觀測資料、空氣品質指標等。<BR><BR>\n如對本服務有任何使用上的問題，歡迎聯繫氣象署維運團隊：<BR>\nEmail：<a href=\"https://cwaebox.cwa.gov.tw/ebox_formfill/ebox_visFormFill.php\" target=\"_blank\">中央氣象署意見箱</a><BR>\n電話：02-23491000\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/010091a7-9fc7-4cbb-a15f-407c6c3a9d95)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/cwa"
+    }
+  ],
+  "paths": {
+    "/graphql": {
+      "post": {
+        "tags": [
+          "Relation 關聯資料"
+        ],
+        "summary": "取得氣象跨域鏈結資料",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Authorization"
+          },
+          {
+            "$ref": "#/components/parameters/Token"
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Body"
+        },
+        "responses": {
+          "200": {
+            "description": "成功"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedError"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequestsError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "UnauthorizedError": {
+        "description": "會員授權碼驗證失敗"
+      },
+      "TooManyRequestsError": {
+        "description": "請求次數超過限流上限"
+      }
+    },
+    "parameters": {
+      "Authorization": {
+        "name": "Authorization",
+        "in": "query",
+        "description": "氣象開放資料平台會員授權碼，每個呼叫來源端IP的上限為每24小時1000次，如需提高上限請至<a href=\"https://opendata.cwa.gov.tw/index\">氣象資料開放平臺</a>申請會員授權碼填入",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "TDX-2A1E325A-C117-4EDB-B4B6-822AACF5088E"
+      },
+      "Token": {
+        "name": "token",
+        "in": "header",
+        "description": "每個呼叫來源端IP每24小時提供3次試用，如需提高上限請填入個人之TDX access token",
+        "schema": {
+          "type": "string"
+        }
+      }
+    },
+    "requestBodies": {
+      "Body": {
+        "description": "GraphQL查詢語句，語句產生可參考<a href=\"https://opendata.cwa.gov.tw/linked/playground?Authorization=TDX-2A1E325A-C117-4EDB-B4B6-822AACF5088E\">GraphQL Playground</a>或<a href=\"https://opendata.cwa.gov.tw/devManual/datalist\">詳細說明</a>",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object"
+            },
+            "example": "{\"query\": \"query forecast { forecast(LocationName: \\\"苗栗縣\\\") { Locations { LocationName Geocode Latitude Longitude Temperature { ElementName Time { StartTime EndTime Temperature } } MaxComfortIndex { ElementName Time { StartTime EndTime MaxComfortIndex MaxComfortIndexDescription } } MinComfortIndex { ElementName Time { StartTime EndTime MinComfortIndex MinComfortIndexDescription } } ProbabilityOfPrecipitation { ElementName Time { StartTime EndTime ProbabilityOfPrecipitation } } WindSpeed { ElementName Time { StartTime EndTime WindSpeed BeaufortScale } } UVIndex { ElementName Time { StartTime EndTime UVIndex UVExposureLevel } } Weather { ElementName Time { StartTime EndTime Weather WeatherCode } } attraction(AttractionClass: 1, first: 5) { AttractionID AttractionName AlternateNames Description PositionLat PositionLon Geometry AttractionClasses PostalAddress { City CityCode Town TownCode ZipCode StreetAddress } Telephones { Tel Ext } Images { Name Description URL Width Height Keywords } Organizations { Name Class TaxCode URL Telephones { Tel Ext } MobilePhones Faxes Email } ServiceTimeInfo TrafficInfo ParkingInfo Facilities ServiceStatus IsPublicAccess IsAccessibleForFree FeeInfo PaymentMethods LocatedCities { Name Class City CityCode Town TownCode } WebsiteUrl ReservationURLs MapURLs SameAsURLs SocialMediaURLs { Name Description Class URL Keywords Tags } VisitDuration AssetsClass SubAttractions { AttractionID AttractionName } PartOfAttraction { AttractionID AttractionName } Remarks UpdateTime } } } }\"}"
+          }
+        },
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ]
+}

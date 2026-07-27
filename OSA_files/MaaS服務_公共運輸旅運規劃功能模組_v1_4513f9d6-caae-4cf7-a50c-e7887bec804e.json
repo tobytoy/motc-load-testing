@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "公共運輸旅運規劃功能模組",
+    "description": "提供涵蓋全國多元公共運輸運具(公車/雙鐵/捷運/輕軌/纜車/渡輪/公共自行車)之旅運規劃服務，使用者可以快速取得任意兩地點之最佳路徑規劃結果，使用本服務需先註冊為會員，透過API金鑰才能呼叫，歡迎各產政學單位介接使用。\n\n計費方式：</br>\n計次：不計入</br>\n計量：不計入</br>\n\n如有任何使用上的問題，請您使用Email或電話聯繫MaaS服務維運團隊：</br>\n`Email：emmy.chiang@metropia.com` </br>\n`Tel: 0937-881-092` </br>\n如針對旅運規劃產生結果有疑問，請您使用此連結回報MaaS服務維運團隊: `https://reurl.cc/yArpO2`\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/4513f9d6-caae-4cf7-a50c-e7887bec804e)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/maas"
+    }
+  ],
+  "paths": {
+    "/routing": {
+      "get": {
+        "tags": [
+          "Routing"
+        ],
+        "summary": "取得指定[起點],[迄點]跨運具旅運規劃結果",
+        "operationId": "getRoutes",
+        "parameters": [
+          {
+            "name": "origin",
+            "in": "query",
+            "description": "經緯度型態，公共運輸旅運規劃的起點經緯度，格式為Decimal Degree的雙精確浮點數。輸入格式: `{lat},{lng}`。 <br> 範例:`{25.047743,121.516273}` ",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "25.047743,121.516273"
+            }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "description": "經緯度型態，公共運輸旅運規劃的迄點經緯度，格式為Decimal Degree的雙精確浮點數。 輸入格式: `{lat},{lng}` <br> 範例 :`{24.802340,120.970486}` ",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "24.802340,120.970486"
+            }
+          },
+          {
+            "name": "gc",
+            "in": "query",
+            "description": "浮點數型態，範圍從`0.0` 到 `1.0` (預設值 `0.0`) ， 輸入格式: `{gc}`。<br>gc = 1 建議時間最短，gc = 0 建議價格最便宜。 <br>此參數影響時間/價格偏好傾向，影響推薦搭乘運具 - (旅運時間愈短，旅費愈貴，旅運時間容許越久，價格越便宜)",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": "0.0"
+            }
+          },
+          {
+            "name": "top",
+            "in": "query",
+            "description": "整數型態，指定回傳路線數量(預設值為`5`條，最大值為`10`條)，輸入格式: `{top}`，輸入數量越多需要越久的運算時間。",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "example": "5"
+            }
+          },
+          {
+            "name": "transit",
+            "in": "query",
+            "description": "整數列表型態，用來指定想要搭乘的運具模式。可指定多個模式例如 : <br>{3:`高鐵`,4:`台鐵`, 5: `公車`, 6: `捷運`, 7: `輕軌`, 8: `渡輪`, 9: `纜車`, 20: `航空`}  <br> 輸入格式: `{transit_mode}` 例如 : ` [3,4,5,6,7,8,9] ` ",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "3,4,5,6,7,8,9"
+            }
+          },
+          {
+            "name": "transfer_time",
+            "in": "query",
+            "description": "整數列表型態，輸入格式: `{min},{max}`，最小值為`0`，最大容許值為`60`。 <br>針對公共運具，您可設定偏好的轉乘時間段，單位為`分鐘`(預設為`15~60`)。例如：transfer_time=5,30 指定大眾運輸工具轉乘範圍時間為5~30分鐘之間",
+            "schema": {
+              "type": "string",
+              "example": "15,60"
+            }
+          },
+          {
+            "name": "depart",
+            "in": "query",
+            "description": "日期格式型態 ，輸入格式:`{yyyy-mm-ddTHH:mm:ss}` 指定理想出發日期與時間，時間為台北時區，<br>depart以及arrival只能二擇一填入時間，若都未輸入，則以當下時間當作理想出發時間，若都輸入則使用理想出發時間進行搜尋。<br>例如 : depart=2022-05-10T07:00:00 理想出發時間<br>注意！如所設定時間並未搜尋到任何結果, 將會前後調整設定時間擴大搜尋範圍。如所設定時間為過去時間將會回傳錯誤。",
+            "schema": {
+              "type": "string",
+              "example": "2022-05-10T07:00:00"
+            }
+          },
+          {
+            "name": "arrival",
+            "in": "query",
+            "description": "日期格式型態，輸入格式: `{yyyy-mm-ddTHH:mm:ss}` 指定抵達日期與時間，時間為台北時區，<br>depart以及arrival只能二擇一填入時間，若都未輸入，則以當下時間當作理想出發時間，若都輸入則使用理想出發時間進行搜尋。 <br>例如 : arrival=2022-05-10T07:00:00 預定抵達時間<br>注意！如所設定時間並未搜尋到任何結果, 將會前後調整設定時間擴大搜尋範圍。如所設定時間為過去時間將會回傳錯誤。",
+            "schema": {
+              "type": "string",
+              "example": "2022-05-10T07:00:00"
+            }
+          },
+          {
+            "name": "first_mile_mode",
+            "in": "query",
+            "description": "整數列表型態，{0:`走路`,1:`腳踏車`,2:`開車`,3:`共享單車`} (預設值為 `0`走路) 輸入格式: `{first_mile_mode}` 範例 : `0` <br> 指定第一哩路的旅運模式，例如第一哩騎腳踏車 : first_mile_mode=1",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            }
+          },
+          {
+            "name": "first_mile_time",
+            "in": "query",
+            "description": "整數列表型態，搭配第一哩路的旅運模式可接受的最大時間，單位為`分鐘`。預設為`10`，最大容許值為`60`  <br> 例如 ：first_mile_mode=1,first_mile_time=30 代表第一哩路腳踏車容許規劃在30分鐘內",
+            "schema": {
+              "type": "string",
+              "example": "10"
+            }
+          },
+          {
+            "name": "last_mile_mode",
+            "in": "query",
+            "description": "整數列表型態，{0:`走路`,1:`腳踏車`,2:`開車`,3:`共享單車`} (預設值為 `0`走路) 輸入格式: `{last_mile_mode}`<br> 指定最後一哩路的旅運模式，例如最後一哩走路 : last_mile_mode=0",
+            "schema": {
+              "type": "string",
+              "example": "0"
+            }
+          },
+          {
+            "name": "last_mile_time",
+            "in": "query",
+            "description": "整數列表型態，搭配最後一哩路的旅運模式可接受的最大時間，單位為`分鐘`。預設為`10`，最大容許值為`60`   <br> 例如 ：fast_mile_mode=0,last_mile_time=10 代表最後一哩路走路容許規劃在10分鐘內",
+            "schema": {
+              "type": "string",
+              "example": "10"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned JSON",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "result": "success",
+                      "data": {
+                        "routes": [
+                          {
+                            "travel_time": 4114,
+                            "start_time": "2022-06-28T21:56:50.0000000+08:00",
+                            "end_time": "2022-06-28T23:05:24.0000000+08:00",
+                            "transfers": 0,
+                            "sections": { }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail - some parameters wrong": {
+                    "value": {
+                      "result": "fail",
+                      "error": {
+                        "code": 20001,
+                        "msg": "origin is required"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authorization information is missing or invalid.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail - apikey is missing or invalid": {
+                    "value": {
+                      "result": "fail",
+                      "error": {
+                        "code": 99999,
+                        "msg": "Authorization information is missing or invalid."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail - API spec params is wrong.": {
+                    "value": {
+                      "result": "fail",
+                      "error": {
+                        "code": 40001,
+                        "msg": "API spec params is wrong."
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Unexpected error.",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "fail": {
+                    "value": {
+                      "result": "fail",
+                      "error": {
+                        "code": 99999,
+                        "msg": "error message"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ]
+}

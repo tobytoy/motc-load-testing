@@ -1,0 +1,1385 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "空間查詢-定位",
+    "description": "本平臺提供涵蓋全國尺度之交通旅運資料服務API，歡迎各產政學單位介接使用。\n<br><span class=swagger-description-indicatation>利用本平臺開放資料進行各項應用服務開發時，請考量不同特性使用者(如：性別/身心障礙/老幼等)的需求，並歡迎回饋寶貴意見。</span>\n<br>計費方式：\n<br>計次：200次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/bbcf25be-a5a7-41c2-8efe-b07a0a62755d)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "v3"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/advanced"
+    }
+  ],
+  "paths": {
+    "/V3/Map/Basic/Road/Intersection/City/{City}/TownCode/{TownCode}/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "Basic"
+        ],
+        "summary": "取得道路交叉路口清單",
+        "description": "取得道路交叉路口清單<br />\r\n            鄉鎮市區 參考 <a target=\"_blank\" href=\"#!/District/District_03003\">取得全臺市區鄉鎮界圖資</a><br />\r\n            道路名稱 參考 <a target=\"_blank\" href=\"#!/Basic/PhysicalNetwork_03014\">取得鄉鎮市區可交叉路口定位之道路清單</a>",
+        "operationId": "PhysicalNetwork_03013",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "欲查詢縣市",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty"
+              ],
+              "type": "string"
+            },
+            "x-enum": {
+              "Taipei": "臺北市",
+              "NewTaipei": "新北市",
+              "Taoyuan": "桃園市",
+              "Taichung": "臺中市",
+              "Tainan": "臺南市",
+              "Kaohsiung": "高雄市",
+              "Keelung": "基隆市",
+              "Hsinchu": "新竹市",
+              "HsinchuCounty": "新竹縣",
+              "MiaoliCounty": "苗栗縣",
+              "ChanghuaCounty": "彰化縣",
+              "NantouCounty": "南投縣",
+              "YunlinCounty": "雲林縣",
+              "ChiayiCounty": "嘉義縣",
+              "Chiayi": "嘉義市",
+              "PingtungCounty": "屏東縣",
+              "YilanCounty": "宜蘭縣",
+              "HualienCounty": "花蓮縣",
+              "TaitungCounty": "臺東縣",
+              "KinmenCounty": "金門縣",
+              "PenghuCounty": "澎湖縣",
+              "LienchiangCounty": "連江縣"
+            }
+          },
+          {
+            "name": "TownCode",
+            "in": "path",
+            "description": "欲查詢鄉鎮市區",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Intersection"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Intersection"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/Basic/Road/RoadName/City/{City}/TownCode/{TownCode}": {
+      "get": {
+        "tags": [
+          "Basic"
+        ],
+        "summary": "取得鄉鎮市區可交叉路口定位之道路清單",
+        "description": "取得鄉鎮市區可交叉路口定位之道路清單<br />\r\n            參考 <a target=\"_blank\" href=\"#!/District/District_03003\">取得全臺市區鄉鎮界圖資</a>",
+        "operationId": "PhysicalNetwork_03014",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "欲查詢縣市",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty"
+              ],
+              "type": "string"
+            },
+            "x-enum": {
+              "Taipei": "臺北市",
+              "NewTaipei": "新北市",
+              "Taoyuan": "桃園市",
+              "Taichung": "臺中市",
+              "Tainan": "臺南市",
+              "Kaohsiung": "高雄市",
+              "Keelung": "基隆市",
+              "Hsinchu": "新竹市",
+              "HsinchuCounty": "新竹縣",
+              "MiaoliCounty": "苗栗縣",
+              "ChanghuaCounty": "彰化縣",
+              "NantouCounty": "南投縣",
+              "YunlinCounty": "雲林縣",
+              "ChiayiCounty": "嘉義縣",
+              "Chiayi": "嘉義市",
+              "PingtungCounty": "屏東縣",
+              "YilanCounty": "宜蘭縣",
+              "HualienCounty": "花蓮縣",
+              "TaitungCounty": "臺東縣",
+              "KinmenCounty": "金門縣",
+              "PenghuCounty": "澎湖縣",
+              "LienchiangCounty": "連江縣"
+            }
+          },
+          {
+            "name": "TownCode",
+            "in": "path",
+            "description": "欲查詢鄉鎮市區",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadListModel"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadListModel"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoCode/Coordinate/Address/{Address}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "地址定位之地理編碼(定位)服務",
+        "description": "地址定位之地理編碼(定位)服務",
+        "operationId": "Locator_03001",
+        "parameters": [
+          {
+            "name": "Address",
+            "in": "path",
+            "description": "地址",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "台北市中正區新營里羅斯福路一段83巷6號"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AddressLocation"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AddressLocation"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Address/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "地理坐標定位地址服務",
+        "description": "地理坐標定位地址服務",
+        "operationId": "Locator_03002",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.5199)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.5199"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.0314)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.0314"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AddressLocation"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AddressLocation"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoCode/Coordinate/RoadClass/{RoadClass}/RoadID/{RoadID}/Mileage/{Mileage}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "道路里程之地理編碼(定位)服務",
+        "description": "道路里程之地理編碼(定位)服務<br />\r\n            參考 <a target=\"_blank\" href=\"https://tdx.transportdata.tw/api-service/swagger/basic/30bc573f-0d73-47f2-ac3c-37c798b86d37#/Basic/PhysicalNetwork_03001\">取得指定道路分類之道路引用參數</a>",
+        "operationId": "Locator_03003",
+        "parameters": [
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "可定位道路等級",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1",
+                "3",
+                "4"
+              ],
+              "type": "string",
+              "default": "0"
+            },
+            "x-enum": {
+              "0": "國道",
+              "1": "省道快速道路",
+              "3": "省道",
+              "4": "縣道"
+            }
+          },
+          {
+            "name": "RoadID",
+            "in": "path",
+            "description": "道路代碼",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "000010"
+            }
+          },
+          {
+            "name": "Mileage",
+            "in": "path",
+            "description": "里程",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "001K+010"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MileageLocation"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MileageLocation"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Mileage/RoadClass/{RoadClass}/RoadID/{RoadID}/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "地理坐標定位道路里程服務",
+        "description": "地理坐標定位道路里程服務<br />\r\n            參考 <a target=\"_blank\" href=\"https://tdx.transportdata.tw/api-service/swagger/basic/30bc573f-0d73-47f2-ac3c-37c798b86d37#/Basic/PhysicalNetwork_03001\">取得指定道路分類之道路引用參數</a>",
+        "operationId": "Locator_03004",
+        "parameters": [
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "可定位道路等級",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1",
+                "3"
+              ],
+              "type": "string",
+              "default": "0"
+            },
+            "x-enum": {
+              "0": "國道",
+              "1": "省道快速道路",
+              "3": "省道"
+            }
+          },
+          {
+            "name": "RoadID",
+            "in": "path",
+            "description": "道路代碼",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "000010"
+            }
+          },
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.7062"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.1357"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MileageLocation"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MileageLocation"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoCode/Coordinate/Markname/{Markname}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "地標地物之地理編碼(定位)服務",
+        "description": "地標地物之地理編碼(定位)服務",
+        "operationId": "Locator_03005",
+        "parameters": [
+          {
+            "name": "Markname",
+            "in": "path",
+            "description": "地標地物名稱",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "交通部"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandmarkLocation"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandmarkLocation"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Markname/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "地理坐標定位地標地物服務",
+        "description": "地理坐標定位地標地物服務",
+        "operationId": "Locator_03006",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.7062"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.1357"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandmarkLocationDistance"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LandmarkLocationDistance"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/District/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "坐標查詢行政區",
+        "description": "坐標查詢行政區",
+        "operationId": "Locator_03008",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.7062"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.1357"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DistrictLocation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/DistrictLocation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoCode/Road/Intersection/City/{City}/TownCode/{TownCode}/RoadName1/{RoadName1}/RoadName2/{RoadName2}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "道路路口定位",
+        "description": "提供縣市、鄉鎮名、主要道路名稱、交會道路名稱參數，將回傳該道路交叉口位置<br />\r\n            參考 <a target=\"_blank\" href=\"#!/District/District_03003\">取得全臺市區鄉鎮界圖資</a><br />\r\n            參考 <a target=\"_blank\" href=\"#!/Basic/PhysicalNetwork_03013\">取得道路交叉路口清單</a>",
+        "operationId": "Locator_03009",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "欲查詢縣市",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty"
+              ],
+              "type": "string"
+            },
+            "x-enum": {
+              "Taipei": "臺北市",
+              "NewTaipei": "新北市",
+              "Taoyuan": "桃園市",
+              "Taichung": "臺中市",
+              "Tainan": "臺南市",
+              "Kaohsiung": "高雄市",
+              "Keelung": "基隆市",
+              "Hsinchu": "新竹市",
+              "HsinchuCounty": "新竹縣",
+              "MiaoliCounty": "苗栗縣",
+              "ChanghuaCounty": "彰化縣",
+              "NantouCounty": "南投縣",
+              "YunlinCounty": "雲林縣",
+              "ChiayiCounty": "嘉義縣",
+              "Chiayi": "嘉義市",
+              "PingtungCounty": "屏東縣",
+              "YilanCounty": "宜蘭縣",
+              "HualienCounty": "花蓮縣",
+              "TaitungCounty": "臺東縣",
+              "KinmenCounty": "金門縣",
+              "PenghuCounty": "澎湖縣",
+              "LienchiangCounty": "連江縣"
+            }
+          },
+          {
+            "name": "TownCode",
+            "in": "path",
+            "description": "欲查詢鄉鎮市區",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName1",
+            "in": "path",
+            "description": "主要道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName2",
+            "in": "path",
+            "description": "交會道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML / GEOJSON",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML",
+                "GEOJSON"
+              ],
+              "type": "string",
+              "default": "GEOJSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntersectionLocation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/IntersectionLocation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Intersection": {
+        "title": "Intersection",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "主要道路"
+          },
+          "IntersectionRoadName": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "交叉路口"
+          }
+        },
+        "description": "道路交叉路口清單"
+      },
+      "Intersection0": {
+        "$ref": "#/components/schemas/Intersection"
+      },
+      "RoadListModel": {
+        "title": "RoadListModel",
+        "type": "object",
+        "properties": {
+          "RoadList": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "道路"
+          }
+        },
+        "description": "道路清單列表"
+      },
+      "AddressLocation": {
+        "title": "AddressLocation",
+        "type": "object",
+        "properties": {
+          "Address": {
+            "type": "string",
+            "description": "地址"
+          },
+          "Geometry": {
+            "type": "string",
+            "description": "空間資訊"
+          }
+        },
+        "description": "地址正向模型"
+      },
+      "AddressLocation1": {
+        "$ref": "#/components/schemas/AddressLocation"
+      },
+      "MileageLocation": {
+        "title": "MileageLocation",
+        "type": "object",
+        "properties": {
+          "RoadClassName": {
+            "type": "string",
+            "description": "道路等級名稱"
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "Mileage": {
+            "type": "string",
+            "description": "里程"
+          },
+          "Geometry": {
+            "type": "string",
+            "description": "空間資訊"
+          }
+        },
+        "description": "里程定位正向查詢結果(無距離欄位)模型"
+      },
+      "MileageLocation2": {
+        "$ref": "#/components/schemas/MileageLocation"
+      },
+      "LandmarkLocation": {
+        "title": "LandmarkLocation",
+        "type": "object",
+        "properties": {
+          "Markname": {
+            "type": "string",
+            "description": "地標名稱"
+          },
+          "Geometry": {
+            "type": "string",
+            "description": "空間資訊"
+          }
+        },
+        "description": "地標地物模型"
+      },
+      "LandmarkLocation3": {
+        "$ref": "#/components/schemas/LandmarkLocation"
+      },
+      "LandmarkLocationDistance": {
+        "title": "LandmarkLocationDistance",
+        "type": "object",
+        "properties": {
+          "Markname": {
+            "type": "string",
+            "description": "地標名稱"
+          },
+          "Distance": {
+            "type": "number",
+            "description": "距離(公尺)",
+            "format": "double"
+          },
+          "Geometry": {
+            "type": "string",
+            "description": "空間資訊"
+          }
+        },
+        "description": "地標地物模型"
+      },
+      "LandmarkLocationDistance4": {
+        "$ref": "#/components/schemas/LandmarkLocationDistance"
+      },
+      "DistrictLocation": {
+        "title": "DistrictLocation",
+        "type": "object",
+        "properties": {
+          "City": {
+            "type": "string",
+            "description": "縣市英文"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱"
+          },
+          "TownCode": {
+            "type": "string",
+            "description": "鄉鎮代碼"
+          },
+          "TownName": {
+            "type": "string",
+            "description": "鄉鎮名稱"
+          }
+        },
+        "description": "行政區定位查詢資料輸出模型"
+      },
+      "IntersectionLocation": {
+        "title": "IntersectionLocation",
+        "type": "object",
+        "properties": {
+          "IntersectionRoadName": {
+            "type": "string",
+            "description": "交叉路口名稱"
+          },
+          "Geometry": {
+            "type": "string",
+            "description": "空間資訊"
+          }
+        },
+        "description": "道路交叉路口位置輸出模型"
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Basic",
+      "description": "基礎"
+    },
+    {
+      "name": "Locator",
+      "description": "定位"
+    }
+  ]
+}

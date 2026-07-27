@@ -1,0 +1,740 @@
+# ──────────────────────────────────────────────────────────────────────────────
+# TDX 壓測平台設定檔
+# 修改此檔後，重新整理 Streamlit 頁面即可生效（無需重啟）
+# ──────────────────────────────────────────────────────────────────────────────
+
+tdx:
+  base_url: "https://tdx.transportdata.tw/api/basic"
+  auth_url: "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
+  # 預設測試縣市（用於有 {City} 參數的端點）
+  default_city: "Taipei"
+  # 預設 TRA 車站 ID（用於臺鐵 OD 票價測試）
+  default_tra_origin: "0900"    # 台北
+  default_tra_dest:   "1000"    # 板橋
+  # 路況預設替代道路代碼
+  default_alternative: "1"      # 國道1號
+  # 預設路名（用於路段編碼）
+  default_road_name: "中山北路"
+  # 預設 CCTV ID
+  default_cctvid: "N1-N-00020-M"
+  # 預設 VD ID
+  default_vdid: "N1-N-00020-M"
+  # 預設 ETag 門架 ID
+  default_etag_id: "01F0009N"
+  # 預設路段 ID
+  default_section_id: "N1-N-00020-000000-001000-M"
+  # 預設行政區代碼（台北市）
+  default_city_code: "TPE"
+  # 預設停車場 ID
+  default_parking_id: "P00001"
+  # 預設充電站 ID
+  default_charger_id: "C00001"
+  # 預設 LinkID（路段編碼）
+  default_link_id: "5000001"
+  # 預設路段版本（路段編碼）
+  default_road_version: "20240101"
+  # 預設自行車站 ID
+  default_bike_station_id: "500101001"
+  # 預設航班 IATA 機場代碼
+  default_airport_iata: "TPE"
+  # 預設航運港口代碼
+  default_port_id: "TWKEL"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SLA / SLO 規格設定（依規格書 §4）
+# ──────────────────────────────────────────────────────────────────────────────
+sla:
+  sla1:
+    label: "SLA 規格 1：靜/動態資料 ≤ 20Kbit（5,000 VU / 每 5 秒 / 1 小時）"
+    vus: 5000
+    duration: "1h"
+    sleep_sec: 5.0
+    avg_rt_threshold_ms: 3000
+    payload_limit_kbit: 20
+    # Ramp-up 緩啟動設定（避免瞬間爆量）
+    ramp_up_duration: "5m"     # 爬坡時間：5 分鐘從 0 爬到 5000 VU
+    ramp_down_duration: "2m"   # 爬坡結束後緩降
+
+  sla2:
+    label: "SLA 規格 2：其它 API 服務（500 VU / 5 分鐘）"
+    vus: 500
+    duration: "5m"
+    sleep_sec: 1.0
+    avg_rt_threshold_ms: 3000
+    payload_limit_kbit: null
+    ramp_up_duration: "1m"
+    ramp_down_duration: "30s"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 單次測試預設值
+# ──────────────────────────────────────────────────────────────────────────────
+single_test_defaults:
+  vus: 10
+  duration: "30s"
+  sleep_sec: 1.0
+  enable_payload_check: false
+  ramp_up_duration: "10s"
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 測試端點清單（來源：官方 OAS 規格書，僅基礎服務）
+# 每個類別挑選代表性端點，有路徑參數者已填入預設值
+# ──────────────────────────────────────────────────────────────────────────────
+endpoints:
+  # ═══ 公車 v3 靜態（OAS: 939d7b26）═══════════════════════════════════════════
+  - label: "[公車v3] 市區公車 - 路線資料 (靜態)"
+    path: "/v3/Bus/Route/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 附屬路線資料 (靜態)"
+    path: "/v3/Bus/SubRoute/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 站牌資料 (靜態)"
+    path: "/v3/Bus/Stop/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 站位資料 (靜態)"
+    path: "/v3/Bus/Station/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 路線站序資料 (靜態)"
+    path: "/v3/Bus/StopOfRoute/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 顯示用路線站序 (靜態)"
+    path: "/v3/Bus/DisplayStopOfRoute/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 路線票價資料 (靜態)"
+    path: "/v3/Bus/RouteFare/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 定期首末班車 (靜態)"
+    path: "/v3/Bus/FirstLastTripInfo/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 定期班表 (靜態)"
+    path: "/v3/Bus/Schedule/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 每日時刻表 (靜態)"
+    path: "/v3/Bus/DailyTimeTable/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 路網資料 (靜態)"
+    path: "/v3/Bus/Network/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 營業所資料 (靜態)"
+    path: "/v3/Bus/Depot/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  # ═══ 公車 v3 動態（OAS: 939d7b26）═══════════════════════════════════════════
+  - label: "[公車v3] 市區公車 - 動態定時A1 (動態)"
+    path: "/v3/Bus/RealTimeByFrequency/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  - label: "[公車v3] 市區公車 - 動態定點A2 (動態)"
+    path: "/v3/Bus/RealTimeNearStop/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v3"
+
+  # ═══ 公車 v2 Streaming 動態（OAS: 2998e851）══════════════════════════════════
+  - label: "[公車v2] 市區公車 - 動態定時A1 批次更新 (動態)"
+    path: "/v2/Bus/RealTimeByFrequency/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 動態定時A1 逐筆更新 (動態)"
+    path: "/v2/Bus/RealTimeByFrequency/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 動態定點A2 逐筆更新 (動態)"
+    path: "/v2/Bus/RealTimeNearStop/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 預估到站N1 逐筆更新 (動態)"
+    path: "/v2/Bus/EstimatedTimeOfArrival/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  # ═══ 公車 v2 其他靜態端點（OAS: 2998e851）════════════════════════════════════
+  - label: "[公車v2] 市區公車 - 路線資料 (靜態)"
+    path: "/v2/Bus/Route/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 站牌資料 (靜態)"
+    path: "/v2/Bus/Stop/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 站位資料 (靜態)"
+    path: "/v2/Bus/Station/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 路線站序資料 (靜態)"
+    path: "/v2/Bus/StopOfRoute/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 路線票價 (靜態)"
+    path: "/v2/Bus/RouteFare/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 市區公車 - 定期班表 (靜態)"
+    path: "/v2/Bus/Schedule/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 公路客運 - 路線資料 (靜態)"
+    path: "/v2/Bus/Route/InterCity"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 公路客運 - 站牌資料 (靜態)"
+    path: "/v2/Bus/Stop/InterCity"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  - label: "[公車v2] 公路客運 - 動態定時A1 (動態)"
+    path: "/v2/Bus/RealTimeByFrequency/InterCity"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-公車_v2"
+
+  # ═══ 軌道 v3 臺鐵（OAS: 5fa88b0c）══════════════════════════════════════════
+  - label: "[軌道v3] 臺鐵 - 路網資料 (靜態)"
+    path: "/v3/Rail/TRA/Network"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 車站基本資料 (靜態)"
+    path: "/v3/Rail/TRA/Station"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 路線基本資料 (靜態)"
+    path: "/v3/Rail/TRA/Line"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 路線車站資料 (靜態)"
+    path: "/v3/Rail/TRA/StationOfLine"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 車站出入口資料 (靜態)"
+    path: "/v3/Rail/TRA/StationExit"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 車站設施資料 (靜態)"
+    path: "/v3/Rail/TRA/StationFacility"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 列車車種資料 (靜態)"
+    path: "/v3/Rail/TRA/TrainType"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 定期時刻表（全車次）(靜態)"
+    path: "/v3/Rail/TRA/GeneralTrainTimetable"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 站別定期時刻表 (靜態)"
+    path: "/v3/Rail/TRA/GeneralStationTimetable"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 臺鐵 - 票價資料（起迄站間）(靜態)"
+    path: "/v3/Rail/TRA/ODFare/{OriginStationID}/to/{DestinationStationID}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  # 軌道 v3 捷運
+  - label: "[軌道v3] 台北捷運 - 路線資料 (靜態)"
+    path: "/v3/Rail/Metro/Line/TRTC"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 台北捷運 - 車站資料 (靜態)"
+    path: "/v3/Rail/Metro/Station/TRTC"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 台北捷運 - 票價資料 (靜態)"
+    path: "/v3/Rail/Metro/ODFare/TRTC"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 台北捷運 - 首末班車 (靜態)"
+    path: "/v3/Rail/Metro/FirstLastTimetable/TRTC"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  - label: "[軌道v3] 台北捷運 - 即時列車到站 (動態)"
+    path: "/v3/Rail/Metro/RealTimeNearStation/TRTC"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-軌道_v3"
+
+  # 軌道 v2 台灣高鐵（TRA+HSR）
+  - label: "[軌道v2] 高鐵 - 車站資料 (靜態)"
+    path: "/v2/Rail/THSR/Station"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v2"
+
+  - label: "[軌道v2] 高鐵 - 票價資料 (靜態)"
+    path: "/v2/Rail/THSR/ODFare"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v2"
+
+  - label: "[軌道v2] 高鐵 - 定期時刻表 (靜態)"
+    path: "/v2/Rail/THSR/GeneralTimetable"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-軌道_v2"
+
+  - label: "[軌道v2] 高鐵 - 即時到站資料 (動態)"
+    path: "/v2/Rail/THSR/RealTimeArrivals"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-軌道_v2"
+
+  # ═══ 自行車 v2（OAS: 2cc9b888）══════════════════════════════════════════════
+  - label: "[自行車v2] YouBike - 站位資料 (靜態)"
+    path: "/v2/Bike/Station/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-自行車_v2"
+
+  - label: "[自行車v2] YouBike - 即時車位資料 (動態)"
+    path: "/v2/Bike/Availability/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-自行車_v2"
+
+  # ═══ 航空 v2（OAS: eb87998f）═════════════════════════════════════════════════
+  - label: "[航空v2] 機場資訊 - 機場資料 (靜態)"
+    path: "/v2/Air/Airport"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-航空_v2"
+
+  - label: "[航空v2] 機場資訊 - 航班資料（全） (靜態)"
+    path: "/v2/Air/FIDS/Flight"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-航空_v2"
+
+  - label: "[航空v2] 機場資訊 - 即時入境航班 (動態)"
+    path: "/v2/Air/FIDS/Airport/Arrival/{AirportIATA}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-航空_v2"
+
+  - label: "[航空v2] 機場資訊 - 即時出境航班 (動態)"
+    path: "/v2/Air/FIDS/Airport/Departure/{AirportIATA}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-航空_v2"
+
+  # ═══ 航運 v3（OAS: 38e6a4c2）═════════════════════════════════════════════════
+  - label: "[航運v3] 航運 - 港口資料 (靜態)"
+    path: "/v3/Ship/Port"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-航運_v3"
+
+  - label: "[航運v3] 航運 - 航線資料 (靜態)"
+    path: "/v3/Ship/Route"
+    data_type: "static"
+    source_oas: "基礎服務_公共運輸-航運_v3"
+
+  - label: "[航運v3] 航運 - 船舶即時位置 (動態)"
+    path: "/v3/Ship/RealTimeByFrequency"
+    data_type: "dynamic"
+    source_oas: "基礎服務_公共運輸-航運_v3"
+
+  # ═══ 路況資訊 v2（OAS: 7f07d940）════════════════════════════════════════════
+  - label: "[路況v2] 路況 - CCTV 攝影機（國道）(靜態)"
+    path: "/v2/Road/Traffic/CCTV/Freeway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - CCTV 攝影機（省道）(靜態)"
+    path: "/v2/Road/Traffic/CCTV/Highway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - CCTV 攝影機（縣市）(靜態)"
+    path: "/v2/Road/Traffic/CCTV/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - VD 偵測器（國道）(靜態)"
+    path: "/v2/Road/Traffic/VD/Freeway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - VD 偵測器（省道）(靜態)"
+    path: "/v2/Road/Traffic/VD/Highway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - ETag 門架（國道）(靜態)"
+    path: "/v2/Road/Traffic/ETag/Freeway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 即時路況（國道）(動態)"
+    path: "/v2/Road/Traffic/Live/Freeway"
+    data_type: "dynamic"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 即時路況（省道）(動態)"
+    path: "/v2/Road/Traffic/Live/Highway"
+    data_type: "dynamic"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 即時路況（縣市）(動態)"
+    path: "/v2/Road/Traffic/Live/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 壅塞等級（國道）(動態)"
+    path: "/v2/Road/Traffic/CongestionLevel/Freeway"
+    data_type: "dynamic"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 路況路段資料（國道）(靜態)"
+    path: "/v2/Road/Traffic/Section/Freeway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - CMS 資訊可變標誌（國道）(靜態)"
+    path: "/v2/Road/Traffic/CMS/Freeway"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  - label: "[路況v2] 路況 - 路況管理機關 (靜態)"
+    path: "/v2/Road/Traffic/Basic/Authority"
+    data_type: "static"
+    source_oas: "基礎服務_路況資訊_v2"
+
+  # ═══ 道路事件 v1（OAS: 60abfa19）════════════════════════════════════════════
+  - label: "[道路事件v1] 道路事件 - 管理機關 (靜態)"
+    path: "/v1/Traffic/RoadEvent/Authority"
+    data_type: "static"
+    source_oas: "基礎服務_道路事件_v1"
+
+  - label: "[道路事件v1] 道路事件 - 道路事件（省道）(動態)"
+    path: "/v1/Traffic/RoadEvent/Event/Highway"
+    data_type: "dynamic"
+    source_oas: "基礎服務_道路事件_v1"
+
+  - label: "[道路事件v1] 道路事件 - 即時道路事件（縣市）(動態)"
+    path: "/v1/Traffic/RoadEvent/LiveEvent/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_道路事件_v1"
+
+  - label: "[道路事件v1] 道路事件 - 即時道路事件（國道）(動態)"
+    path: "/v1/Traffic/RoadEvent/LiveEvent/Freeway"
+    data_type: "dynamic"
+    source_oas: "基礎服務_道路事件_v1"
+
+  # ═══ 停車資訊 v1（OAS: 945f57da）════════════════════════════════════════════
+  - label: "[停車v1] 停車 - 停車場基本資料 (靜態)"
+    path: "/v1/Parking/Station/CarPark"
+    data_type: "static"
+    source_oas: "基礎服務_停車資訊_v1"
+
+  - label: "[停車v1] 停車 - 路外停車場即時資訊 (動態)"
+    path: "/v1/Parking/OffStreet/CarPark"
+    data_type: "dynamic"
+    source_oas: "基礎服務_停車資訊_v1"
+
+  - label: "[停車v1] 停車 - 路邊停車格即時資訊 (動態)"
+    path: "/v1/Parking/OnStreet/ParkingAvailability/City/{City}"
+    data_type: "dynamic"
+    source_oas: "基礎服務_停車資訊_v1"
+
+  # ═══ 充電樁 v1（OAS: b378d320）══════════════════════════════════════════════
+  - label: "[充電樁v1] 充電樁 - 充電站資料 (靜態)"
+    path: "/v1/EV/Station"
+    data_type: "static"
+    source_oas: "基礎服務_綠色運輸-充電樁_v1"
+
+  - label: "[充電樁v1] 充電樁 - 充電樁即時資訊 (動態)"
+    path: "/v1/EV/Station/Availability"
+    data_type: "dynamic"
+    source_oas: "基礎服務_綠色運輸-充電樁_v1"
+
+  # ═══ GIS 圖資 v3（OAS: 30bc573f）════════════════════════════════════════════
+  - label: "[GIS v3] 地圖 - 路段中心線幾何資料 (靜態)"
+    path: "/v3/Map/Shape/RoadNetwork/Road"
+    data_type: "static"
+    source_oas: "基礎服務_GIS圖資_v3"
+
+  - label: "[GIS v3] 地圖 - 縣市行政區幾何 (靜態)"
+    path: "/v3/Map/Shape/District/City/{City}"
+    data_type: "static"
+    source_oas: "基礎服務_GIS圖資_v3"
+
+  # ═══ 共通資料（OAS: 9aa23880 / 152a47cc / ec7b6b4a）══════════════════════════
+  - label: "[共通-公共運輸v2] 運業者基本資料 (靜態)"
+    path: "/v2/Basic/Operator"
+    data_type: "static"
+    source_oas: "基礎服務_共通資料-公共運輸_v2"
+
+  - label: "[共通-行政區v2] 縣市清單 (靜態)"
+    path: "/v2/Basic/City"
+    data_type: "static"
+    source_oas: "基礎服務_共通資料-行政區_v2"
+
+  - label: "[共通-道路v2] 道路等級定義 (靜態)"
+    path: "/v2/Road/Class"
+    data_type: "static"
+    source_oas: "基礎服務_共通資料-道路_v2"
+
+  # ═══ 有聲號誌 v1（OAS: 4eb2732e）════════════════════════════════════════════
+  - label: "[有聲號誌v1] 有聲號誌 - 號誌設施資料 (靜態)"
+    path: "/v1/Traffic/APS"
+    data_type: "static"
+    source_oas: "基礎服務_有聲號誌_v1"
+
+  # ═══ 觀光資訊 v2（OAS: cd0226cf）════════════════════════════════════════════
+  - label: "[觀光v2] 台灣好行 - 路線資料 (靜態)"
+    path: "/v2/Tourism/Bus/Route/TaiwanTrip"
+    data_type: "static"
+    source_oas: "基礎服務_觀光資訊_v2"
+
+  - label: "[觀光v2] 台灣好行 - 即時班次資料 (動態)"
+    path: "/v2/Tourism/Bus/RealTimeByFrequency/TaiwanTrip"
+    data_type: "dynamic"
+    source_oas: "基礎服務_觀光資訊_v2"
+
+  # ═══ 路段編碼 v2（OAS: e2718568）════════════════════════════════════════════
+  - label: "[路段編碼v2] 路段 - 路段清單 (靜態)"
+    path: "/v2/Road/Link/LinkID"
+    data_type: "static"
+    source_oas: "基礎服務_路段編碼_v2"
+
+  - label: "[路段編碼v2] 路段 - 最新版本 (靜態)"
+    path: "/v2/Road/Link/Version/Latest"
+    data_type: "static"
+    source_oas: "基礎服務_路段編碼_v2"
+
+  # ═══ 自訂端點 ════════════════════════════════════════════════════════════════
+  - label: "自訂端點 (Custom Path)"
+    path: "CUSTOM"
+    data_type: "custom"
+    source_oas: "-"
+
+tdx:
+  base_url: "https://tdx.transportdata.tw/api/basic"
+  auth_url: "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token"
+  # 預設測試縣市（用於有 {City} 參數的端點）
+  default_city: "Taipei"
+  # 預設 TRA 車站 ID（用於臺鐵 OD 票價測試）
+  default_tra_origin: "0900"    # 台北
+  default_tra_dest:   "1000"    # 板橋
+
+# ──────────────────────────────────────────────────────────────────────────────
+# SLA / SLO 規格設定（依規格書 §4）
+# ──────────────────────────────────────────────────────────────────────────────
+sla:
+  sla1:
+    label: "SLA 規格 1：靜/動態資料 ≤ 20Kbit（5,000 VU / 每 5 秒 / 1 小時）"
+    vus: 5000
+    duration: "1h"
+    sleep_sec: 5.0
+    avg_rt_threshold_ms: 3000
+    payload_limit_kbit: 20
+
+  sla2:
+    label: "SLA 規格 2：其它 API 服務（500 VU / 5 分鐘）"
+    vus: 500
+    duration: "5m"
+    sleep_sec: 1.0
+    avg_rt_threshold_ms: 3000
+    payload_limit_kbit: null
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 單次測試預設值
+# ──────────────────────────────────────────────────────────────────────────────
+single_test_defaults:
+  vus: 10
+  duration: "30s"
+  sleep_sec: 1.0
+  enable_payload_check: false
+
+# ──────────────────────────────────────────────────────────────────────────────
+# 測試端點清單（來源：官方 OAS 規格書）
+#
+# OAS 1 - 公車 v2 (Streaming):
+#   https://tdx.transportdata.tw/webapi/File/Swagger/V3/2998e851-81d0-40f5-b26d-77e2f5ac4118
+# OAS 2 - 公車 v3:
+#   https://tdx.transportdata.tw/webapi/File/Swagger/V3/939d7b26-14d6-40bc-bdc9-a076e3f8d4dc
+# OAS 3 - 軌道 v3 (TRA):
+#   https://tdx.transportdata.tw/webapi/File/Swagger/V3/5fa88b0c-120b-43f1-b188-c379ddb2593d
+# ──────────────────────────────────────────────────────────────────────────────
+endpoints:
+  # ─── 公車 v3 靜態資料（來源：OAS2）────────────────────────────────────────
+  - label: "[公車v3] 市區公車 - 路線資料 (靜態)"
+    path: "/v3/Bus/Route/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 附屬路線資料 (靜態)"
+    path: "/v3/Bus/SubRoute/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 站牌資料 (靜態)"
+    path: "/v3/Bus/Stop/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 站位資料 (靜態)"
+    path: "/v3/Bus/Station/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 路線站序資料 (靜態)"
+    path: "/v3/Bus/StopOfRoute/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 顯示用路線站序 (靜態)"
+    path: "/v3/Bus/DisplayStopOfRoute/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 路線票價資料 (靜態)"
+    path: "/v3/Bus/RouteFare/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 定期首末班車 (靜態)"
+    path: "/v3/Bus/FirstLastTripInfo/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 定期班表 (靜態)"
+    path: "/v3/Bus/Schedule/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 每日時刻表 (靜態)"
+    path: "/v3/Bus/DailyTimeTable/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 路網資料 (靜態)"
+    path: "/v3/Bus/Network/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 營業所資料 (靜態)"
+    path: "/v3/Bus/Depot/City/{City}"
+    data_type: "static"
+    source_oas: "OAS2"
+
+  # ─── 公車 v3 動態資料（來源：OAS2）────────────────────────────────────────
+  - label: "[公車v3] 市區公車 - 動態定時A1 (動態)"
+    path: "/v3/Bus/RealTimeByFrequency/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS2"
+
+  - label: "[公車v3] 市區公車 - 動態定點A2 (動態)"
+    path: "/v3/Bus/RealTimeNearStop/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS2"
+
+  # ─── 公車 v2 Streaming 動態資料（來源：OAS1）──────────────────────────────
+  - label: "[公車v2] 市區公車 - 動態定時A1 Streaming (動態)"
+    path: "/v2/Bus/RealTimeByFrequency/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS1"
+
+  - label: "[公車v2] 市區公車 - 動態定時A1 Streaming[逐筆] (動態)"
+    path: "/v2/Bus/RealTimeByFrequency/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS1"
+
+  - label: "[公車v2] 市區公車 - 動態定點A2 Streaming[逐筆] (動態)"
+    path: "/v2/Bus/RealTimeNearStop/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS1"
+
+  - label: "[公車v2] 市區公車 - 預估到站N1 Streaming[逐筆] (動態)"
+    path: "/v2/Bus/EstimatedTimeOfArrival/Streaming/City/{City}"
+    data_type: "dynamic"
+    source_oas: "OAS1"
+
+  # ─── 軌道 v3 臺鐵（來源：OAS3）────────────────────────────────────────────
+  - label: "[臺鐵v3] 路網資料 (靜態)"
+    path: "/v3/Rail/TRA/Network"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 車站基本資料 (靜態)"
+    path: "/v3/Rail/TRA/Station"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 路線基本資料 (靜態)"
+    path: "/v3/Rail/TRA/Line"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 路線車站資料 (靜態)"
+    path: "/v3/Rail/TRA/StationOfLine"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 車站出入口資料 (靜態)"
+    path: "/v3/Rail/TRA/StationExit"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 車站設施資料 (靜態)"
+    path: "/v3/Rail/TRA/StationFacility"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 列車車種資料 (靜態)"
+    path: "/v3/Rail/TRA/TrainType"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 定期時刻表（全車次）(靜態)"
+    path: "/v3/Rail/TRA/GeneralTrainTimetable"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 站別定期時刻表（全站）(靜態)"
+    path: "/v3/Rail/TRA/GeneralStationTimetable"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  - label: "[臺鐵v3] 票價資料（起迄站間）(靜態)"
+    path: "/v3/Rail/TRA/ODFare/{OriginStationID}/to/{DestinationStationID}"
+    data_type: "static"
+    source_oas: "OAS3"
+
+  # ─── 自訂端點 ──────────────────────────────────────────────────────────────
+  - label: "自訂端點 (Custom Path)"
+    path: "CUSTOM"
+    data_type: "custom"
+    source_oas: "-"

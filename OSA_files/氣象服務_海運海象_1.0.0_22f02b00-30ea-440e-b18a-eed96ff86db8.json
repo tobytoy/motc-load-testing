@@ -1,0 +1,239 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "海運海象",
+    "description": "交通部中央氣象署提供海象資料，包含波侯、乾滿潮預報、交通船級舒適度、船級作業風險、長浪監測、東亞智慧航路與50公尺精度潮流預報。<BR><BR>如對本服務有任何使用上的問題，歡迎聯繫氣象署維運團隊：<BR>．交通船級舒適度、船級作業風險<BR>Email：szuwei@cwa.gov.tw<BR>電話：02-23491197<BR>．波候<BR>Email：jcjan@cwa.gov.tw<BR>電話：02-23491196<BR>．乾滿潮預報、50公尺精度潮流預報、長浪監測<BR>Email：shihche@cwa.gov.tw<BR>電話：02-23491195<BR>．東亞智慧航路<BR>Email：chenji@cwa.gov.tw<BR>電話：02-23491198\"\n\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/22f02b00-30ea-440e-b18a-eed96ff86db8)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/cwa"
+    }
+  ],
+  "paths": {
+    "/api/v1/MED/product/raster/analysis/Wave_Climate": {
+      "get": {
+        "tags": [
+          "Wave 風浪"
+        ],
+        "summary": "波侯",
+        "description": "臺灣海域之波浪氣候統計網格，可供規劃離島航線與適合營運之耐浪船種。",
+        "operationId": "MED-Wave_Climate-001",
+        "parameters": [
+          {
+            "name": "var",
+            "in": "query",
+            "description": "變數名稱:浪高(WH)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "datamonth",
+            "in": "query",
+            "description": "資料月份(可多選用逗號分隔，例如要選擇一月跟三月跟五月，可輸入 \"1,3,5\"，預設為一至十二月全部)",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "code=200：成功，code=400/404：失敗",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/MED/product/raster/analysis/TIDE_P_01": {
+      "get": {
+        "tags": [
+          "Tide 潮汐"
+        ],
+        "summary": "乾滿潮預報",
+        "description": "每日更新預報各港口之滿潮、乾潮時間及潮高，提供進出港應用。",
+        "operationId": "MED-TIDE_P_01-001",
+        "parameters": [
+          {
+            "name": "startdate",
+            "in": "query",
+            "description": "資料開始日期(格式為年-月-日，ex:2024-01-01)，本歷史資料提供範圍為過去一個月至今天(每天早上2點前更新)，最早可選擇一個月前的日期，查詢天數最多30天。",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "enddate",
+            "in": "query",
+            "description": "資料結束日期(格式為年-月-日，ex:2024-02-01)，最晚可選擇當日。",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "code=200：成功，code=400/404：失敗",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/MED/product/raster/analysis/Wave_Watch": {
+      "get": {
+        "tags": [
+          "Wave 風浪"
+        ],
+        "summary": "長浪監測",
+        "description": "臺灣附近海域長浪監測資料：提供測站地點及其過去8小時觀測之最高浪高、警戒狀態(低於警戒、超過長浪警戒、超過巨浪警戒)。",
+        "operationId": "MED-Wave_Watch-001",
+        "responses": {
+          "200": {
+            "description": "code=200：成功，code=400/404：失敗",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/MED/product/raster/analysis/Smart_Route": {
+      "get": {
+        "tags": [
+          "Wave 風浪"
+        ],
+        "summary": "東亞智慧航路",
+        "description": "東亞智慧風浪航路：每日更新預報臺灣6個港口對東亞9個港口間避風浪最佳航路，包含未來5天每小時之建議航點經緯度、預報風速、風浪、長浪、作業風險。",
+        "operationId": "MED-Smart_Route-001",
+        "responses": {
+          "200": {
+            "description": "code=200：成功，code=400/404：失敗",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/MED/product/raster/forecast/": {
+      "get": {
+        "tags": [
+          "Grid Forecast 格點預報"
+        ],
+        "summary": "格點預報",
+        "description": "1.交通船級舒適度：每日更新預報5天之舒適、顛簸、劇烈顛簸網格資料，以預報風浪再加值計算4種長度之交通船或遊艇船級舒適度。<br> 2.船級作業風險：每日更新預報5天航行作業高、低風險網格資料，以預報風浪再加值計算5種噸位船級之航行作業風險。<br> 3.每日更新提供14個港區導航等級50公尺、每6分鐘之時空網格潮流預報，包含商港、離島交通港、遊艇港、帆船港灣等，應用於進出港時可即時取得定位處流速、流向：基隆港50公尺精度潮流預報、臺北港50公尺精度潮流預報、臺中港50公尺精度潮流預報、高雄港一港口50公尺精度潮流預報、高雄港二港口50公尺精度潮流預報、馬公港50公尺精度潮流預報、安平港50公尺精度潮流預報、淡水河口50公尺精度潮流預報、基隆深澳望海巷灣50公尺精度潮流預報、東北角龍洞灣50公尺精度潮流預報、墾丁南灣50公尺精度潮流預報、東港大鵬灣50公尺精度潮流預報、小琉球50公尺精度潮流預報、布袋港50公尺精度潮流預報、金門水頭港50公尺精度潮流預報",
+        "operationId": "MED-forecast-001",
+        "parameters": [
+          {
+            "name": "longname",
+            "in": "query",
+            "description": "資料源名稱(船級作業風險:SHIP_RISK，交通船級舒適度:SHIP_CONF，50公尺精度潮流預報:OSU_TPXO_Tide_50m)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "var",
+            "in": "query",
+            "description": "1.交通船級舒適變數名稱:交通船、遊艇40呎以下船級舒適度預報(CONF1)、交通船、遊艇40至80呎船級舒適度預報(CONF2)、交通船、遊艇80至120呎船級舒適度預報(CONF3)、交通船、遊艇120呎以上船級舒適度預報(CONF4)<br> 2.船級作業風險變數名稱:巡防艇20噸以下、漁船CT2以下船級作業風險預報(RISK1)、巡防艇20噸至60噸、漁船CT3船級作業風險預報(RISK2)、巡防艇60噸以上、漁船CT4至CT6船級作業風險預報(RISK3)、巡防艇、巡護船、漁船CT7至CT8船級作業風險預報(RISK4)<br> 3.50公尺精度潮流預報變數名稱:東西向流速(UCURR)、南北向流速(VCURR)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "flag",
+            "in": "query",
+            "description": "50公尺精度潮流預報(OSU_TPXO_Tide_50m)需選擇變數:東北角龍洞灣(Longdong)、布袋港(BuDai)、臺中港(Taichung)、東港大鵬灣(DapengBay)、高雄港二港口(Kaohsiung2)、基隆港(Keelung)、高雄港一港口(Kaohsiung1)、安平港(Anping)、墾丁南灣(Houbihu)、馬公港(Magong)、基隆深澳望海巷灣(WangHaiBay)、小琉球(XiaoLiuqiu)、淡水河口(Tamsui)、臺北港(Taipei)、金門水頭港(ShuiTou)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "initialtime",
+            "in": "query",
+            "description": "此指定預報初始時間，UTC 時區，格式為年月日時 <br> 1.交通船級舒適預報初始時間:可選擇過去24小時(含)以前的時間，一天四報(ex:2024052100 / 2024052106 / 2024052112 / 202405218) <br> 2.船級作業風險預報初始時間:可選擇過去24小時(含)以前的時間，一天四報(ex:2024052100 / 2024052106/ 2024052112 / 202405218) <br> 3.50公尺精度潮流預報預報初始時間:可選擇過去30天(含)至未來30天(含)的時間，一天一報(ex:2024052100)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "taus",
+            "in": "query",
+            "description": "tau(交通船級舒適、船級作業風險可選tau為000,003,...,096；50公尺精度潮流預報可選tau為000,001,...,240，以此指定tau，可多選用逗號分隔，例如要選擇000及003可使用\"000,003\"，無輸入則表示全選)<br> 1.交通船級舒適、船級作業風險預報四天，tau單位為小時 <br> 2.50公尺精度潮流預報預報40小時，tau單位為6分鐘",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "code=200：成功，code=400/404：失敗",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "x-original-swagger-version": "2.0"
+}

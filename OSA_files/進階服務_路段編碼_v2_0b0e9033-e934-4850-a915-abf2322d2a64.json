@@ -1,0 +1,2568 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "路段編碼",
+    "description": "本平臺提供涵蓋全國尺度之道路編碼資料服務API，歡迎各產政學單位介接使用。\n<br><span class=swagger-description-indicatation>利用本平臺開放資料進行各項應用服務開發時，請考量不同特性使用者(如：性別/身心障礙/老幼等)的需求，並歡迎回饋寶貴意見。</span>\n<br>計費方式：\n<br>計次：200次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/0b0e9033-e934-4850-a915-abf2322d2a64)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/advanced"
+    }
+  ],
+  "paths": {
+    "/v2/Road/Link/GeoLocating/Coordinate/{locationX}/{locationY}/{Range}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得某[位置坐標]範圍[方圓公尺]之路段編碼基本資料",
+        "description": "依坐標定位取得某[位置坐標]範圍[方圓公尺]之路段編碼基本資料",
+        "operationId": "GeoLocating_GetCoordinate",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortest",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/Bearing/{Bearing}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[方位]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[方位]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestBearing",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Bearing",
+            "in": "path",
+            "description": "路段方位代碼 ex:N",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/RoadClass/{RoadClass}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestRoadClass",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "道路分類</br>0 = 國道</br>1 = 省道快速公路</br>2 = 市區快速道路</br>3 = 省道一般公路</br>4 = 市道、縣道</br>5 = 鄉道、區道</br>6 = 市區一般道路",
+            "required": true,
+            "schema": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/RoadClass/{RoadClass}/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]、[道路名稱]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]、[道路名稱]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestRoadClassRoadName",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "道路分類</br>0 = 國道</br>1 = 省道快速公路</br>2 = 市區快速道路</br>3 = 省道一般公路</br>4 = 市道、縣道</br>5 = 鄉道、區道</br>6 = 市區一般道路",
+            "required": true,
+            "schema": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱 ex:國道1號、臺61線",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/RoadClass/{RoadClass}/RoadName/{RoadName}/{Direction}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]、[道路名稱]、[道路方向]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路分類]、[道路名稱]、[道路方向]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestRoadClassRoadNameDirection",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "道路分類</br>0 = 國道</br>1 = 省道快速公路</br>2 = 市區快速道路</br>3 = 省道一般公路</br>4 = 市道、縣道</br>5 = 鄉道、區道</br>6 = 市區一般道路",
+            "required": true,
+            "schema": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱 ex:國道1號、臺61線",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Direction",
+            "in": "path",
+            "description": "道路方向:<br>公路等級[0 = 順向、1 = 逆向]\r\n                              <br>市區道路[0 = 北、1 = 東北、2 = 東、3 = 東南、4 = 南、5 = 西南、6 = 西、7 = 西北、8 = 外環道(順時鐘)、9 = 外環道(逆時鐘)、A = 圓環]",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "A"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/RoadID/{RoadID}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路代碼]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路代碼]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestRoadID",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadID",
+            "in": "path",
+            "description": "道路代碼 ex:000010",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Coordinate/Shortest/{locationX}/{locationY}/{Range}/RoadID/{RoadID}/{Direction}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路代碼]、[道路方向]距離最近之路段編碼基本資料",
+        "description": "依坐標定位取得指定[位置坐標]、範圍[方圓公尺]、[道路代碼]、[道路方向]距離最近之路段編碼基本資料",
+        "operationId": "GeoLocating_GetShortestRoadIDDirection",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:121.515497",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:25.076637",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Range",
+            "in": "path",
+            "description": "方圓公尺(上限：500)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadID",
+            "in": "path",
+            "description": "道路代碼 ex:000010",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Direction",
+            "in": "path",
+            "description": "道路方向:<br>公路等級[0 = 順向、1 = 逆向]\r\n                              <br>市區道路[0 = 北、1 = 東北、2 = 東、3 = 東南、4 = 南、5 = 西南、6 = 西、7 = 西北、8 = 外環道(順時鐘)、9 = 外環道(逆時鐘)、A = 圓環]",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6",
+                "7",
+                "8",
+                "9",
+                "A"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfLink"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/RoadClass/{RoadClass}/Mileage/Confidence/{RoadName}/{Direction}/{FromMileage}/to/{ToMileage}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "取得指定[道路分類]、[道路名稱]、[道路方向]、[起點里程]至[迄點里程]之路段編碼比對資料（不含一般市區道路）",
+        "operationId": "GeoLocating_GetMileageConfidence",
+        "parameters": [
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "道路分類代碼 ex:0</br>0 = 國道</br>1 = 省道快速公路</br>2 = 市區快速道路</br>3 = 省道一般公路</br>4 = 市道、縣道</br>5 = 鄉道、區道</br>6 = 市區一般道路",
+            "required": true,
+            "schema": {
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6
+              ],
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱 ex:國道1號、臺61線",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Direction",
+            "in": "path",
+            "description": "道路方向:<br>0 = 順向、1 = 逆向",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "FromMileage",
+            "in": "path",
+            "description": "起點里程(公里) ex:0.4",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "ToMileage",
+            "in": "path",
+            "description": "迄點里程(公里) ex:5.3",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfidenceOfMileage"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConfidenceOfMileage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Address/{Address}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "取得指定[地址]之路段編碼比對資料",
+        "description": "取得指定[地址]之路段編碼比對資料\r\n\r\n1.地址對應主要依據內政部門牌坐標查找最近之路段編碼，唯由於部份門牌可能有誤，使用者在進行資料引用時，需再特別注意使用。\r\n\r\n2.門牌坐標若位於道路二側中間，則系統將對應雙向道路，使用者在進行資料引用時宜再進行人工確認。",
+        "operationId": "GeoLocating_GetAddress",
+        "parameters": [
+          {
+            "name": "Address",
+            "in": "path",
+            "description": "地址",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfAddress"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfAddress"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/GeoLocating/Address/AddressRDName/{Address}": {
+      "get": {
+        "tags": [
+          "GeoLocating"
+        ],
+        "summary": "取得路名相同[地址]之路段編碼比對資料",
+        "description": "取得路名相同[地址]之路段編碼比對資料\r\n\r\n1.地址對應主要依據內政部門牌坐標查找最近之路段編碼，唯由於部份門牌可能有誤，使用者在進行資料引用時，需再特別注意使用。\r\n\r\n2.門牌坐標若位於道路二側中間，則系統將對應雙向道路，使用者在進行資料引用時宜再進行人工確認。",
+        "operationId": "GeoLocating_GetRoadAddress",
+        "parameters": [
+          {
+            "name": "Address",
+            "in": "path",
+            "description": "地址",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfAddress"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfAddress"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/Mapping/Station": {
+      "get": {
+        "tags": [
+          "Mapping"
+        ],
+        "summary": "取得運輸場站(出入口)對應之路段編碼基本資料",
+        "description": "取得運輸場站(出入口)對應之路段編碼基本資料",
+        "operationId": "Mapping_GetStation",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/Mapping/Station/Operator/{Operator}": {
+      "get": {
+        "tags": [
+          "Mapping"
+        ],
+        "summary": "依[運輸場站單位]取得運輸場站(出入口)對應之路段編碼基本資料",
+        "description": "依[運輸場站單位]取得運輸場站(出入口)對應之路段編碼基本資料",
+        "operationId": "Mapping_GetStationOperator",
+        "parameters": [
+          {
+            "name": "Operator",
+            "in": "path",
+            "description": "運輸場站單位<br>TRA: 交通部臺灣鐵路管理局\r\n                              <br>THSR: 臺灣高速鐵路股份有限公司\r\n                              <br>TRTC: 臺北大眾捷運股份有限公司\r\n                              <br>TYMC: 桃園大眾捷運股份有限公司  \r\n                              <br>TMRT: 臺中捷運股份有限公司   \r\n                              <br>KRTC: 高雄捷運股份有限公司\r\n                              <br>TRTCMG: 貓空纜車",
+            "required": true,
+            "schema": {
+              "enum": [
+                "TRA",
+                "THSR",
+                "TRTC",
+                "TYMC",
+                "TMRT",
+                "KRTC",
+                "TRTCMG"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Link/Mapping/Station/StationName/{StationName}": {
+      "get": {
+        "tags": [
+          "Mapping"
+        ],
+        "summary": "依[運輸場站名稱]取得運輸場站(出入口)對應之路段編碼基本資料",
+        "description": "依[運輸場站名稱]取得運輸場站(出入口)對應之路段編碼基本資料",
+        "operationId": "Mapping_GetStationName",
+        "parameters": [
+          {
+            "name": "StationName",
+            "in": "path",
+            "description": "運輸場站名稱 ex:臺北車站",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ArrayOfStation"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Transports/LinkID/{LinkID}": {
+      "get": {
+        "tags": [
+          "Transport"
+        ],
+        "summary": "取得指定[路段編碼]之設施資料",
+        "operationId": "Transport_GetLinkTransport",
+        "parameters": [
+          {
+            "name": "LinkID",
+            "in": "path",
+            "description": "基礎路段代碼 ex:0000300140000T",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkIDTransport"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkIDTransport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Transports/CityRoad/{City}/{RoadName}": {
+      "get": {
+        "tags": [
+          "Transport"
+        ],
+        "summary": "取得指定[縣市]、[道路名稱]之設施資料",
+        "operationId": "Transport_GetRoadNameTransport",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "縣市(英文)</br>Taipei = 臺北市</br>Taichung = 臺中市</br>Keelung = 基隆市</br>Tainan = 臺南市</br>Kaohsiung = 高雄市</br>NewTaipei = 新北市</br>YilanCounty = 宜蘭縣</br>Taoyuan = 桃園市</br>Chiayi = 嘉義市</br>HsinchuCounty = 新竹縣</br>MiaoliCounty = 苗栗縣</br>NantouCounty = 南投縣</br>ChanghuaCounty = 彰化縣</br>Hsinchu = 新竹市</br>YunlinCounty = 雲林縣</br>ChiayiCounty = 嘉義縣</br>PingtungCounty = 屏東縣</br>HualienCounty = 花蓮縣</br>TaitungCounty = 臺東縣</br>KinmenCounty = 金門縣</br>PenghuCounty = 澎湖縣</br>LienchiangCounty = 連江縣",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "Taichung",
+                "Keelung",
+                "Tainan",
+                "Kaohsiung",
+                "NewTaipei",
+                "YilanCounty",
+                "Taoyuan",
+                "Chiayi",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "NantouCounty",
+                "ChanghuaCounty",
+                "Hsinchu",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "PingtungCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱 ex:中山路",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadNameTransport"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadNameTransport"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Transports/RoadClass/{RoadClass}/{RoadName}": {
+      "get": {
+        "tags": [
+          "Transport"
+        ],
+        "summary": "取得指定[道路分類]、[道路名稱]之設施資料",
+        "operationId": "Transport_GetRDClassRDNameTransport",
+        "parameters": [
+          {
+            "name": "RoadClass",
+            "in": "path",
+            "description": "道路分類代碼 ex:0</br>0 = 國道</br>1 = 省道快速公路</br>2 = 市區快速道路</br>3 = 省道一般公路</br>4 = 市道、縣道</br>5 = 鄉道、區道</br>6 = 市區一般道路",
+            "required": true,
+            "schema": {
+              "enum": [
+                "0",
+                "1",
+                "2",
+                "3",
+                "4",
+                "5",
+                "6"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱 ex:中山路",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadClassTransport"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadClassTransport"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ArrayOfLink": {
+        "type": "object",
+        "properties": {
+          "Link": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Link"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Link": {
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "RoadID": {
+            "type": "string",
+            "description": "道路代碼",
+            "nullable": true
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱(中文)",
+            "nullable": true
+          },
+          "RoadClass": {
+            "type": "integer",
+            "description": "道路分類代碼",
+            "format": "int32"
+          },
+          "RoadClassName": {
+            "type": "string",
+            "description": "道路分類名稱(中文)",
+            "nullable": true
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向(參照即時路況資料標準2.0)",
+            "nullable": true
+          },
+          "RoadDirectionID": {
+            "type": "string",
+            "description": "道路方向(如：0, 1, 2..., 9, A)",
+            "nullable": true
+          },
+          "Bearing": {
+            "type": "string",
+            "description": "路段方位代碼",
+            "nullable": true
+          },
+          "StartNode": {
+            "type": "string",
+            "description": "基礎路段起始節點代碼",
+            "nullable": true
+          },
+          "EndNode": {
+            "type": "string",
+            "description": "基礎路段結束節點代碼",
+            "nullable": true
+          },
+          "StartMile": {
+            "type": "string",
+            "description": "基礎路段起始里程",
+            "nullable": true
+          },
+          "EndMile": {
+            "type": "string",
+            "description": "基礎路段結束里程",
+            "nullable": true
+          },
+          "MileLength": {
+            "type": "string",
+            "description": "基礎路段里程長度",
+            "nullable": true
+          },
+          "Length": {
+            "type": "number",
+            "description": "基礎路段GIS線形長度",
+            "format": "double"
+          },
+          "StartPoint": {
+            "type": "string",
+            "description": "基礎路段起始節點坐標",
+            "nullable": true
+          },
+          "EndPoint": {
+            "type": "string",
+            "description": "基礎路段終點節點坐標",
+            "nullable": true
+          },
+          "MidPoint": {
+            "type": "string",
+            "description": "基礎路段中點節點坐標",
+            "nullable": true
+          },
+          "OpenLR": {
+            "type": "string",
+            "description": "OpenLR代碼",
+            "nullable": true
+          },
+          "CityID": {
+            "type": "string",
+            "description": "縣市代碼",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市(英文)",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "資料版本編號",
+            "nullable": true
+          },
+          "UpdateDate": {
+            "type": "string",
+            "description": "資料更新日期時間(格式:yyyy-MM-dd)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConfidenceOfMileage": {
+        "type": "object",
+        "properties": {
+          "Confidence": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MileageConfidence"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "MileageConfidence": {
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "RoadID": {
+            "type": "string",
+            "description": "道路代碼",
+            "nullable": true
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱(中文)",
+            "nullable": true
+          },
+          "RoadClass": {
+            "type": "integer",
+            "description": "道路分類代碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "RoadClassName": {
+            "type": "string",
+            "description": "道路分類名稱(中文)",
+            "nullable": true
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向(參照即時路況資料標準 2.0)",
+            "nullable": true
+          },
+          "RoadDirectionID": {
+            "type": "string",
+            "description": "道路方向(如：0, 1, 2…,9,A)",
+            "nullable": true
+          },
+          "Bearing": {
+            "type": "string",
+            "description": "路段方位代碼",
+            "nullable": true
+          },
+          "StartNode": {
+            "type": "string",
+            "description": "基礎路段起始節點代碼",
+            "nullable": true
+          },
+          "EndNode": {
+            "type": "string",
+            "description": "基礎路段結束節點代碼",
+            "nullable": true
+          },
+          "StartMile": {
+            "type": "string",
+            "description": "基礎路段起始里程",
+            "nullable": true
+          },
+          "EndMile": {
+            "type": "string",
+            "description": "基礎路段結束里程",
+            "nullable": true
+          },
+          "MileLength": {
+            "type": "string",
+            "description": "基礎路段里程長度",
+            "nullable": true
+          },
+          "Length": {
+            "type": "number",
+            "description": "基礎路段GIS線形長度",
+            "format": "double",
+            "nullable": true
+          },
+          "CityID": {
+            "type": "string",
+            "description": "縣市代碼",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市(英文)",
+            "nullable": true
+          },
+          "Confidence": {
+            "type": "string",
+            "description": "路段涵蓋率",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "資料版本編號",
+            "nullable": true
+          },
+          "UpdateDate": {
+            "type": "string",
+            "description": "資料更新日期時間(格式:yyyy-MM-dd)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArrayOfAddress": {
+        "type": "object",
+        "properties": {
+          "Address": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Doorplate"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Doorplate": {
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "路段編碼ID",
+            "nullable": true
+          },
+          "RoadID": {
+            "type": "string",
+            "description": "道路代碼",
+            "nullable": true
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱(中文)",
+            "nullable": true
+          },
+          "RoadNameID": {
+            "type": "string",
+            "description": "道路代碼",
+            "nullable": true
+          },
+          "RoadClass": {
+            "type": "integer",
+            "description": "道路分類代碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "RoadClassName": {
+            "type": "string",
+            "description": "道路分類名稱(中文)",
+            "nullable": true
+          },
+          "CityID": {
+            "type": "string",
+            "description": "縣市代碼",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市(英文)",
+            "nullable": true
+          },
+          "Address": {
+            "type": "string",
+            "description": "地址",
+            "nullable": true
+          },
+          "Length": {
+            "type": "number",
+            "description": "基礎路段GIS線形長度",
+            "format": "double",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "description": "門牌註釋",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ArrayOfStation": {
+        "type": "object",
+        "properties": {
+          "Station": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Station"
+            },
+            "description": "運輸場站基礎資料",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Station": {
+        "type": "object",
+        "properties": {
+          "StationUID": {
+            "type": "string",
+            "description": "場站代號",
+            "nullable": true
+          },
+          "StationName": {
+            "type": "string",
+            "description": "場站名稱(中文)",
+            "nullable": true
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市(英文)",
+            "nullable": true
+          },
+          "Exits": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Exit"
+            },
+            "description": "出入口資訊",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "本平台資料版本",
+            "nullable": true
+          },
+          "UpdateDate": {
+            "type": "string",
+            "description": "本平台資料更新日期(格式:yyyy-MM-dd)",
+            "nullable": true
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料日期(格式:yyyy-MM-dd)",
+            "nullable": true
+          },
+          "SrcUpdateDate": {
+            "type": "string",
+            "description": "來源端資料更新日期(格式:yyyy-MM-dd)",
+            "nullable": true
+          },
+          "DataSource": {
+            "type": "string",
+            "description": "來源平台",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Exit": {
+        "type": "object",
+        "properties": {
+          "ExitName": {
+            "type": "string",
+            "description": "出入口名稱(中文)",
+            "nullable": true
+          },
+          "LocationNote": {
+            "type": "string",
+            "description": "出入口描述",
+            "nullable": true
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "位置緯度(WGS84)",
+            "format": "float",
+            "nullable": true
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "位置經度(WGS84)",
+            "format": "float",
+            "nullable": true
+          },
+          "RoadID": {
+            "type": "string",
+            "description": "道路代碼",
+            "nullable": true
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱(中文)",
+            "nullable": true
+          },
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "Bearing": {
+            "type": "string",
+            "description": "路段方位代碼",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkIDTransport": {
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱",
+            "nullable": true
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "縣市代碼(三碼)",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號",
+            "nullable": true
+          },
+          "Updatetime": {
+            "type": "string",
+            "description": "資料更新時間",
+            "nullable": true
+          },
+          "Transports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Transport"
+            },
+            "description": "運輸資料結果",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "Transport": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "type": "string",
+            "description": "設施類別(VD,CMS,VD,CCTV,Etag,ParkingEntranceExits,StationExits,BusStop,BusStation)",
+            "nullable": true
+          },
+          "ID": {
+            "type": "string",
+            "description": "設施代碼",
+            "nullable": true
+          },
+          "AuthorityCode": {
+            "type": "string",
+            "description": "業管機關簡碼",
+            "nullable": true
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "位置經度(WGS84)",
+            "format": "double",
+            "nullable": true
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "位置緯度(WGS84)",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoadNameTransport": {
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "縣市代碼(三碼)",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號",
+            "nullable": true
+          },
+          "Updatetime": {
+            "type": "string",
+            "description": "資料更新時間",
+            "nullable": true
+          },
+          "Transports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkOfTransport"
+            },
+            "description": "運輸資料結果",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LinkOfTransport": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "type": "string",
+            "description": "設施類別(VD,CMS,VD,CCTV,Etag,ParkingEntranceExits,StationExits,BusStop,BusStation)",
+            "nullable": true
+          },
+          "ID": {
+            "type": "string",
+            "description": "設施代碼",
+            "nullable": true
+          },
+          "AuthorityCode": {
+            "type": "string",
+            "description": "業管機關簡碼",
+            "nullable": true
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "位置經度(WGS84)",
+            "format": "double",
+            "nullable": true
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "位置緯度(WGS84)",
+            "format": "double",
+            "nullable": true
+          },
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoadClassTransport": {
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱",
+            "nullable": true
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號",
+            "nullable": true
+          },
+          "Updatetime": {
+            "type": "string",
+            "description": "資料更新時間",
+            "nullable": true
+          },
+          "Transports": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoadOfTransport"
+            },
+            "description": "運輸資料結果",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RoadOfTransport": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "type": "string",
+            "description": "設施類別(VD,CMS,VD,CCTV,Etag,ParkingEntranceExits,StationExits,BusStop,BusStation)",
+            "nullable": true
+          },
+          "ID": {
+            "type": "string",
+            "description": "設施代碼",
+            "nullable": true
+          },
+          "AuthorityCode": {
+            "type": "string",
+            "description": "業管機關簡碼",
+            "nullable": true
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "位置經度(WGS84)",
+            "format": "double",
+            "nullable": true
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "位置緯度(WGS84)",
+            "format": "double",
+            "nullable": true
+          },
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼",
+            "nullable": true
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向",
+            "nullable": true
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)",
+            "nullable": true
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "縣市代碼(三碼)",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "GeoLocating",
+      "description": "地理坐標定位"
+    },
+    {
+      "name": "Mapping",
+      "description": "路段比對資料"
+    },
+    {
+      "name": "Transport",
+      "description": "道路運輸資料"
+    }
+  ]
+}

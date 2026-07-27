@@ -1,0 +1,1025 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "氣象資訊",
+    "description": "本平臺提供涵蓋全國尺度之交通旅運資料服務API，歡迎各產政學單位介接使用。\n#### ◃ 本資料使用注意事項 ▹\n1. Swagger上的API僅供預覽測試用途 (預設查詢筆數為 30，上限數值為 100，意即 `$top` 參數上限為 100)。 若需要取得更完整資料，請至平臺申請以獲取相關使用權限。\n2. 大部分API必須事先選定日期範圍，日期範圍選取越廣資料便越多，需等待API回應，或選定較小的日前範圍。\n\n<br>計費方式：\n<br>計次：10次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/e438732e-6d82-473c-8f18-8f7895f91d84)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "維運團隊 [tdc@motc.gov.tw]",
+      "email": "tdc@motc.gov.tw"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/historical"
+    }
+  ],
+  "paths": {
+    "/v1/Weather/Observation/AWS": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "取得自動氣象站-氣象觀測資料",
+        "description": "提供自動氣象站-氣象觀測資料，包含測站ID、縣市、經緯度、風向、風速、氣壓、累積雨量、資料更新時間…等資訊",
+        "operationId": "WeatherObservationAWS",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-Dates"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherObservationAWS"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"Lat\": 0.0,\n    \"Lon\": 0.0,\n    \"LatWGS84\": 0.0,\n    \"LonWGS84\": 0.0,\n    \"LocationName\": \"string\",\n    \"StationID\": \"string\",\n    \"ObsTime\": \"2026-07-27 00:00:03\",\n    \"ELEV\": 0.0,\n    \"WDIR\": 0.0,\n    \"WDSD\": 0.0,\n    \"Temp\": 0.0,\n    \"HUMD\": 0.0,\n    \"PRES\": 0.0,\n    \"H24R\": 0.0,\n    \"H_FX\": 0.0,\n    \"H_XD\": 0.0,\n    \"H_FXT\": \"string\",\n    \"D_TX\": 0.0,\n    \"D_TXT\": \"string\",\n    \"D_TN\": 0.0,\n    \"D_TNT\": \"string\",\n    \"City\": \"string\",\n    \"CitySn\": \"string\",\n    \"Town\": \"string\",\n    \"TownSn\": \"string\",\n    \"SrcUpdateTime\": \"2026-07-27 00:00:03\",\n    \"UpdateTime\": \"2026-07-27 00:00:03\",\n    \"InfoTime\": \"2026-07-27 00:00:03\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"Lat\": 0.0,\"Lon\": 0.0,\"LatWGS84\": 0.0,\"LonWGS84\": 0.0,\"LocationName\":\"string\",\"StationID\":\"string\",\"ObsTime\":\"2026-07-27 00:00:03\",\"ELEV\": 0.0,\"WDIR\": 0.0,\"WDSD\": 0.0,\"Temp\": 0.0,\"HUMD\": 0.0,\"PRES\": 0.0,\"H24R\": 0.0,\"H_FX\": 0.0,\"H_XD\": 0.0,\"H_FXT\":\"string\",\"D_TX\": 0.0,\"D_TXT\":\"string\",\"D_TN\": 0.0,\"D_TNT\":\"string\",\"City\":\"string\",\"CitySn\":\"string\",\"Town\":\"string\",\"TownSn\":\"string\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}\n{\"Lat\": 0.0,\"Lon\": 0.0,\"LatWGS84\": 0.0,\"LonWGS84\": 0.0,\"LocationName\":\"string\",\"StationID\":\"string\",\"ObsTime\":\"2026-07-27 00:00:03\",\"ELEV\": 0.0,\"WDIR\": 0.0,\"WDSD\": 0.0,\"Temp\": 0.0,\"HUMD\": 0.0,\"PRES\": 0.0,\"H24R\": 0.0,\"H_FX\": 0.0,\"H_XD\": 0.0,\"H_FXT\":\"string\",\"D_TX\": 0.0,\"D_TXT\":\"string\",\"D_TN\": 0.0,\"D_TNT\":\"string\",\"City\":\"string\",\"CitySn\":\"string\",\"Town\":\"string\",\"TownSn\":\"string\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Lat": {
+                      "type": "number",
+                      "description": "緯度(座標系統採TWD67)",
+                      "format": "double"
+                    },
+                    "Lon": {
+                      "type": "number",
+                      "description": "經度(座標系統採TWD67)",
+                      "format": "double"
+                    },
+                    "LatWGS84": {
+                      "type": "number",
+                      "description": "緯度(座標系統採WGS84)",
+                      "format": "double"
+                    },
+                    "LonWGS84": {
+                      "type": "number",
+                      "description": "經度(座標系統採WGS84)",
+                      "format": "double"
+                    },
+                    "LocationName": {
+                      "type": "string",
+                      "description": "測站名稱"
+                    },
+                    "StationID": {
+                      "type": "string",
+                      "description": "測站編號"
+                    },
+                    "ObsTime": {
+                      "type": "string",
+                      "description": "觀測資料時間",
+                      "format": "date-time"
+                    },
+                    "ELEV": {
+                      "type": "number",
+                      "description": "高度，單位: 公尺",
+                      "format": "double"
+                    },
+                    "WDIR": {
+                      "type": "number",
+                      "description": "風向，單位: 度，一般風向;0表示無風",
+                      "format": "double"
+                    },
+                    "WDSD": {
+                      "type": "number",
+                      "description": "風速，單位: 公尺/秒",
+                      "format": "double"
+                    },
+                    "Temp": {
+                      "type": "number",
+                      "description": "溫度，單位: 攝氏",
+                      "format": "double"
+                    },
+                    "HUMD": {
+                      "type": "number",
+                      "description": "相對濕度，單位: 百分比率，此處以實數0-1.0記錄",
+                      "format": "double"
+                    },
+                    "PRES": {
+                      "type": "number",
+                      "description": "測站氣壓，單位: 百帕",
+                      "format": "double"
+                    },
+                    "H24R": {
+                      "type": "number",
+                      "description": "日累積雨量，單位: 毫米",
+                      "format": "double"
+                    },
+                    "H_FX": {
+                      "type": "number",
+                      "description": "小時最大陣風風速，單位: 公尺/秒",
+                      "format": "double"
+                    },
+                    "H_XD": {
+                      "type": "number",
+                      "description": "小時最大陣風風向，單位: 度",
+                      "format": "double"
+                    },
+                    "H_FXT": {
+                      "type": "string",
+                      "description": "小時最大陣風時間，hhmm(小時分鐘)"
+                    },
+                    "D_TX": {
+                      "type": "number",
+                      "description": "本日最高溫，單位: 攝氏",
+                      "format": "double"
+                    },
+                    "D_TXT": {
+                      "type": "string",
+                      "description": "本日最高溫發生時間，hhmm(小時分鐘)"
+                    },
+                    "D_TN": {
+                      "type": "number",
+                      "description": "本日最低溫，單位: 攝氏",
+                      "format": "double"
+                    },
+                    "D_TNT": {
+                      "type": "string",
+                      "description": "本日最低溫發生時間，hhmm(小時分鐘)"
+                    },
+                    "City": {
+                      "type": "string",
+                      "description": "縣市名稱"
+                    },
+                    "CitySn": {
+                      "type": "string",
+                      "description": "縣市代碼"
+                    },
+                    "Town": {
+                      "type": "string",
+                      "description": "鄉鎮名稱"
+                    },
+                    "TownSn": {
+                      "type": "string",
+                      "description": "鄉鎮代碼"
+                    },
+                    "SrcUpdateTime": {
+                      "type": "string",
+                      "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"Lat\",\"Lon\",\"LatWGS84\",\"LonWGS84\",\"LocationName\",\"StationID\",\"ObsTime\",\"ELEV\",\"WDIR\",\"WDSD\",\"Temp\",\"HUMD\",\"PRES\",\"H24R\",\"H_FX\",\"H_XD\",\"H_FXT\",\"D_TX\",\"D_TXT\",\"D_TN\",\"D_TNT\",\"City\",\"CitySn\",\"Town\",\"TownSn\",\"SrcUpdateTime\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"string\",\"string\",\"2026-07-27 00:00:03\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"string\",\"0.0\",\"string\",\"0.0\",\"string\",\"string\",\"string\",\"string\",\"string\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/Weather/Observation/CWS": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "取得局屬氣象站-天氣觀測報告資料",
+        "description": "提供氣象觀測資料，包含測站ID、縣市、經緯度、風向、風速、氣壓、累積雨量、資料更新時間…等資訊",
+        "operationId": "WeatherObservationCWS",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-Dates"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherObservationCWS"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"Lat\": 0.0,\n    \"Lon\": 0.0,\n    \"LatWGS84\": 0.0,\n    \"LonWGS84\": 0.0,\n    \"LocationName\": \"string\",\n    \"StationID\": \"string\",\n    \"ObsTime\": \"2026-07-27 00:00:03\",\n    \"D_TNT\": \"string\",\n    \"ELEV\": \"string\",\n    \"WDIR\": \"string\",\n    \"WDSD\": \"string\",\n    \"Temp\": 0,\n    \"HUMD\": 0,\n    \"PRES\": 0,\n    \"D24R\": \"string\",\n    \"H_FX\": \"string\",\n    \"H_XD\": 0.0,\n    \"H_FXT\": \"string\",\n    \"H_F10\": 0,\n    \"H_10D\": \"string\",\n    \"H_F10T\": \"string\",\n    \"H_UVI\": 0.0,\n    \"D_TX\": \"string\",\n    \"D_TXT\": \"string\",\n    \"D_TN\": 0,\n    \"D_TS\": \"string\",\n    \"VIS\": \"string\",\n    \"City\": \"string\",\n    \"CitySn\": \"string\",\n    \"Town\": \"string\",\n    \"TownSn\": \"string\",\n    \"SrcUpdateTime\": \"2026-07-27 00:00:03\",\n    \"UpdateTime\": \"2026-07-27 00:00:03\",\n    \"InfoTime\": \"2026-07-27 00:00:03\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"Lat\": 0.0,\"Lon\": 0.0,\"LatWGS84\": 0.0,\"LonWGS84\": 0.0,\"LocationName\":\"string\",\"StationID\":\"string\",\"ObsTime\":\"2026-07-27 00:00:03\",\"D_TNT\":\"string\",\"ELEV\":\"string\",\"WDIR\":\"string\",\"WDSD\":\"string\",\"Temp\": 0,\"HUMD\": 0,\"PRES\": 0,\"D24R\":\"string\",\"H_FX\":\"string\",\"H_XD\": 0.0,\"H_FXT\":\"string\",\"H_F10\": 0,\"H_10D\":\"string\",\"H_F10T\":\"string\",\"H_UVI\": 0.0,\"D_TX\":\"string\",\"D_TXT\":\"string\",\"D_TN\": 0,\"D_TS\":\"string\",\"VIS\":\"string\",\"City\":\"string\",\"CitySn\":\"string\",\"Town\":\"string\",\"TownSn\":\"string\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}\n{\"Lat\": 0.0,\"Lon\": 0.0,\"LatWGS84\": 0.0,\"LonWGS84\": 0.0,\"LocationName\":\"string\",\"StationID\":\"string\",\"ObsTime\":\"2026-07-27 00:00:03\",\"D_TNT\":\"string\",\"ELEV\":\"string\",\"WDIR\":\"string\",\"WDSD\":\"string\",\"Temp\": 0,\"HUMD\": 0,\"PRES\": 0,\"D24R\":\"string\",\"H_FX\":\"string\",\"H_XD\": 0.0,\"H_FXT\":\"string\",\"H_F10\": 0,\"H_10D\":\"string\",\"H_F10T\":\"string\",\"H_UVI\": 0.0,\"D_TX\":\"string\",\"D_TXT\":\"string\",\"D_TN\": 0,\"D_TS\":\"string\",\"VIS\":\"string\",\"City\":\"string\",\"CitySn\":\"string\",\"Town\":\"string\",\"TownSn\":\"string\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Lat": {
+                      "type": "number",
+                      "description": "緯度(座標系統採TWD67)",
+                      "format": "double"
+                    },
+                    "Lon": {
+                      "type": "number",
+                      "description": "經度(座標系統採TWD67)",
+                      "format": "double"
+                    },
+                    "LatWGS84": {
+                      "type": "number",
+                      "description": "緯度(座標系統採WGS84)",
+                      "format": "double"
+                    },
+                    "LonWGS84": {
+                      "type": "number",
+                      "description": "經度(座標系統採WGS84)",
+                      "format": "double"
+                    },
+                    "LocationName": {
+                      "type": "string",
+                      "description": "測站名稱"
+                    },
+                    "StationID": {
+                      "type": "string",
+                      "description": "測站編號"
+                    },
+                    "ObsTime": {
+                      "type": "string",
+                      "description": "觀測資料時間",
+                      "format": "date-time"
+                    },
+                    "D_TNT": {
+                      "type": "string",
+                      "description": "本日最低溫發生時間，hhmm(小時分鐘)"
+                    },
+                    "ELEV": {
+                      "type": "string",
+                      "description": "高度，單位: 公尺"
+                    },
+                    "WDIR": {
+                      "type": "string",
+                      "description": "風向，單位: 度，一般風向;0表示無風"
+                    },
+                    "WDSD": {
+                      "type": "string",
+                      "description": "風速，單位: 公尺/秒"
+                    },
+                    "Temp": {
+                      "type": "integer",
+                      "description": "溫度，單位: 攝氏",
+                      "format": "int32"
+                    },
+                    "HUMD": {
+                      "type": "integer",
+                      "description": "相對濕度，單位: 百分比率，此處以實數0-1.0記錄",
+                      "format": "int32"
+                    },
+                    "PRES": {
+                      "type": "integer",
+                      "description": "測站氣壓，單位: 百帕",
+                      "format": "int32"
+                    },
+                    "D24R": {
+                      "type": "string",
+                      "description": "日累積雨量，單位: 毫米"
+                    },
+                    "H_FX": {
+                      "type": "string",
+                      "description": "小時最大陣風風速，單位: 公尺/秒"
+                    },
+                    "H_XD": {
+                      "type": "number",
+                      "description": "小時最大陣風風向，單位: 度",
+                      "format": "double"
+                    },
+                    "H_FXT": {
+                      "type": "string",
+                      "description": "小時最大陣風時間，hhmm(小時分鐘)"
+                    },
+                    "H_F10": {
+                      "type": "integer",
+                      "description": "本時最大10分鐘平均風速，單位: 公尺/秒",
+                      "format": "int32"
+                    },
+                    "H_10D": {
+                      "type": "string",
+                      "description": "本時最大10分鐘平均風向，單位: 度"
+                    },
+                    "H_F10T": {
+                      "type": "string",
+                      "description": "本時最大10分鐘平均風速發生時間，hhmm(小時分鐘)"
+                    },
+                    "H_UVI": {
+                      "type": "number",
+                      "description": "小時紫外線指數",
+                      "format": "double"
+                    },
+                    "D_TX": {
+                      "type": "string",
+                      "description": "本日最高溫，單位: 攝氏"
+                    },
+                    "D_TXT": {
+                      "type": "string",
+                      "description": "本日最高溫發生時間，hhmm(小時分鐘)"
+                    },
+                    "D_TN": {
+                      "type": "integer",
+                      "description": "本日最低溫，單位: 攝氏",
+                      "format": "int32"
+                    },
+                    "D_TS": {
+                      "type": "string",
+                      "description": "本日總日照時數，單位: 小時"
+                    },
+                    "VIS": {
+                      "type": "string",
+                      "description": "10分鐘盛⾏能⾒度 （區間或⽂字描述）單位: 公里單位: 公里"
+                    },
+                    "City": {
+                      "type": "string",
+                      "description": "縣市名稱"
+                    },
+                    "CitySn": {
+                      "type": "string",
+                      "description": "縣市代碼"
+                    },
+                    "Town": {
+                      "type": "string",
+                      "description": "鄉鎮名稱"
+                    },
+                    "TownSn": {
+                      "type": "string",
+                      "description": "鄉鎮代碼"
+                    },
+                    "SrcUpdateTime": {
+                      "type": "string",
+                      "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"Lat\",\"Lon\",\"LatWGS84\",\"LonWGS84\",\"LocationName\",\"StationID\",\"ObsTime\",\"D_TNT\",\"ELEV\",\"WDIR\",\"WDSD\",\"Temp\",\"HUMD\",\"PRES\",\"D24R\",\"H_FX\",\"H_XD\",\"H_FXT\",\"H_F10\",\"H_10D\",\"H_F10T\",\"H_UVI\",\"D_TX\",\"D_TXT\",\"D_TN\",\"D_TS\",\"VIS\",\"City\",\"CitySn\",\"Town\",\"TownSn\",\"SrcUpdateTime\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"0.0\",\"0.0\",\"0.0\",\"0.0\",\"string\",\"string\",\"2026-07-27 00:00:03\",\"string\",\"string\",\"string\",\"string\",\"0\",\"0\",\"0\",\"string\",\"string\",\"0.0\",\"string\",\"0\",\"string\",\"string\",\"0.0\",\"string\",\"string\",\"0\",\"string\",\"string\",\"string\",\"string\",\"string\",\"string\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/Weather/Hazard": {
+      "get": {
+        "tags": [
+          "Weather"
+        ],
+        "summary": "取得個別縣市天氣警特報資料",
+        "description": "提供氣象特報資料，包含觀測地區、地理編碼、觀測起迄時間、資料更新時間…等資訊",
+        "operationId": "WeatherHazard",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-Dates"
+          },
+          {
+            "$ref": "#/components/parameters/DatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/WeatherHazard"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"LocationName\": \"string\",\n    \"Geocode\": \"string\",\n    \"Phenomena\": \"string\",\n    \"Significance\": \"string\",\n    \"StartTime\": \"2026-07-27 00:00:03\",\n    \"EndTime\": \"2026-07-27 00:00:03\",\n    \"SrcUpdateTime\": \"2026-07-27 00:00:03\",\n    \"UpdateTime\": \"2026-07-27 00:00:03\",\n    \"InfoTime\": \"2026-07-27 00:00:03\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"LocationName\":\"string\",\"Geocode\":\"string\",\"Phenomena\":\"string\",\"Significance\":\"string\",\"StartTime\":\"2026-07-27 00:00:03\",\"EndTime\":\"2026-07-27 00:00:03\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}\n{\"LocationName\":\"string\",\"Geocode\":\"string\",\"Phenomena\":\"string\",\"Significance\":\"string\",\"StartTime\":\"2026-07-27 00:00:03\",\"EndTime\":\"2026-07-27 00:00:03\",\"SrcUpdateTime\":\"2026-07-27 00:00:03\",\"UpdateTime\":\"2026-07-27 00:00:03\",\"InfoTime\":\"2026-07-27 00:00:03\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "LocationName": {
+                      "type": "string",
+                      "description": "觀測地區"
+                    },
+                    "Geocode": {
+                      "type": "string",
+                      "description": "地理編碼",
+                      "nullable": true
+                    },
+                    "Phenomena": {
+                      "type": "string",
+                      "description": "觀測現象"
+                    },
+                    "Significance": {
+                      "type": "string",
+                      "description": "重要性",
+                      "nullable": true
+                    },
+                    "StartTime": {
+                      "type": "string",
+                      "description": "觀測開始時間",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "EndTime": {
+                      "type": "string",
+                      "description": "觀測結束時間",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "SrcUpdateTime": {
+                      "type": "string",
+                      "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date",
+                      "nullable": true
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"LocationName\",\"Geocode\",\"Phenomena\",\"Significance\",\"StartTime\",\"EndTime\",\"SrcUpdateTime\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"string\",\"string\",\"string\",\"string\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27 00:00:03\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "WeatherObservationAWS": {
+        "type": "object",
+        "properties": {
+          "Lat": {
+            "type": "number",
+            "description": "緯度(座標系統採TWD67)",
+            "format": "double"
+          },
+          "Lon": {
+            "type": "number",
+            "description": "經度(座標系統採TWD67)",
+            "format": "double"
+          },
+          "LatWGS84": {
+            "type": "number",
+            "description": "緯度(座標系統採WGS84)",
+            "format": "double"
+          },
+          "LonWGS84": {
+            "type": "number",
+            "description": "經度(座標系統採WGS84)",
+            "format": "double"
+          },
+          "LocationName": {
+            "type": "string",
+            "description": "測站名稱"
+          },
+          "StationID": {
+            "type": "string",
+            "description": "測站編號"
+          },
+          "ObsTime": {
+            "type": "string",
+            "description": "觀測資料時間",
+            "format": "date-time"
+          },
+          "ELEV": {
+            "type": "number",
+            "description": "高度，單位: 公尺",
+            "format": "double"
+          },
+          "WDIR": {
+            "type": "number",
+            "description": "風向，單位: 度，一般風向;0表示無風",
+            "format": "double"
+          },
+          "WDSD": {
+            "type": "number",
+            "description": "風速，單位: 公尺/秒",
+            "format": "double"
+          },
+          "Temp": {
+            "type": "number",
+            "description": "溫度，單位: 攝氏",
+            "format": "double"
+          },
+          "HUMD": {
+            "type": "number",
+            "description": "相對濕度，單位: 百分比率，此處以實數0-1.0記錄",
+            "format": "double"
+          },
+          "PRES": {
+            "type": "number",
+            "description": "測站氣壓，單位: 百帕",
+            "format": "double"
+          },
+          "H24R": {
+            "type": "number",
+            "description": "日累積雨量，單位: 毫米",
+            "format": "double"
+          },
+          "H_FX": {
+            "type": "number",
+            "description": "小時最大陣風風速，單位: 公尺/秒",
+            "format": "double"
+          },
+          "H_XD": {
+            "type": "number",
+            "description": "小時最大陣風風向，單位: 度",
+            "format": "double"
+          },
+          "H_FXT": {
+            "type": "string",
+            "description": "小時最大陣風時間，hhmm(小時分鐘)"
+          },
+          "D_TX": {
+            "type": "number",
+            "description": "本日最高溫，單位: 攝氏",
+            "format": "double"
+          },
+          "D_TXT": {
+            "type": "string",
+            "description": "本日最高溫發生時間，hhmm(小時分鐘)"
+          },
+          "D_TN": {
+            "type": "number",
+            "description": "本日最低溫，單位: 攝氏",
+            "format": "double"
+          },
+          "D_TNT": {
+            "type": "string",
+            "description": "本日最低溫發生時間，hhmm(小時分鐘)"
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市名稱"
+          },
+          "CitySn": {
+            "type": "string",
+            "description": "縣市代碼"
+          },
+          "Town": {
+            "type": "string",
+            "description": "鄉鎮名稱"
+          },
+          "TownSn": {
+            "type": "string",
+            "description": "鄉鎮代碼"
+          },
+          "SrcUpdateTime": {
+            "type": "string",
+            "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoTime": {
+            "type": "string",
+            "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date"
+          }
+        }
+      },
+      "ErrorModel": {
+        "type": "object",
+        "properties": {
+          "HttpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 狀態碼",
+            "format": "int32"
+          },
+          "HttpStatusType": {
+            "type": "string",
+            "description": "HTTP 狀態類別"
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "description": "錯誤訊息",
+            "nullable": true
+          }
+        }
+      },
+      "WeatherObservationCWS": {
+        "type": "object",
+        "properties": {
+          "Lat": {
+            "type": "number",
+            "description": "緯度(座標系統採TWD67)",
+            "format": "double"
+          },
+          "Lon": {
+            "type": "number",
+            "description": "經度(座標系統採TWD67)",
+            "format": "double"
+          },
+          "LatWGS84": {
+            "type": "number",
+            "description": "緯度(座標系統採WGS84)",
+            "format": "double"
+          },
+          "LonWGS84": {
+            "type": "number",
+            "description": "經度(座標系統採WGS84)",
+            "format": "double"
+          },
+          "LocationName": {
+            "type": "string",
+            "description": "測站名稱"
+          },
+          "StationID": {
+            "type": "string",
+            "description": "測站編號"
+          },
+          "ObsTime": {
+            "type": "string",
+            "description": "觀測資料時間",
+            "format": "date-time"
+          },
+          "D_TNT": {
+            "type": "string",
+            "description": "本日最低溫發生時間，hhmm(小時分鐘)"
+          },
+          "ELEV": {
+            "type": "string",
+            "description": "高度，單位: 公尺"
+          },
+          "WDIR": {
+            "type": "string",
+            "description": "風向，單位: 度，一般風向;0表示無風"
+          },
+          "WDSD": {
+            "type": "string",
+            "description": "風速，單位: 公尺/秒"
+          },
+          "Temp": {
+            "type": "integer",
+            "description": "溫度，單位: 攝氏",
+            "format": "int32"
+          },
+          "HUMD": {
+            "type": "integer",
+            "description": "相對濕度，單位: 百分比率，此處以實數0-1.0記錄",
+            "format": "int32"
+          },
+          "PRES": {
+            "type": "integer",
+            "description": "測站氣壓，單位: 百帕",
+            "format": "int32"
+          },
+          "D24R": {
+            "type": "string",
+            "description": "日累積雨量，單位: 毫米"
+          },
+          "H_FX": {
+            "type": "string",
+            "description": "小時最大陣風風速，單位: 公尺/秒"
+          },
+          "H_XD": {
+            "type": "number",
+            "description": "小時最大陣風風向，單位: 度",
+            "format": "double"
+          },
+          "H_FXT": {
+            "type": "string",
+            "description": "小時最大陣風時間，hhmm(小時分鐘)"
+          },
+          "H_F10": {
+            "type": "integer",
+            "description": "本時最大10分鐘平均風速，單位: 公尺/秒",
+            "format": "int32"
+          },
+          "H_10D": {
+            "type": "string",
+            "description": "本時最大10分鐘平均風向，單位: 度"
+          },
+          "H_F10T": {
+            "type": "string",
+            "description": "本時最大10分鐘平均風速發生時間，hhmm(小時分鐘)"
+          },
+          "H_UVI": {
+            "type": "number",
+            "description": "小時紫外線指數",
+            "format": "double"
+          },
+          "D_TX": {
+            "type": "string",
+            "description": "本日最高溫，單位: 攝氏"
+          },
+          "D_TXT": {
+            "type": "string",
+            "description": "本日最高溫發生時間，hhmm(小時分鐘)"
+          },
+          "D_TN": {
+            "type": "integer",
+            "description": "本日最低溫，單位: 攝氏",
+            "format": "int32"
+          },
+          "D_TS": {
+            "type": "string",
+            "description": "本日總日照時數，單位: 小時"
+          },
+          "VIS": {
+            "type": "string",
+            "description": "10分鐘盛⾏能⾒度 （區間或⽂字描述）單位: 公里單位: 公里"
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市名稱"
+          },
+          "CitySn": {
+            "type": "string",
+            "description": "縣市代碼"
+          },
+          "Town": {
+            "type": "string",
+            "description": "鄉鎮名稱"
+          },
+          "TownSn": {
+            "type": "string",
+            "description": "鄉鎮代碼"
+          },
+          "SrcUpdateTime": {
+            "type": "string",
+            "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoTime": {
+            "type": "string",
+            "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date"
+          }
+        }
+      },
+      "WeatherHazard": {
+        "type": "object",
+        "properties": {
+          "LocationName": {
+            "type": "string",
+            "description": "觀測地區"
+          },
+          "Geocode": {
+            "type": "string",
+            "description": "地理編碼",
+            "nullable": true
+          },
+          "Phenomena": {
+            "type": "string",
+            "description": "觀測現象"
+          },
+          "Significance": {
+            "type": "string",
+            "description": "重要性",
+            "nullable": true
+          },
+          "StartTime": {
+            "type": "string",
+            "description": "觀測開始時間",
+            "format": "date-time",
+            "nullable": true
+          },
+          "EndTime": {
+            "type": "string",
+            "description": "觀測結束時間",
+            "format": "date-time",
+            "nullable": true
+          },
+          "SrcUpdateTime": {
+            "type": "string",
+            "description": "來源端平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time",
+            "nullable": true
+          },
+          "InfoTime": {
+            "type": "string",
+            "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time",
+            "nullable": true
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "responses": {
+      "GeneralErrorResponse": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorModel"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "DatesQueryAPI-Dates": {
+        "name": "Dates",
+        "in": "query",
+        "description": "欲查詢之日期 / 區間(日期格式為: 'yyyy-MM-dd', 查詢多筆使用逗號','分隔, 查詢區間使用波浪號'~'分隔, 查詢天數最多7日, 例如: '2021-06-01,2021-06-03~2021-06-05')",
+        "allowReserved": true,
+        "schema": {
+          "type": "string",
+          "default": "2021-08-01"
+        }
+      },
+      "DatesQueryAPI-top": {
+        "name": "$top",
+        "in": "query",
+        "description": "取前幾筆",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maximum": 100.0,
+          "minimum": 1.0,
+          "type": "integer",
+          "format": "int32",
+          "default": 30,
+          "example": 30
+        }
+      },
+      "NoRestrictAPI-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "DatesQueryAPI-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "NoRestrictAPI-top": {
+        "name": "$top",
+        "in": "query",
+        "description": "取前幾筆",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maximum": 100.0,
+          "minimum": 1.0,
+          "type": "integer",
+          "format": "int32",
+          "default": 30,
+          "example": 30
+        }
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Weather",
+      "description": "氣象資料"
+    }
+  ]
+}

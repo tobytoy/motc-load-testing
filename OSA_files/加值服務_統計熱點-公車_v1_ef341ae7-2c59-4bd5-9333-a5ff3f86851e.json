@@ -1,0 +1,1530 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "統計熱點-公車",
+    "description": "本平臺提供涵蓋全國尺度之交通旅運資料服務API，歡迎各產政學單位介接使用。\n<br><span class=swagger-description-indicatation>利用本平臺開放資料進行各項應用服務開發時，請考量不同特性使用者(如：性別/身心障礙/老幼等)的需求，並歡迎回饋寶貴意見</span>。\n<br>計費方式：\n<br>計次：10次/1點\n<br>計量：1MB/10點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/ef341ae7-2c59-4bd5-9333-a5ff3f86851e)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/premium"
+    }
+  ],
+  "paths": {
+    "/Link/RouteStats/CityRoad/{City}/{RoadName}": {
+      "get": {
+        "tags": [
+          "RouteStats"
+        ],
+        "summary": "指定[縣市]、[道路]公車路線數量",
+        "description": "指定[縣市]、[道路]公車路線數量",
+        "operationId": "RouteStats_CityRoad",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "縣市<br>Taipei = 臺北市, <br>Taichung = 臺中市, <br>Keelung = 基隆市, <br>Tainan = 臺南市, <br>Kaohsiung = 高雄市, <br>NewTaipei = 新北市, <br>YilanCounty = 宜蘭縣, <br>Taoyuan = 桃園市, <br>Chiayi = 嘉義市, <br>HsinchuCounty = 新竹縣, <br>MiaoliCounty = 苗栗縣, <br>NantouCounty = 南投縣, <br>ChanghuaCounty = 彰化縣, <br>Hsinchu = 新竹市, <br>YunlinCounty = 雲林縣, <br>ChiayiCounty = 嘉義縣, <br>PingtungCounty = 屏東縣, <br>HualienCounty = 花蓮縣, <br>TaitungCounty = 臺東縣, <br>KinmenCounty = 金門縣, <br>PenghuCounty = 澎湖縣, <br>LienchiangCounty = 連江縣, <br>InterCity = 公路客運",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty",
+                "InterCity"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadRouteStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadRouteStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadRouteStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadRouteStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/RouteStats/LinkID/Coordinate/{locationX}/{locationY}/{Distance}": {
+      "get": {
+        "tags": [
+          "RouteStats"
+        ],
+        "summary": "指定[坐標]公車路線數量",
+        "description": "指定[坐標]公車路線數量",
+        "operationId": "RouteStats_RouteStats",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:120.611520",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:24.294629",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "path",
+            "description": "距離公尺(預設20公尺)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateRouteStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateRouteStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateRouteStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateRouteStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/RouteStats/BusinessDist/{BusinessDist}": {
+      "get": {
+        "tags": [
+          "RouteStats"
+        ],
+        "summary": "指定[商圈]公車路線數量",
+        "description": "指定[商圈]公車路線數量",
+        "operationId": "RouteStats_BusinessDist",
+        "parameters": [
+          {
+            "name": "BusinessDist",
+            "in": "path",
+            "description": "商圈",
+            "required": true,
+            "schema": {
+              "enum": [
+                "東區商圈"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistRouteStatus"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistRouteStatus"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistRouteStatus"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistRouteStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StopStats/CityRoad/{City}/{RoadName}": {
+      "get": {
+        "tags": [
+          "StopStats"
+        ],
+        "summary": "指定[縣市]、[道路]公車站牌數量",
+        "description": "指定[縣市]、[道路]公車站牌數量",
+        "operationId": "StopStats_CityRoad",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "縣市<br>Taipei = 臺北市, <br>Taichung = 臺中市, <br>Keelung = 基隆市, <br>Tainan = 臺南市, <br>Kaohsiung = 高雄市, <br>NewTaipei = 新北市, <br>YilanCounty = 宜蘭縣, <br>Taoyuan = 桃園市, <br>Chiayi = 嘉義市, <br>HsinchuCounty = 新竹縣, <br>MiaoliCounty = 苗栗縣, <br>NantouCounty = 南投縣, <br>ChanghuaCounty = 彰化縣, <br>Hsinchu = 新竹市, <br>YunlinCounty = 雲林縣, <br>ChiayiCounty = 嘉義縣, <br>PingtungCounty = 屏東縣, <br>HualienCounty = 花蓮縣, <br>TaitungCounty = 臺東縣, <br>KinmenCounty = 金門縣, <br>PenghuCounty = 澎湖縣, <br>LienchiangCounty = 連江縣, <br>InterCity = 公路客運",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty",
+                "InterCity"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStopStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStopStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStopStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStopStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StopStats/LinkID/Coordinate/{locationX}/{locationY}/{Distance}": {
+      "get": {
+        "tags": [
+          "StopStats"
+        ],
+        "summary": "指定[坐標]公車站牌數量",
+        "description": "指定[坐標]公車站牌數量",
+        "operationId": "StopStats_StopStats",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:120.611520",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:24.294629",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "path",
+            "description": "距離公尺(預設20公尺)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStopStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStopStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStopStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStopStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StopStats/BusinessDist/{BusinessDist}": {
+      "get": {
+        "tags": [
+          "StopStats"
+        ],
+        "summary": "指定[商圈]公車站牌數量",
+        "description": "指定[商圈]公車站牌數量",
+        "operationId": "StopStats_BusinessDist",
+        "parameters": [
+          {
+            "name": "BusinessDist",
+            "in": "path",
+            "description": "商圈",
+            "required": true,
+            "schema": {
+              "enum": [
+                "東區商圈"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStopStatus"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStopStatus"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStopStatus"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStopStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StationStats/CityRoad/{City}/{RoadName}": {
+      "get": {
+        "tags": [
+          "StationStats"
+        ],
+        "summary": "指定[縣市]、[道路]公車站位數量",
+        "description": "指定[縣市]、[道路]公車站位數量",
+        "operationId": "StationStats_CityRoad",
+        "parameters": [
+          {
+            "name": "City",
+            "in": "path",
+            "description": "縣市<br>Taipei = 臺北市, <br>Taichung = 臺中市, <br>Keelung = 基隆市, <br>Tainan = 臺南市, <br>Kaohsiung = 高雄市, <br>NewTaipei = 新北市, <br>YilanCounty = 宜蘭縣, <br>Taoyuan = 桃園市, <br>Chiayi = 嘉義市, <br>HsinchuCounty = 新竹縣, <br>MiaoliCounty = 苗栗縣, <br>NantouCounty = 南投縣, <br>ChanghuaCounty = 彰化縣, <br>Hsinchu = 新竹市, <br>YunlinCounty = 雲林縣, <br>ChiayiCounty = 嘉義縣, <br>PingtungCounty = 屏東縣, <br>HualienCounty = 花蓮縣, <br>TaitungCounty = 臺東縣, <br>KinmenCounty = 金門縣, <br>PenghuCounty = 澎湖縣, <br>LienchiangCounty = 連江縣, <br>InterCity = 公路客運",
+            "required": true,
+            "schema": {
+              "enum": [
+                "Taipei",
+                "NewTaipei",
+                "Taoyuan",
+                "Taichung",
+                "Tainan",
+                "Kaohsiung",
+                "Keelung",
+                "Hsinchu",
+                "HsinchuCounty",
+                "MiaoliCounty",
+                "ChanghuaCounty",
+                "NantouCounty",
+                "YunlinCounty",
+                "ChiayiCounty",
+                "Chiayi",
+                "PingtungCounty",
+                "YilanCounty",
+                "HualienCounty",
+                "TaitungCounty",
+                "KinmenCounty",
+                "PenghuCounty",
+                "LienchiangCounty",
+                "InterCity"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "道路名稱",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStationStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStationStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStationStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/RoadStationStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StationStats/LinkID/Coordinate/{locationX}/{locationY}/{Distance}": {
+      "get": {
+        "tags": [
+          "StationStats"
+        ],
+        "summary": "指定[坐標]公車站位數量",
+        "description": "指定[坐標]公車站位數量",
+        "operationId": "StationStats_SatioStats",
+        "parameters": [
+          {
+            "name": "locationX",
+            "in": "path",
+            "description": "經度坐標 ex:120.611520",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "locationY",
+            "in": "path",
+            "description": "緯度坐標 ex:24.294629",
+            "required": true,
+            "schema": {
+              "type": "number",
+              "format": "float"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "path",
+            "description": "距離公尺(預設20公尺)",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStationStats"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStationStats"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStationStats"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/CoordinateStationStats"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/Link/StationStats/BusinessDist/{BusinessDist}": {
+      "get": {
+        "tags": [
+          "StationStats"
+        ],
+        "summary": "指定[商圈]公車站位數量",
+        "description": "指定[商圈]公車站位數量",
+        "operationId": "StationStats_BusinessDist",
+        "parameters": [
+          {
+            "name": "BusinessDist",
+            "in": "path",
+            "description": "商圈",
+            "required": true,
+            "schema": {
+              "enum": [
+                "東區商圈"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStationStatus"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStationStatus"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStationStatus"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/BussinessDistStationStatus"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "text/json": { },
+              "application/xml": { },
+              "text/xml": { }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RoadRouteStats": {
+        "title": "RoadRouteStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDRouteData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDRouteData": {
+        "title": "LinkIDRouteData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "RouteTotal": {
+            "type": "integer",
+            "description": "路線數量",
+            "format": "int32"
+          },
+          "RouteDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteData"
+            },
+            "description": "路線資訊"
+          }
+        }
+      },
+      "RouteData": {
+        "title": "RouteData",
+        "type": "object",
+        "properties": {
+          "RouteID": {
+            "type": "string",
+            "description": "地區既用中之路線代碼(為原資料內碼)"
+          },
+          "RouteName": {
+            "type": "string",
+            "description": "路線名稱"
+          },
+          "SubRouteID": {
+            "type": "string",
+            "description": "地區既用中之附屬路線代碼(為原資料內碼)"
+          },
+          "SubRouteName": {
+            "type": "string",
+            "description": "附屬路線名稱"
+          }
+        }
+      },
+      "CoordinateRouteStats": {
+        "title": "CoordinateRouteStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDCoorRouteData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDCoorRouteData": {
+        "title": "LinkIDCoorRouteData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "NumberOfRoute": {
+            "type": "integer",
+            "description": "輸入坐標測之路段路線數量",
+            "format": "int32"
+          },
+          "RouteTotal": {
+            "type": "integer",
+            "description": "路線數量",
+            "format": "int32"
+          },
+          "RouteDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RouteData"
+            },
+            "description": "路線資訊"
+          }
+        }
+      },
+      "BussinessDistRouteStatus": {
+        "title": "BussinessDistRouteStatus",
+        "type": "object",
+        "properties": {
+          "BusinessDist": {
+            "type": "string",
+            "description": "商圈名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoadRouteResult"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "RoadRouteResult": {
+        "title": "RoadRouteResult",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "LinkIDRouteDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDRouteData"
+            },
+            "description": "基礎路段路線資訊"
+          }
+        }
+      },
+      "RoadStopStats": {
+        "title": "RoadStopStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDStopData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDStopData": {
+        "title": "LinkIDStopData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "StopTotal": {
+            "type": "integer",
+            "description": "站牌數量",
+            "format": "int32"
+          },
+          "StopDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StopData"
+            },
+            "description": "站牌資訊"
+          }
+        }
+      },
+      "StopData": {
+        "title": "StopData",
+        "type": "object",
+        "properties": {
+          "StopID": {
+            "type": "string",
+            "description": "站牌代碼"
+          },
+          "StopName": {
+            "type": "string",
+            "description": "站牌名稱"
+          }
+        }
+      },
+      "CoordinateStopStats": {
+        "title": "CoordinateStopStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDCoorStopData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDCoorStopData": {
+        "title": "LinkIDCoorStopData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "NumberOfStop": {
+            "type": "integer",
+            "description": "輸入坐標測之路段站牌數量",
+            "format": "int32"
+          },
+          "StopTotal": {
+            "type": "integer",
+            "description": "站牌數量",
+            "format": "int32"
+          },
+          "StopDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StopData"
+            },
+            "description": "站牌資訊"
+          }
+        }
+      },
+      "BussinessDistStopStatus": {
+        "title": "BussinessDistStopStatus",
+        "type": "object",
+        "properties": {
+          "BusinessDist": {
+            "type": "string",
+            "description": "商圈名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoadStopResult"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "RoadStopResult": {
+        "title": "RoadStopResult",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "LinkIDStopDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDStopData"
+            },
+            "description": "基礎路段站牌資訊"
+          }
+        }
+      },
+      "RoadStationStats": {
+        "title": "RoadStationStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDStationData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDStationData": {
+        "title": "LinkIDStationData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "string",
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "StationTotal": {
+            "type": "integer",
+            "description": "站位數量",
+            "format": "int32"
+          },
+          "StationDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StationData"
+            },
+            "description": "站位資訊"
+          }
+        }
+      },
+      "StationData": {
+        "title": "StationData",
+        "type": "object",
+        "properties": {
+          "StationID": {
+            "type": "string",
+            "description": "站位代碼"
+          },
+          "StationName": {
+            "type": "string",
+            "description": "站位名稱"
+          }
+        }
+      },
+      "CoordinateStationStats": {
+        "title": "CoordinateStationStats",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDCoorStationData"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "LinkIDCoorStationData": {
+        "title": "LinkIDCoorStationData",
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "基礎路段代碼"
+          },
+          "RoadDirection": {
+            "type": "string",
+            "description": "道路方向"
+          },
+          "NumberOfStation": {
+            "type": "integer",
+            "description": "輸入坐標測之路段站位數量",
+            "format": "int32"
+          },
+          "StationTotal": {
+            "type": "integer",
+            "description": "站位數量",
+            "format": "int32"
+          },
+          "StationDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StationData"
+            },
+            "description": "站位資訊"
+          }
+        }
+      },
+      "BussinessDistStationStatus": {
+        "title": "BussinessDistStationStatus",
+        "type": "object",
+        "properties": {
+          "BusinessDist": {
+            "type": "string",
+            "description": "商圈名稱"
+          },
+          "CityName": {
+            "type": "string",
+            "description": "縣市名稱(中文)"
+          },
+          "CountyCode": {
+            "type": "string",
+            "description": "縣市代碼(五碼)"
+          },
+          "Version": {
+            "type": "string",
+            "description": "路段資料版本編號"
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "資料更新日期",
+            "format": "date-time"
+          },
+          "Results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RoadStationResult"
+            },
+            "description": "資料結果"
+          }
+        }
+      },
+      "RoadStationResult": {
+        "title": "RoadStationResult",
+        "type": "object",
+        "properties": {
+          "RoadName": {
+            "type": "string",
+            "description": "道路名稱"
+          },
+          "LinkIDStationDatas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LinkIDStationData"
+            },
+            "description": "基礎路段站位資訊"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "RouteStats",
+      "description": "路線統計"
+    },
+    {
+      "name": "StopStats",
+      "description": "站牌統計"
+    },
+    {
+      "name": "StationStats",
+      "description": "站位統計"
+    }
+  ]
+}

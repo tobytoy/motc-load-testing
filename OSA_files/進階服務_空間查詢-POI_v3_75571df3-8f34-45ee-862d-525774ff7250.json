@@ -1,0 +1,1389 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "空間查詢-POI",
+    "description": "本平臺提供涵蓋全國尺度之交通旅運資料服務API，歡迎各產政學單位介接使用。\n<br><span class=swagger-description-indicatation>利用本平臺開放資料進行各項應用服務開發時，請考量不同特性使用者(如：性別/身心障礙/老幼等)的需求，並歡迎回饋寶貴意見。</span>\n<br>計費方式：\n<br>計次：200次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/75571df3-8f34-45ee-862d-525774ff7250)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "v3"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/advanced"
+    }
+  ],
+  "paths": {
+    "/V3/Map/GeoLocating/Parking/Nearby/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "取得指定位置周邊停車資料",
+        "description": "輸出指定位置，周邊五百公尺範圍的停車場資料",
+        "operationId": "Locator_03010",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.57557"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.04832"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyCarPark"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyCarPark"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/PopulationStats/Nearby/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "取得指定位置周邊人口資料",
+        "description": "輸出指定位置，周邊五百公尺範圍內人口數",
+        "operationId": "Locator_03011",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.57557"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.04832"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyPopulation"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyPopulation"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Household/Nearby/StopUID/{StopUID}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "指定站牌周邊家戶數",
+        "description": "站牌周邊五百公尺範圍內家戶數<br />\r\n            參考 <a target=\"_blank\" href=\"#!/Bus/TransportNetwork_03009\">取得指定縣市之市區公車站牌圖資資料</a>",
+        "operationId": "Locator_03012",
+        "parameters": [
+          {
+            "name": "StopUID",
+            "in": "path",
+            "description": "站牌唯一識別代碼",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "NWT192687"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyHouseNumber"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/LocationNearbyHouseNumber"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Transit/Nearby/LocationX/{LocationX}/LocationY/{LocationY}/Distance/{Distance}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "指定位置周邊公共運輸服務資訊",
+        "description": "指定位置周邊公共運輸服務資訊",
+        "operationId": "Locator_03013",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "121.516330"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "25.049220"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "path",
+            "description": "範圍，只能輸入百位整數，100,200...500，500公尺為上限",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 500
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationNearby"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationNearby"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Transit/Nearest/LocationX/{LocationX}/LocationY/{LocationY}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "取得指定位置最近公共運輸服務資訊",
+        "description": "取得指定位置最近公共運輸服務資訊",
+        "operationId": "Locator_03014",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "120.62545"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "24.10887"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationNearest"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationNearest"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Tourism/Nearby/LocationX/{LocationX}/LocationY/{LocationY}/Distance/{Distance}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "取得指定位置和範圍之周邊交通及觀光資訊服務",
+        "description": "取得指定範圍交通及觀光資訊服務",
+        "operationId": "Locator_03015",
+        "parameters": [
+          {
+            "name": "LocationX",
+            "in": "path",
+            "description": "坐標X(121.7062)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "120.62545"
+            }
+          },
+          {
+            "name": "LocationY",
+            "in": "path",
+            "description": "坐標Y(25.1357)",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "24.10887"
+            }
+          },
+          {
+            "name": "Distance",
+            "in": "path",
+            "description": "範圍，只能輸入百位整數，100,200...1000，1000公尺為上限",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 500
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationRangeNearby"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/LocationRangeNearby"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    },
+    "/V3/Map/GeoLocating/Travel/Nearby/ScenicSpot/{ScenicSpot}": {
+      "get": {
+        "tags": [
+          "Locator"
+        ],
+        "summary": "指定興趣點鄰近交通及觀光服務資訊",
+        "description": "指定興趣點鄰近交通及觀光服務資訊<br />\r\n            觀光景點名稱  參考 <a target=\"_blank\" href=\"https://tdx.transportdata.tw/api-service/swagger#/Tourism/TourismApi_ScenicSpot_2240\">取得所有觀光景點資料</a>",
+        "operationId": "Locator_03016",
+        "parameters": [
+          {
+            "name": "ScenicSpot",
+            "in": "path",
+            "description": "觀光景點名稱",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "板橋慈惠宮"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "JSON / XML",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string",
+              "default": "JSON"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "呼叫成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TravelRangeNearby"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TravelRangeNearby"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": { },
+              "application/xml": { }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LocationNearbyCarPark": {
+        "title": "LocationNearbyCarPark",
+        "type": "object",
+        "properties": {
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新日期"
+          },
+          "TotalCarParks": {
+            "type": "integer",
+            "description": "該範圍內停車場總數",
+            "format": "int32"
+          },
+          "CarParkList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarPark"
+            },
+            "description": "停車資料(陣列)"
+          }
+        },
+        "description": "周邊停車資料輸出模型"
+      },
+      "CarPark": {
+        "title": "CarPark",
+        "type": "object",
+        "properties": {
+          "CarParkID": {
+            "type": "string",
+            "description": "業管機關訂定之停車場代碼"
+          },
+          "CarParkName": {
+            "type": "string",
+            "description": "停車場名稱"
+          },
+          "CarParkType": {
+            "type": "integer",
+            "description": "停車場類型 : [1:'平面',2:'立體',3:'地下',4:'立體停車塔',5:'立體機械式',6:'同時涵蓋2種以上',254:'其他',255:'未知']",
+            "format": "int32"
+          },
+          "TotalSpaces": {
+            "type": "integer",
+            "description": "停車位總數",
+            "format": "int32"
+          },
+          "Spaces": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Space"
+            },
+            "description": "停車位資料(陣列)"
+          }
+        },
+        "description": "停車資料"
+      },
+      "Space": {
+        "title": "Space",
+        "type": "object",
+        "properties": {
+          "SpaceType": {
+            "type": "integer",
+            "description": "停車位類型 : [0:'所有停車位類型',1:'自小客車位',2:'機車位',3:'重型機車位',4:'腳踏車位',5:'大型車位',6:'小型巴士位',7:'孕婦及親子專用車位',8:'婦女車位',9:'身心障礙汽車車位',10:'身心障礙機車車位',11:'電動汽車車位',12:'電動機車車位',13:'復康巴士',14:'月租機車位',15:'月租汽車位',16:'季租機車位',17:'季租汽車位',18:'半年租機車位',19:'半年租汽車位',20:'年租機車位',21:'年租汽車位',22:'租賃機車位',23:'租賃汽車位',24:'卸貨車位',25:'計程車位',26:'夜間安心停車位',27:'臨時停車',28:'專用停車',29:'預約停車',254:'其他',255:'未知']",
+            "format": "int32"
+          },
+          "NumberOfSpaces": {
+            "type": "integer",
+            "description": "停車位數",
+            "format": "int32"
+          }
+        },
+        "description": "停車位資料"
+      },
+      "LocationNearbyPopulation": {
+        "title": "LocationNearbyPopulation",
+        "type": "object",
+        "properties": {
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "TotalPopulation": {
+            "type": "integer",
+            "description": "人口數",
+            "format": "int32"
+          },
+          "NumberOfStatsAreas": {
+            "type": "integer",
+            "description": "有涵蓋到的最小統計區數量",
+            "format": "int32"
+          },
+          "StatsAreas": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StatsArea"
+            },
+            "description": "統計區"
+          }
+        },
+        "description": "人口數資料"
+      },
+      "StatsArea": {
+        "title": "StatsArea",
+        "type": "object",
+        "properties": {
+          "StatsAreaType": {
+            "type": "string",
+            "description": "一級發布區ID"
+          },
+          "StatsAreaID": {
+            "type": "string",
+            "description": "最小統計區ID"
+          }
+        },
+        "description": "統計區"
+      },
+      "LocationNearbyHouseNumber": {
+        "title": "LocationNearbyHouseNumber",
+        "type": "object",
+        "properties": {
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "TotalCount": {
+            "type": "integer",
+            "description": "家戶數",
+            "format": "int32"
+          },
+          "Towns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Town"
+            },
+            "description": "鄉鎮市區列"
+          }
+        },
+        "description": "站牌周邊家戶數"
+      },
+      "Town": {
+        "title": "Town",
+        "type": "object",
+        "properties": {
+          "CountyName": {
+            "type": "string",
+            "description": "縣市名稱"
+          },
+          "TownCode": {
+            "type": "string",
+            "description": "鄉鎮市區簡碼"
+          },
+          "TownName": {
+            "type": "string",
+            "description": "鄉鎮市區名稱"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "數量",
+            "format": "int32"
+          }
+        },
+        "description": "鄉鎮市區"
+      },
+      "LocationNearby": {
+        "title": "LocationNearby",
+        "type": "object",
+        "properties": {
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "RailStations": {
+            "$ref": "#/components/schemas/RailStations"
+          },
+          "BusStations": {
+            "$ref": "#/components/schemas/BusStations"
+          },
+          "BikeStations": {
+            "$ref": "#/components/schemas/BikeStations"
+          }
+        },
+        "description": "周邊公共運輸服務資訊"
+      },
+      "LocationNearby0": {
+        "$ref": "#/components/schemas/LocationNearby"
+      },
+      "RailStations": {
+        "title": "RailStations",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "RailStationList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RailStation"
+            },
+            "description": "車站資訊"
+          }
+        },
+        "description": "車站資訊"
+      },
+      "RailStation": {
+        "title": "RailStation",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "StationUID": {
+            "type": "string",
+            "description": "車站編號"
+          },
+          "StationName": {
+            "type": "string",
+            "description": "車站名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "車站資訊"
+      },
+      "BusStations": {
+        "title": "BusStations",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "BusStationList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BusStation"
+            },
+            "description": "公車資訊"
+          }
+        },
+        "description": "公車資訊"
+      },
+      "BusStation": {
+        "title": "BusStation",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "RouteUID": {
+            "type": "string",
+            "description": "路線編號"
+          },
+          "RouteName": {
+            "type": "string",
+            "description": "路線名稱"
+          },
+          "SubRouteUID": {
+            "type": "string",
+            "description": "子路線編號"
+          },
+          "SubRouteName": {
+            "type": "string",
+            "description": "子路線名稱"
+          },
+          "StopUID": {
+            "type": "string",
+            "description": "站牌編號"
+          },
+          "StopName": {
+            "type": "string",
+            "description": "站牌名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "公車資訊"
+      },
+      "BikeStations": {
+        "title": "BikeStations",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "BikeStationList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BikeStation"
+            },
+            "description": "公共自行車資訊"
+          }
+        },
+        "description": "公共自行車資訊"
+      },
+      "BikeStation": {
+        "title": "BikeStation",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "StationUID": {
+            "type": "string",
+            "description": "站編號"
+          },
+          "StationName": {
+            "type": "string",
+            "description": "站名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "公共自行車資訊"
+      },
+      "LocationNearest": {
+        "title": "LocationNearest",
+        "type": "object",
+        "properties": {
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "RailStations": {
+            "$ref": "#/components/schemas/RailStations"
+          },
+          "BusStations": {
+            "$ref": "#/components/schemas/BusStations"
+          },
+          "BikeStations": {
+            "$ref": "#/components/schemas/BikeStations"
+          }
+        },
+        "description": "最近公共運輸服務資訊"
+      },
+      "LocationNearest1": {
+        "$ref": "#/components/schemas/LocationNearest"
+      },
+      "LocationRangeNearby": {
+        "title": "LocationRangeNearby",
+        "type": "object",
+        "properties": {
+          "CarParkings": {
+            "$ref": "#/components/schemas/CarParkings"
+          },
+          "ScenicSpots": {
+            "$ref": "#/components/schemas/ScenicSpots"
+          },
+          "Hotels": {
+            "$ref": "#/components/schemas/Hotels"
+          },
+          "Restaurants": {
+            "$ref": "#/components/schemas/Restaurants"
+          },
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "RailStations": {
+            "$ref": "#/components/schemas/RailStations"
+          },
+          "BusStations": {
+            "$ref": "#/components/schemas/BusStations"
+          },
+          "BikeStations": {
+            "$ref": "#/components/schemas/BikeStations"
+          }
+        },
+        "description": "交通及觀光資訊服務"
+      },
+      "LocationRangeNearby2": {
+        "$ref": "#/components/schemas/LocationRangeNearby"
+      },
+      "CarParkings": {
+        "title": "CarParkings",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "CarParkingList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CarParking"
+            },
+            "description": "停車場資訊"
+          }
+        },
+        "description": "停車場資訊"
+      },
+      "CarParking": {
+        "title": "CarParking",
+        "type": "object",
+        "properties": {
+          "CarParkID": {
+            "type": "string",
+            "description": "業管機關訂定之停車場代碼"
+          },
+          "CarParkName": {
+            "type": "string",
+            "description": "停車場名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "停車場資訊"
+      },
+      "ScenicSpots": {
+        "title": "ScenicSpots",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "ScenicSpotList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ScenicSpot"
+            },
+            "description": "景點資訊"
+          }
+        },
+        "description": "景點資訊"
+      },
+      "ScenicSpot": {
+        "title": "ScenicSpot",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "ScenicSpotID": {
+            "type": "string",
+            "description": "編號"
+          },
+          "ScenicSpotName": {
+            "type": "string",
+            "description": "名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "景點資訊"
+      },
+      "Hotels": {
+        "title": "Hotels",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "HotelList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Hotel"
+            },
+            "description": "旅館資訊"
+          }
+        },
+        "description": "旅館資訊"
+      },
+      "Hotel": {
+        "title": "Hotel",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "HotelID": {
+            "type": "string",
+            "description": "編號"
+          },
+          "HotelName": {
+            "type": "string",
+            "description": "名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "旅館資訊"
+      },
+      "Restaurants": {
+        "title": "Restaurants",
+        "type": "object",
+        "properties": {
+          "InfoDate": {
+            "type": "string",
+            "description": "資料產製日期"
+          },
+          "Count": {
+            "type": "integer",
+            "description": "筆數",
+            "format": "int32"
+          },
+          "RestaurantList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Restaurant"
+            },
+            "description": "餐廳資訊"
+          }
+        },
+        "description": "餐廳資訊"
+      },
+      "Restaurant": {
+        "title": "Restaurant",
+        "type": "object",
+        "properties": {
+          "Distance": {
+            "type": "number",
+            "description": "坐標與站點距離(公尺)",
+            "format": "double"
+          },
+          "RestaurantID": {
+            "type": "string",
+            "description": "編號"
+          },
+          "RestaurantName": {
+            "type": "string",
+            "description": "名稱"
+          },
+          "LocationX": {
+            "type": "number",
+            "description": "經度",
+            "format": "double"
+          },
+          "LocationY": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double"
+          }
+        },
+        "description": "餐廳資訊"
+      },
+      "TravelRangeNearby": {
+        "title": "TravelRangeNearby",
+        "type": "object",
+        "properties": {
+          "ScenicSpots": {
+            "$ref": "#/components/schemas/ScenicSpots"
+          },
+          "Hotels": {
+            "$ref": "#/components/schemas/Hotels"
+          },
+          "Restaurants": {
+            "$ref": "#/components/schemas/Restaurants"
+          },
+          "UpdateDate": {
+            "type": "string",
+            "description": "系統更新時間"
+          },
+          "RailStations": {
+            "$ref": "#/components/schemas/RailStations"
+          },
+          "BusStations": {
+            "$ref": "#/components/schemas/BusStations"
+          },
+          "BikeStations": {
+            "$ref": "#/components/schemas/BikeStations"
+          }
+        },
+        "description": "最近交通及觀光資訊服務"
+      },
+      "TravelRangeNearby3": {
+        "$ref": "#/components/schemas/TravelRangeNearby"
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "Locator",
+      "description": "定位"
+    }
+  ]
+}

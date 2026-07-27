@@ -1,0 +1,5150 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "路況資訊",
+    "description": "本平臺提供涵蓋全國尺度之路況設備資料，包含VD、CMS、CCTV、AVI等資料服務API，歡迎各產政學單位介接使用。\n<br><span class=swagger-description-indicatation>利用本平臺開放資料進行各項應用服務開發時，請考量不同特性使用者(如：性別/身心障礙/老幼等)的需求，並歡迎回饋寶貴意見。</span>\n<br>計費方式：\n<br>計次：200次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/2b914744-f290-4b1f-9e08-9b3b6a6d33c1)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "TDX客服信箱",
+      "email": "tdx@motc.gov.tw"
+    },
+    "version": "v2"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/advanced"
+    }
+  ],
+  "paths": {
+    "/v2/Road/Traffic/VD/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上車輛偵測器",
+        "description": "部分VD設備資料因特殊情境可不受資料標準規範，當基礎路段代碼(LINK ID)之欄位為\"FFFFFFFFFFFFFF\"時，該設備部分必填欄位空白為正常現象。",
+        "operationId": "VD_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VD]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VD]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/VD/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上車輛偵測器",
+        "description": "部分VD設備資料因特殊情境可不受資料標準規範，當基礎路段代碼(LINK ID)之欄位為\"FFFFFFFFFFFFFF\"時，該設備部分必填欄位空白為正常現象。",
+        "operationId": "VD_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VD]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VD]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/VD/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]車輛偵測器即時路況",
+        "operationId": "Live_VD_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VDLive]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VDLive]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/VD/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]車輛偵測器即時路況",
+        "operationId": "Live_VD_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VDLive]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VDLive]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CMS/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上資訊可變標誌",
+        "operationId": "CMS_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMS]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMS]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CMS/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上資訊可變標誌",
+        "operationId": "CMS_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMS]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMS]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/CMS/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上資訊可變標誌即時資訊",
+        "operationId": "Live_CMS_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/CMS/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上資訊可變標誌即時資訊",
+        "operationId": "Live_CMS_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CCTV/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上閉路電視攝影機",
+        "description": "CCTV僅提供會員使用，存取時務必輸入會員[App ID]跟[App Key]才能正常取得資料",
+        "operationId": "CCTV_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CCTV]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CCTV]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CCTV/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上閉路電視攝影機",
+        "description": "CCTV僅提供會員使用，存取時務必輸入會員[App ID]跟[App Key]才能正常取得資料",
+        "operationId": "CCTV_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CCTV]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CCTV]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/ETag/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上電子標籤門架",
+        "operationId": "ETag_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.ETag]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.ETag]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/ETag/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上電子標籤門架",
+        "operationId": "ETag_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.ETag]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.ETag]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Section/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上發布路段",
+        "operationId": "Section_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.Section]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.Section]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Section/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上發布路段",
+        "operationId": "Section_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.SectionWithGeometry]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.SectionWithGeometry]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/Freeway/RoadName/{RoadName}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[道路名稱]上發布路段即時路況",
+        "operationId": "Live_Freeway_2",
+        "parameters": [
+          {
+            "name": "RoadName",
+            "in": "path",
+            "description": "指定道路名稱<br />，如國道1號、國道2號",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTraffic]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTraffic]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/Live/Freeway/Alternative/{Alternative}": {
+      "get": {
+        "tags": [
+          "FreewayAlternativeRouteTraffic"
+        ],
+        "summary": "取得[高速公路局]指定[替代道路]上發布路段即時路況",
+        "operationId": "Live_Freeway_3",
+        "parameters": [
+          {
+            "name": "Alternative",
+            "in": "path",
+            "description": "指定替代道路：<br /><br />\r\n國1 大雅至員林替代道路,<br />\r\n國1 湖口至新竹南下替代道路,<br />\r\n國1國3 新竹至臺南地區替代道路,<br />\r\n國3 三峽至大溪替代道路,<br />\r\n國3 中港系統至彰化市區南向替代道路,<br />\r\n國3 土城至三峽替代道路,<br />\r\n國3 斗六至霧峰替代道路,<br />\r\n國3 田寮至旗山地區替代道路,<br />\r\n國3 草屯至快官替代道路,<br />\r\n國5 頭城至坪林替代道路,<br />\r\n國6 舊正至國3 中投替代道路,<br />\r\n北宜廊道",
+            "required": true,
+            "schema": {
+              "enum": [
+                "國1 大雅至員林替代道路",
+                "國1 湖口至新竹南下替代道路",
+                "國1國3 新竹至臺南地區替代道路",
+                "國3 三峽至大溪替代道路",
+                "國3 中港系統至彰化市區南向替代道路",
+                "國3 土城至三峽替代道路",
+                "國3 斗六至霧峰替代道路",
+                "國3 田寮至旗山地區替代道路",
+                "國3 草屯至快官替代道路",
+                "國5 頭城至坪林替代道路",
+                "國6 舊正至國3 中投替代道路",
+                "北宜廊道"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$count",
+            "in": "query",
+            "description": "查詢數量",
+            "schema": {
+              "enum": [
+                true,
+                false
+              ],
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTrafficWithGeometry]"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTrafficWithGeometry]"
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/VD/NearBy": {
+      "get": {
+        "tags": [
+          "Traffic Advanced(Near By)"
+        ],
+        "summary": "指定[位置,範圍]的全臺車輛偵測器資料",
+        "description": "部分VD設備資料因特殊情境可不受資料標準規範，當基礎路段代碼(LINK ID)之欄位為\"FFFFFFFFFFFFFF\"時，該設備部分必填欄位空白為正常現象。",
+        "operationId": "VD_NearBy",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$spatialFilter",
+            "in": "query",
+            "description": "空間過濾(最大搜尋半徑為1000公尺)，語法為 nearby({Lat},{Lon},{DistanceInMeters})，例如 nearby(25.047675, 121.517055, 100)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.VD"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.VD"
+                  }
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CCTV/NearBy": {
+      "get": {
+        "tags": [
+          "Traffic Advanced(Near By)"
+        ],
+        "summary": "指定[位置,範圍]的全臺閉路電視攝影機資料",
+        "operationId": "CCTV_NearBy",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$spatialFilter",
+            "in": "query",
+            "description": "空間過濾(最大搜尋半徑為1000公尺)，語法為 nearby({Lat},{Lon},{DistanceInMeters})，例如 nearby(25.047675, 121.517055, 100)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CCTV"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CCTV"
+                  }
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/CMS/NearBy": {
+      "get": {
+        "tags": [
+          "Traffic Advanced(Near By)"
+        ],
+        "summary": "指定[位置,範圍]的全臺資訊可變標誌資料",
+        "operationId": "CMS_NearBy",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$spatialFilter",
+            "in": "query",
+            "description": "空間過濾(最大搜尋半徑為1000公尺)，語法為 nearby({Lat},{Lon},{DistanceInMeters})，例如 nearby(25.047675, 121.517055, 100)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CMS"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CMS"
+                  }
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/Road/Traffic/ETag/NearBy": {
+      "get": {
+        "tags": [
+          "Traffic Advanced(Near By)"
+        ],
+        "summary": "指定[位置,範圍]的全臺電子標籤門架資料",
+        "operationId": "ETag_NearBy",
+        "parameters": [
+          {
+            "name": "$select",
+            "in": "query",
+            "description": "挑選",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$filter",
+            "in": "query",
+            "description": "過濾",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$orderby",
+            "in": "query",
+            "description": "排序",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "description": "取前幾筆",
+            "schema": {
+              "type": "integer",
+              "default": 30
+            }
+          },
+          {
+            "name": "$skip",
+            "in": "query",
+            "description": "跳過前幾筆",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "$spatialFilter",
+            "in": "query",
+            "description": "空間過濾(最大搜尋半徑為1000公尺)，語法為 nearby({Lat},{Lon},{DistanceInMeters})，例如 nearby(25.047675, 121.517055, 100)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "health",
+            "in": "query",
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "schema": {
+              "enum": [
+                "true",
+                "false"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "$format",
+            "in": "query",
+            "description": "指定來源格式",
+            "required": true,
+            "schema": {
+              "enum": [
+                "JSON",
+                "XML"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.ETag"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "title": "Array",
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.ETag"
+                  }
+                }
+              }
+            }
+          },
+          "299": {
+            "description": "加入參數'?health=true'即可查詢此API服務的健康狀態",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VD]": {
+        "title": "VDList",
+        "required": [
+          "AuthorityCode",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime",
+          "VDs"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "VDs": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.VD"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfVD",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.VD": {
+        "title": "VD",
+        "required": [
+          "BiDirectional",
+          "DetectionLinks",
+          "DetectionType",
+          "PositionLat",
+          "PositionLon",
+          "VDID",
+          "VDType"
+        ],
+        "type": "object",
+        "properties": {
+          "VDID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "VD設備代碼",
+            "xml": {
+              "name": "VDID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "BiDirectional": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否為雙向偵測 : [0:'偵測單向',1:'偵測雙向']"
+          },
+          "DetectionLinks": {
+            "title": "DetectionLink[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.DetectionLink"
+            },
+            "description": "路段車流偵測資訊",
+            "xml": {
+              "name": "DetectionLink[]"
+            }
+          },
+          "VDType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "VD 類別 : [1:'線圈式',2:'微波式',3:'影像式',4:'紅外線',5:'超音波',6:'其它']"
+          },
+          "LocationType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設置地點位置類型 : [1:'路側',2:'道路中央分隔島',3:'快慢分隔島',4:'車道上門架',5:'車道鋪面',6:'其他']"
+          },
+          "DetectionType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "車流偵側類型 : [1:'高快速公路/市快主線',2:'高快速公路/市快匝道',3:'其它道路路段中',4:'其它道路路口(靠近路口或停止線)']"
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "設備架設位置 X 坐標",
+            "format": "double"
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "設備架設位置 Y 坐標",
+            "format": "double"
+          },
+          "RoadID": {
+            "title": "String",
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "type": "string",
+            "description": "道路名稱",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "LocationMile": {
+            "title": "String",
+            "type": "string",
+            "description": "所在方向里程數",
+            "xml": {
+              "name": "LocationMile"
+            }
+          },
+          "LayoutMapURL": {
+            "title": "String",
+            "type": "string",
+            "description": "路側設備布設簡圖URL",
+            "xml": {
+              "name": "LayoutMapURL"
+            }
+          }
+        },
+        "xml": {
+          "name": "VD"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.DetectionLink": {
+        "title": "DetectionLink",
+        "required": [
+          "ActualLaneNum",
+          "LaneNum",
+          "LinkID",
+          "RoadDirection"
+        ],
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          },
+          "Bearing": {
+            "title": "String",
+            "type": "string",
+            "description": "基礎路段方位 : [E:'東',N:'北',NE:'東北',NW:'西北',S:'南',SE:'東南',SW:'西南',W:'西']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "LaneNum": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設備於該方向基礎路段所能偵側車道數",
+            "format": "int32"
+          },
+          "ActualLaneNum": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "該方向基礎路段的實際車道數",
+            "format": "int32"
+          }
+        },
+        "xml": {
+          "name": "DetectionLink"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection": {
+        "title": "RoadSection",
+        "type": "object",
+        "properties": {
+          "Start": {
+            "title": "String",
+            "type": "string",
+            "description": "路段起點描述",
+            "xml": {
+              "name": "Start"
+            }
+          },
+          "End": {
+            "title": "String",
+            "type": "string",
+            "description": "路段迄點描述",
+            "xml": {
+              "name": "End"
+            }
+          }
+        },
+        "xml": {
+          "name": "RoadSection"
+        }
+      },
+      "PTX.Service.DTO.Shared.Specification.V3.Base.DisplayHealth": {
+        "title": "DisplayHealth",
+        "required": [
+          "ServiceID",
+          "ServiceName"
+        ],
+        "type": "object",
+        "properties": {
+          "ServiceID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "API服務代碼",
+            "xml": {
+              "name": "ServiceID"
+            }
+          },
+          "ServiceName": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "API服務中文名稱",
+            "xml": {
+              "name": "ServiceName"
+            }
+          },
+          "Inbound": {
+            "title": "Inbound",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.Inbound"
+              }
+            ],
+            "description": "本平台資料來源轉入狀態",
+            "xml": {
+              "name": "Inbound"
+            }
+          },
+          "Outbound": {
+            "title": "Outbound",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Shared.Specification.V3.Base.Outbound"
+              }
+            ],
+            "description": "本平台API狀態",
+            "xml": {
+              "name": "Outbound"
+            }
+          }
+        },
+        "description": "API服務健康狀態",
+        "xml": {
+          "name": "DisplayHealth"
+        }
+      },
+      "PTX.Service.DTO.Shared.Specification.V3.Base.Inbound": {
+        "title": "Inbound",
+        "required": [
+          "CheckTime",
+          "Status"
+        ],
+        "type": "object",
+        "properties": {
+          "CheckTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "檢核時間",
+            "format": "date-time"
+          },
+          "Status": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "檢核結果狀態 : [0:'失敗',1:'成功',2:'資料清洗中']"
+          },
+          "Reason": {
+            "title": "String",
+            "type": "string",
+            "description": "檢核失敗原因",
+            "xml": {
+              "name": "Reason"
+            }
+          }
+        },
+        "description": "本平台資料來源轉入狀態",
+        "xml": {
+          "name": "Inbound"
+        }
+      },
+      "PTX.Service.DTO.Shared.Specification.V3.Base.Outbound": {
+        "title": "Outbound",
+        "required": [
+          "CheckTime",
+          "Status"
+        ],
+        "type": "object",
+        "properties": {
+          "CheckTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "檢核時間",
+            "format": "date-time"
+          },
+          "Status": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "檢核結果狀態 : [0:'失敗',1:'成功',2:'資料清洗中']"
+          },
+          "Reason": {
+            "title": "String",
+            "type": "string",
+            "description": "檢核失敗原因",
+            "xml": {
+              "name": "Reason"
+            }
+          }
+        },
+        "description": "本平台API狀態",
+        "xml": {
+          "name": "Outbound"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.VDLive]": {
+        "title": "VDLiveList",
+        "required": [
+          "AuthorityCode",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime",
+          "VDLives"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "VDLives": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.VDLive"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfVDLive",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.VDLive": {
+        "title": "VDLive",
+        "required": [
+          "DataCollectTime",
+          "LinkFlows",
+          "Status",
+          "VDID"
+        ],
+        "type": "object",
+        "properties": {
+          "VDID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "VD設備代碼",
+            "xml": {
+              "name": "VDID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "<details>\r\n  <summary>業管子機關簡碼</summary>\r\n                與Inbound XML不同，透過靜態資料對應設備的SubAuthorityCode取得\r\n              </details>",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "LinkFlows": {
+            "title": "LinkFlow[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.LinkFlow"
+            },
+            "description": "路段車流偵測資訊",
+            "xml": {
+              "name": "LinkFlow[]"
+            }
+          },
+          "Status": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設備狀態 : [0:'正常',1:'通訊異常',2:'停用或施工中',3:'設備故障']"
+          },
+          "DataCollectTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "資料蒐集時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "VDLive"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.LinkFlow": {
+        "title": "LinkFlow",
+        "required": [
+          "Lanes",
+          "LinkID"
+        ],
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          },
+          "Lanes": {
+            "title": "Lane[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Lane"
+            },
+            "description": "偵側路段車道資訊",
+            "xml": {
+              "name": "Lane[]"
+            }
+          }
+        },
+        "xml": {
+          "name": "LinkFlow"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.Lane": {
+        "title": "Lane",
+        "required": [
+          "LaneID",
+          "LaneType",
+          "Occupancy",
+          "Speed",
+          "Vehicles"
+        ],
+        "type": "object",
+        "properties": {
+          "LaneID": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "車道代碼",
+            "format": "int32"
+          },
+          "LaneType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "車道種類 : [1:'一般車道',2:'快車道',3:'慢車道',4:'機車道',5:'高承載車道',6:'公車專用道',7:'轉向車道',8:'路肩',9:'輔助車道',10:'調撥車道',11:'其他']"
+          },
+          "Speed": {
+            "title": "Double",
+            "type": "number",
+            "description": "平均速率偵測值, -99=資料異常",
+            "format": "double"
+          },
+          "Occupancy": {
+            "title": "Double",
+            "type": "number",
+            "description": "佔有率偵測值",
+            "format": "double"
+          },
+          "Vehicles": {
+            "title": "Vehicle[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Vehicle"
+            },
+            "description": "車道內車輛資訊",
+            "xml": {
+              "name": "Vehicle[]"
+            }
+          },
+          "ErrorType": {
+            "title": "String",
+            "type": "string",
+            "description": "車道內車流偵測資訊異常類型代碼, 請參閱[**[資料品質檢核](https://motc-traffic.gitbook.io/motc-traffic/)**]",
+            "xml": {
+              "name": "ErrorType"
+            }
+          }
+        },
+        "xml": {
+          "name": "Lane"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.Vehicle": {
+        "title": "Vehicle",
+        "required": [
+          "VehicleType",
+          "Volume"
+        ],
+        "type": "object",
+        "properties": {
+          "VehicleType": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "車種代碼, 請參閱[**[車種代碼](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "VehicleType"
+            }
+          },
+          "Volume": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "流量偵測值, -99=資料異常",
+            "format": "int32"
+          },
+          "Speed": {
+            "type": "number",
+            "description": "平均速率偵測值, -99=資料異常",
+            "format": "double"
+          }
+        },
+        "xml": {
+          "name": "Vehicle"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMS]": {
+        "title": "CMSList",
+        "required": [
+          "AuthorityCode",
+          "CMSs",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "CMSs": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CMS"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfCMS",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.CMS": {
+        "title": "CMS",
+        "required": [
+          "CMSID",
+          "LinkID",
+          "LocationType",
+          "PositionLat",
+          "PositionLon"
+        ],
+        "type": "object",
+        "properties": {
+          "CMSID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "CMS設備代碼",
+            "xml": {
+              "name": "CMSID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          },
+          "LocationType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設置地點位置類型 : [1:'路側',2:'道路中央分隔島',3:'快慢分隔島',4:'車道上門架',5:'車道鋪面',6:'其他']"
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "設備架設位置 X 坐標",
+            "format": "double"
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "設備架設位置 Y 坐標",
+            "format": "double"
+          },
+          "RoadID": {
+            "title": "String",
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "type": "string",
+            "description": "道路代碼",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "LocationMile": {
+            "title": "String",
+            "type": "string",
+            "description": "所在方向里程數",
+            "xml": {
+              "name": "LocationMile"
+            }
+          },
+          "LayoutMapURL": {
+            "title": "String",
+            "type": "string",
+            "description": "路側設備布設簡圖URL",
+            "xml": {
+              "name": "LayoutMapURL"
+            }
+          }
+        },
+        "xml": {
+          "name": "CMS"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive]": {
+        "title": "CMSLiveList",
+        "required": [
+          "AuthorityCode",
+          "CMSLives",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "CMSLives": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfCMSLive",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.CMSLive": {
+        "title": "CMSLive",
+        "required": [
+          "CMSID",
+          "DataCollectTime",
+          "Messages",
+          "MessageStatus",
+          "Status"
+        ],
+        "type": "object",
+        "properties": {
+          "CMSID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "CMS設備代碼",
+            "xml": {
+              "name": "CMSID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "<details>\r\n  <summary>業管子機關簡碼</summary>\r\n                與Inbound XML不同，透過靜態資料對應設備的SubAuthorityCode取得\r\n              </details>",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "MessageStatus": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "訊息發布狀態 : [0:'目前無資料顯示',1:'目前正執行循環顯示']"
+          },
+          "Messages": {
+            "title": "Message[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.Message"
+            },
+            "description": "循環訊息內容",
+            "xml": {
+              "name": "Message[]"
+            }
+          },
+          "Status": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設備狀態 : [0:'正常',1:'通訊異常',2:'停用或施工中',3:'設備故障']"
+          },
+          "DataCollectTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "資料蒐集時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "CMSLive"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.Message": {
+        "title": "Message",
+        "type": "object",
+        "properties": {
+          "Text": {
+            "title": "String",
+            "type": "string",
+            "description": "內容文字訊息",
+            "xml": {
+              "name": "Text"
+            }
+          },
+          "Image": {
+            "title": "String",
+            "type": "string",
+            "description": "內容圖片訊息",
+            "xml": {
+              "name": "Image"
+            }
+          },
+          "Type": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "訊息種類 : [1:'旅行時間資訊',2:'壅塞資訊',3:'事故資訊',4:'施工資訊',5:'停車資訊',6:'政令宣導資訊',7:'其他未定義']"
+          },
+          "Priority": {
+            "type": "integer",
+            "description": "顯示優先順序",
+            "format": "int32"
+          }
+        },
+        "xml": {
+          "name": "Message"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.CCTV]": {
+        "title": "CCTVList",
+        "required": [
+          "AuthorityCode",
+          "CCTVs",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "CCTVs": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.CCTV"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfCCTV",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.CCTV": {
+        "title": "CCTV",
+        "required": [
+          "CCTVID",
+          "LinkID",
+          "LocationType",
+          "PositionLat",
+          "PositionLon"
+        ],
+        "type": "object",
+        "properties": {
+          "CCTVID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "CCTV設備代碼",
+            "xml": {
+              "name": "CCTVID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          },
+          "LookingViews": {
+            "title": "LookingView[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LookingView"
+            },
+            "description": "CCTV監看方向參考影像圖片",
+            "xml": {
+              "name": "LookingView[]"
+            }
+          },
+          "VideoStreamURL": {
+            "title": "String",
+            "type": "string",
+            "description": "動態影像串流網址",
+            "xml": {
+              "name": "VideoStreamURL"
+            }
+          },
+          "VideoImageURL": {
+            "title": "String",
+            "type": "string",
+            "description": "靜態影像(快照)網址網址",
+            "xml": {
+              "name": "VideoImageURL"
+            }
+          },
+          "ImageRefreshRate": {
+            "type": "integer",
+            "description": "靜態影像(快照)更新頻率",
+            "format": "int32"
+          },
+          "LocationType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設置地點位置類型 : [1:'路側',2:'道路中央分隔島',3:'快慢分隔島',4:'車道上門架',5:'車道鋪面',6:'其他']"
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "設備架設位置 X 坐標",
+            "format": "double"
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "設備架設位置 Y 坐標",
+            "format": "double"
+          },
+          "SurveillanceType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "CCTV監視類別 : [1:'路段',2:'路口',3:'匝道出入口',4:'未定義']"
+          },
+          "SurveillanceDescription": {
+            "title": "String",
+            "type": "string",
+            "description": "拍攝地點描述",
+            "xml": {
+              "name": "SurveillanceDescription"
+            }
+          },
+          "RoadID": {
+            "title": "String",
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "type": "string",
+            "description": "道路名稱",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "LocationMile": {
+            "title": "String",
+            "type": "string",
+            "description": "所在方向里程數",
+            "xml": {
+              "name": "LocationMile"
+            }
+          },
+          "LayoutMapURL": {
+            "title": "String",
+            "type": "string",
+            "description": "路側設備布設簡圖URL",
+            "xml": {
+              "name": "LayoutMapURL"
+            }
+          }
+        },
+        "xml": {
+          "name": "CCTV"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.LookingView": {
+        "title": "LookingView",
+        "type": "object",
+        "properties": {
+          "Bearing": {
+            "title": "String",
+            "type": "string",
+            "description": "參考影像圖片的看方位 : [E:'東',N:'北',NE:'東北',NW:'西北',S:'南',SE:'東南',SW:'西南',W:'西']"
+          },
+          "Image": {
+            "title": "String",
+            "type": "string",
+            "description": "參考影像圖片",
+            "xml": {
+              "name": "Image"
+            }
+          }
+        },
+        "xml": {
+          "name": "LookingView"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.ETag]": {
+        "title": "ETagList",
+        "required": [
+          "AuthorityCode",
+          "ETags",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "ETags": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.ETag"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfETag",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.ETag": {
+        "title": "ETag",
+        "required": [
+          "ETagGantryID",
+          "LinkID",
+          "LocationType",
+          "PositionLat",
+          "PositionLon"
+        ],
+        "type": "object",
+        "properties": {
+          "ETagGantryID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "eTag偵測站代碼",
+            "xml": {
+              "name": "ETagGantryID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          },
+          "LocationType": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "設置地點位置類型 : [1:'路側',2:'道路中央分隔島',3:'快慢分隔島',4:'車道上門架',5:'車道鋪面',6:'其他']"
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "設備架設位置 X 坐標",
+            "format": "double"
+          },
+          "PositionLat": {
+            "type": "number",
+            "description": "設備架設位置 Y 坐標",
+            "format": "double"
+          },
+          "RoadID": {
+            "title": "String",
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "type": "string",
+            "description": "道路名稱",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "LocationMile": {
+            "title": "String",
+            "type": "string",
+            "description": "所在方向里程數",
+            "xml": {
+              "name": "LocationMile"
+            }
+          },
+          "LayoutMapURL": {
+            "title": "String",
+            "type": "string",
+            "description": "路側設備布設簡圖URL",
+            "xml": {
+              "name": "LayoutMapURL"
+            }
+          }
+        },
+        "xml": {
+          "name": "ETag"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.Section]": {
+        "title": "SectionList",
+        "required": [
+          "AuthorityCode",
+          "Sections",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "Sections": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.Section"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfSection",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.Section": {
+        "title": "Section",
+        "required": [
+          "RoadClass",
+          "RoadDirection",
+          "RoadID",
+          "RoadName",
+          "RoadSection",
+          "SectionID",
+          "SectionName"
+        ],
+        "type": "object",
+        "properties": {
+          "SectionID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段代碼",
+            "xml": {
+              "name": "SectionID"
+            }
+          },
+          "LinkIDs": {
+            "title": "LinkIDItem[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LinkIDItem"
+            },
+            "description": "機關基礎路段代碼集合",
+            "xml": {
+              "name": "LinkIDItem[]"
+            }
+          },
+          "OpenLRs": {
+            "title": "OpenLRItem[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.OpenLRItem"
+            },
+            "description": "動態區域描述集合",
+            "xml": {
+              "name": "OpenLRItem[]"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "SectionName": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段中文名稱描述",
+            "xml": {
+              "name": "SectionName"
+            }
+          },
+          "RoadID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "道路路名",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "SectionLength": {
+            "type": "number",
+            "description": "機關發布路段長度, GIS的提供路段長度(KM), 可到小數點3位, 單位:KM",
+            "format": "float"
+          },
+          "SectionMile": {
+            "title": "SectionMile",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.SectionMile"
+              }
+            ],
+            "description": "機關發布路段所在位置之起迄里程數",
+            "xml": {
+              "name": "SectionMile"
+            }
+          },
+          "SectionStart": {
+            "title": "Point",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Point"
+              }
+            ],
+            "description": "機關發布路段起點座標",
+            "xml": {
+              "name": "Point"
+            }
+          },
+          "SectionEnd": {
+            "title": "Point",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Point"
+              }
+            ],
+            "description": "機關發布路段迄點座標",
+            "xml": {
+              "name": "Point"
+            }
+          },
+          "SpeedLimit": {
+            "type": "integer",
+            "description": "機關發布路段最高限速",
+            "format": "int32"
+          }
+        },
+        "xml": {
+          "name": "Section"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.LinkIDItem": {
+        "title": "LinkIDItem",
+        "required": [
+          "LinkID"
+        ],
+        "type": "object",
+        "properties": {
+          "LinkID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段代碼, 請參閱[**[基礎路段代碼表](https://motclink.gitbook.io/link/lu-duan-bian-ma-nei-rong/2code)**]",
+            "xml": {
+              "name": "LinkID"
+            }
+          }
+        },
+        "xml": {
+          "name": "LinkIDItem"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.OpenLRItem": {
+        "title": "OpenLRItem",
+        "required": [
+          "OpenLR"
+        ],
+        "type": "object",
+        "properties": {
+          "OpenLR": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "動態區域描述",
+            "xml": {
+              "name": "OpenLR"
+            }
+          }
+        },
+        "xml": {
+          "name": "OpenLRItem"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.SectionMile": {
+        "title": "SectionMile",
+        "type": "object",
+        "properties": {
+          "StartKM": {
+            "title": "String",
+            "type": "string",
+            "description": "起點里程數, 里程表示方式：整數公里數+整數公里數下 3 位，如 36K+525",
+            "xml": {
+              "name": "StartKM"
+            }
+          },
+          "EndKM": {
+            "title": "String",
+            "type": "string",
+            "description": "迄點里程數, 里程表示方式：整數公里數+整數公里數下 3 位，如 36K+525",
+            "xml": {
+              "name": "EndKM"
+            }
+          }
+        },
+        "xml": {
+          "name": "SectionMile"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.Commons.Point": {
+        "title": "Point",
+        "type": "object",
+        "properties": {
+          "PositionLat": {
+            "type": "number",
+            "description": "位置緯度(WGS84)",
+            "format": "float"
+          },
+          "PositionLon": {
+            "type": "number",
+            "description": "位置經度(WGS84)",
+            "format": "float"
+          }
+        },
+        "xml": {
+          "name": "Point"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.SectionWithGeometry]": {
+        "title": "SectionWithGeometryList",
+        "required": [
+          "AuthorityCode",
+          "SectionWithGeometrys",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "SectionWithGeometrys": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.SectionWithGeometry"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfSectionWithGeometry",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.SectionWithGeometry": {
+        "title": "SectionWithGeometry",
+        "required": [
+          "Geometry",
+          "RoadClass",
+          "RoadDirection",
+          "RoadID",
+          "RoadName",
+          "RoadSection",
+          "SectionID",
+          "SectionName"
+        ],
+        "type": "object",
+        "properties": {
+          "SectionID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段代碼",
+            "xml": {
+              "name": "SectionID"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "業管子機關簡碼",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "SectionName": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段中文名稱描述",
+            "xml": {
+              "name": "SectionName"
+            }
+          },
+          "RoadID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "道路代碼, 請參閱[**[路名碼基本資料](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadID"
+            }
+          },
+          "RoadName": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "道路路名",
+            "xml": {
+              "name": "RoadName"
+            }
+          },
+          "RoadClass": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "道路分類 : [0:'國道',1:'快速道路',2:'市區快速道路',3:'省道',4:'縣道',5:'鄉道',6:'市區一般道路',7:'匝道']"
+          },
+          "RoadDirection": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "基礎路段所屬道路方向, 請參閱[**[道路方向資料表](https://traffic-api-documentation.gitbook.io/traffic/xiang-dai-zhao-biao)**]",
+            "xml": {
+              "name": "RoadDirection"
+            }
+          },
+          "RoadSection": {
+            "title": "RoadSection",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.RoadSection"
+              }
+            ],
+            "description": "所在道路路段描述",
+            "xml": {
+              "name": "RoadSection"
+            }
+          },
+          "SectionLength": {
+            "type": "number",
+            "description": "機關發布路段長度, GIS的提供路段長度(KM), 可到小數點3位, 單位:KM",
+            "format": "float"
+          },
+          "SectionMile": {
+            "title": "SectionMile",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.SectionMile"
+              }
+            ],
+            "description": "機關發布路段所在位置之起迄里程數",
+            "xml": {
+              "name": "SectionMile"
+            }
+          },
+          "SectionStart": {
+            "title": "Point",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Point"
+              }
+            ],
+            "description": "機關發布路段起點座標",
+            "xml": {
+              "name": "Point"
+            }
+          },
+          "SectionEnd": {
+            "title": "Point",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.Commons.Point"
+              }
+            ],
+            "description": "機關發布路段迄點座標",
+            "xml": {
+              "name": "Point"
+            }
+          },
+          "SpeedLimit": {
+            "type": "integer",
+            "description": "機關發布路段最高限速",
+            "format": "int32"
+          },
+          "Geometry": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段線型圖資資料, 格式為WKT",
+            "xml": {
+              "name": "Geometry"
+            }
+          }
+        },
+        "xml": {
+          "name": "SectionWithGeometry"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTraffic]": {
+        "title": "LiveTrafficList",
+        "required": [
+          "AuthorityCode",
+          "LiveTraffics",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "LiveTraffics": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LiveTraffic"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfLiveTraffic",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.LiveTraffic": {
+        "title": "LiveTraffic",
+        "required": [
+          "CongestionLevel",
+          "CongestionLevelID",
+          "DataCollectTime",
+          "DataSources",
+          "TravelSpeed",
+          "TravelTime"
+        ],
+        "type": "object",
+        "properties": {
+          "SectionID": {
+            "title": "String",
+            "type": "string",
+            "description": "機關發布路段代碼",
+            "xml": {
+              "name": "SectionID"
+            }
+          },
+          "LinkIDs": {
+            "title": "LinkIDItem[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LinkIDItem"
+            },
+            "description": "機關基礎路段代碼集合",
+            "xml": {
+              "name": "LinkIDItem[]"
+            }
+          },
+          "OpenLRs": {
+            "title": "OpenLRItem[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.OpenLRItem"
+            },
+            "description": "動態區域描述集合",
+            "xml": {
+              "name": "OpenLRItem[]"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "<details>\r\n  <summary>業管子機關簡碼</summary>\r\n                與Inbound XML不同，透過靜態資料對應設備的SubAuthorityCode取得\r\n              </details>",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "TravelTime": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "路段平均旅行時間, 單位:秒, 若壅塞級別為-1, 則為-1",
+            "format": "int32"
+          },
+          "TravelSpeed": {
+            "title": "Double",
+            "type": "number",
+            "description": "路段平均旅行速度, 單位:KM/Hr, 若壅塞級別為-1, 則為-1",
+            "format": "double"
+          },
+          "CongestionLevelID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "壅塞水準組別代碼",
+            "xml": {
+              "name": "CongestionLevelID"
+            }
+          },
+          "CongestionLevel": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "壅塞級別, -99=資料異常, -1=道路封閉",
+            "xml": {
+              "name": "CongestionLevel"
+            }
+          },
+          "DataSources": {
+            "title": "DataSources",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.DataSources"
+              }
+            ],
+            "description": "即時路況資訊來源種類",
+            "xml": {
+              "name": "DataSources"
+            }
+          },
+          "DataCollectTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "資料蒐集時間(ISO8601格式:yyyy-MM-ddTHH:mm:ss zzz)",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "LiveTraffic"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.DataSources": {
+        "title": "DataSources",
+        "required": [
+          "HasAVI",
+          "HasCVP",
+          "HasETAG",
+          "HasGVP",
+          "HasHistorical",
+          "HasOthers",
+          "HasVD"
+        ],
+        "type": "object",
+        "properties": {
+          "HasHistorical": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含歷史資料 : [0:'不包含',1:'包含']"
+          },
+          "HasVD": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含VD資料(車輛偵測器) : [0:'不包含',1:'包含']"
+          },
+          "HasAVI": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含AVI資料(自動車輛辨識) : [0:'不包含',1:'包含']"
+          },
+          "HasETAG": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含ETag資料(eTag電子辨識) : [0:'不包含',1:'包含']"
+          },
+          "HasGVP": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含GVP資料(GPS Vehicle Probe) : [0:'不包含',1:'包含']"
+          },
+          "HasCVP": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含CVP資料(Cellular Vehicle Probe) : [0:'不包含',1:'包含']"
+          },
+          "HasOthers": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "是否包含其他多元路況資料 : [0:'不包含',1:'包含']"
+          }
+        },
+        "xml": {
+          "name": "DataSources"
+        }
+      },
+      "PTX.API.Traffic.Model.TrafficWrapper[PTX.Service.DTO.Traffic.Specification.V2.API.LiveTrafficWithGeometry]": {
+        "title": "LiveTrafficWithGeometryList",
+        "required": [
+          "AuthorityCode",
+          "LiveTrafficWithGeometrys",
+          "SrcUpdateInterval",
+          "SrcUpdateTime",
+          "UpdateInterval",
+          "UpdateTime"
+        ],
+        "type": "object",
+        "properties": {
+          "UpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>本平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                與來源Inbound XML不同，為中心端處理完後提供資料的更新時間\r\n              </details>",
+            "format": "date-time"
+          },
+          "UpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>本平台資料更新週期(秒)</summary>\r\n                與來源Inbound XML不同，為中心端更新資料的週期\r\n              </details>",
+            "format": "int32"
+          },
+          "SrcUpdateTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "<details>\r\n  <summary>來源端平台資料更新時間(ISO8601格式:yyyy-MM-ddTHH:mm:sszzz)</summary>\r\n                為來源Inbound XML中的UpdateTime [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "date-time"
+          },
+          "SrcUpdateInterval": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "<details>\r\n  <summary>來源端平台資料更新週期(秒) : [-1:'不定期更新']</summary>\r\n                為來源Inbound XML中的UpdateInterval [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int32"
+          },
+          "AuthorityCode": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "業管機關簡碼",
+            "xml": {
+              "name": "AuthorityCode"
+            }
+          },
+          "LinkVersion": {
+            "title": "String",
+            "type": "string",
+            "description": "版號",
+            "xml": {
+              "name": "LinkVersion"
+            }
+          },
+          "LiveTrafficWithGeometrys": {
+            "title": "Array",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LiveTrafficWithGeometry"
+            },
+            "description": "資料(陣列)",
+            "xml": {
+              "name": "List`1"
+            }
+          },
+          "Count": {
+            "type": "integer",
+            "description": "<details>\r\n  <summary>資料總筆數</summary>\r\n                與來源Inbound XML不同，為提供資料的總筆數  [該欄位由本平台自動產製]\r\n              </details>",
+            "format": "int64"
+          }
+        },
+        "xml": {
+          "name": "TrafficWrapperOfLiveTrafficWithGeometry",
+          "namespace": "https://traffic.transportdata.tw/standard/traffic/schema/"
+        }
+      },
+      "PTX.Service.DTO.Traffic.Specification.V2.API.LiveTrafficWithGeometry": {
+        "title": "LiveTrafficWithGeometry",
+        "required": [
+          "CongestionLevel",
+          "CongestionLevelID",
+          "DataCollectTime",
+          "DataSources",
+          "Geometry",
+          "TravelSpeed",
+          "TravelTime"
+        ],
+        "type": "object",
+        "properties": {
+          "SectionID": {
+            "title": "String",
+            "type": "string",
+            "description": "機關發布路段代碼",
+            "xml": {
+              "name": "SectionID"
+            }
+          },
+          "LinkIDs": {
+            "title": "LinkIDItem[]",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.LinkIDItem"
+            },
+            "description": "機關基礎路段代碼集合",
+            "xml": {
+              "name": "LinkIDItem[]"
+            }
+          },
+          "SubAuthorityCode": {
+            "title": "String",
+            "type": "string",
+            "description": "<details>\r\n  <summary>業管子機關簡碼</summary>\r\n                與Inbound XML不同，透過靜態資料對應設備的SubAuthorityCode取得\r\n              </details>",
+            "xml": {
+              "name": "SubAuthorityCode"
+            }
+          },
+          "TravelTime": {
+            "title": "Int32",
+            "type": "integer",
+            "description": "路段平均旅行時間, 單位:秒",
+            "format": "int32"
+          },
+          "TravelSpeed": {
+            "title": "Double",
+            "type": "number",
+            "description": "路段平均旅行速度, 單位:KM/Hr",
+            "format": "double"
+          },
+          "Geometry": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "機關發布路段線型圖資資料, 格式為WKT",
+            "xml": {
+              "name": "Geometry"
+            }
+          },
+          "CongestionLevelID": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "壅塞水準組別代碼",
+            "xml": {
+              "name": "CongestionLevelID"
+            }
+          },
+          "CongestionLevel": {
+            "title": "String",
+            "minLength": 1,
+            "type": "string",
+            "description": "壅塞級別, -99=資料異常",
+            "xml": {
+              "name": "CongestionLevel"
+            }
+          },
+          "DataSources": {
+            "title": "DataSources",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/PTX.Service.DTO.Traffic.Specification.V2.API.DataSources"
+              }
+            ],
+            "description": "即時路況資訊來源種類",
+            "xml": {
+              "name": "DataSources"
+            }
+          },
+          "DataCollectTime": {
+            "title": "DateTime",
+            "type": "string",
+            "description": "資料蒐集時間(ISO8601格式:yyyy-MM-ddTHH:mm:ss zzz)",
+            "format": "date-time"
+          }
+        },
+        "xml": {
+          "name": "LiveTrafficWithGeometry"
+        }
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "FreewayAlternativeRouteTraffic",
+      "description": "高速公路替代道路即時路況"
+    },
+    {
+      "name": "Traffic Advanced(Near By)",
+      "description": "路況進階(指定位置及範圍)"
+    }
+  ]
+}

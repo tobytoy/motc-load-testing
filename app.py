@@ -16,12 +16,23 @@ import threading
 import queue
 import pandas as pd
 from datetime import datetime
+from pathlib import Path
 from dotenv import load_dotenv
+import yaml
 
 # ─────────────────────────────────────────────────────────
-# 0. 載入 .env（若存在）
+# 0. 載入 .env 與 config.yaml
 # ─────────────────────────────────────────────────────────
 load_dotenv()
+
+@st.cache_data(ttl=60)
+def load_config() -> dict:
+    """載入 config.yaml（最多 60 秒快取，修改後 Streamlit 自動 reload）"""
+    config_path = Path(__file__).parent / "config.yaml"
+    with open(config_path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+cfg = load_config()
 
 # ─────────────────────────────────────────────────────────
 # 1. 頁面設定
@@ -235,15 +246,25 @@ with st.sidebar:
     st.divider()
     st.markdown("### 🎯 測試目標 API")
 
-    BASE_URL = "https://tdx.transportdata.tw/api/basic"
+    BASE_URL = cfg["tdx"]["base_url"]
+    default_city = cfg["tdx"].get("default_city", "Taipei")
+    tra_origin   = cfg["tdx"].get("default_tra_origin", "0900")
+    tra_dest     = cfg["tdx"].get("default_tra_dest",   "1000")
+
+    # 從 config.yaml 建立端點選項
+    def _resolve_path(raw_path: str) -> str:
+        """展開路徑中的 {City}、{OriginStationID}、{DestinationStationID} 佔位符"""
+        return (
+            raw_path
+            .replace("{City}", default_city)
+            .replace("{OriginStationID}", tra_origin)
+            .replace("{DestinationStationID}", tra_dest)
+            .replace("{RouteName}", "0")  # 預設路線名
+            .replace("{StationID}", tra_origin)
+        )
 
     endpoint_options = {
-        "市區公車 - 指定縣市路線資料 (靜態)": "/v2/Bus/Route/City/Taipei",
-        "市區公車 - 指定縣市預估到站資料 (動態)": "/v2/Bus/DisplayStopOfRoute/City/Taipei",
-        "市區公車 - 即時車輛位置 (動態)": "/v2/Bus/RealTimeByFrequency/City/Taipei",
-        "公路客運 - 路線資料 (靜態)": "/v2/Bus/Route/InterCity",
-        "公路客運 - 即時車輛位置 (動態)": "/v2/Bus/RealTimeByFrequency/InterCity",
-        "自訂端點 (Custom Path)": "CUSTOM",
+        ep["label"]: ep["path"] for ep in cfg["endpoints"]
     }
 
     selected_label = st.selectbox("選擇 API 端點", list(endpoint_options.keys()), key="ep_select")
@@ -251,13 +272,13 @@ with st.sidebar:
     if endpoint_options[selected_label] == "CUSTOM":
         custom_path = st.text_input(
             "輸入相對路徑",
-            value="/v2/Bus/Station/City/Taipei",
-            placeholder="/v2/Bus/Route/City/Taichung",
+            value="/v3/Bus/Station/City/Taipei",
+            placeholder="/v3/Bus/Route/City/Taichung",
             key="custom_path",
         )
         target_path = custom_path.strip()
     else:
-        target_path = endpoint_options[selected_label]
+        target_path = _resolve_path(endpoint_options[selected_label])
 
     full_url = f"{BASE_URL}{target_path}"
 
@@ -302,25 +323,45 @@ def generate_k6_script(
     duration: str,
     sleep_sec: float,
     size_limit_kbit: int | None,
+    ramp_up_duration: str = "30s",
+    ramp_down_duration: str = "10s",
 ) -> str:
-    """動態生成 k6 壓測腳本"""
+    """動態生成 k6 壓測腳本（ramping-vus + jitter 緩啟動）"""
     size_check = ""
     if size_limit_kbit:
         max_bytes = (size_limit_kbit * 1000) // 8
         size_check = f",\n    'Response <= {size_limit_kbit}Kbit': (r) => r.body && r.body.length <= {max_bytes}"
 
-    sleep_block = f"  sleep({sleep_sec});" if sleep_sec > 0 else ""
+    # jitter：sleep 加入 ±20% 隨機誤差，讓請求更分散避免同時間點衝擊
+    if sleep_sec > 0:
+        jitter_max = round(sleep_sec * 0.2, 3)
+        sleep_block = (
+            f"  // sleep + \u00b120% jitter \u8b93\u8acb\u6c42\u5206\u6563\n"
+            f"  sleep({sleep_sec} + (Math.random() * {jitter_max * 2} - {jitter_max}));"
+        )
+    else:
+        sleep_block = ""
 
     return f"""
 import http from 'k6/http';
 import {{ check, sleep }} from 'k6';
 
+// ─── Ramp-up 說明 ────────────────────────────────────────────────────
+// 1. Ramp-up  ({ramp_up_duration}): VU 從 0 線性爸到 {vus}，避免瞬間衝擊
+// 2. Steady   ({duration}): 維持 {vus} VU 全速壓測
+// 3. Ramp-down({ramp_down_duration}): VU 緩降到 0，讓伺服器恢復
+// ─────────────────────────────────────────────────────
 export const options = {{
   scenarios: {{
     tdx_test: {{
-      executor: 'constant-vus',
-      vus: {vus},
-      duration: '{duration}',
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        {{ duration: '{ramp_up_duration}',   target: {vus}  }},
+        {{ duration: '{duration}',            target: {vus}  }},
+        {{ duration: '{ramp_down_duration}',  target: 0      }},
+      ],
+      gracefulRampDown: '10s',
     }},
   }},
   thresholds: {{
@@ -338,9 +379,13 @@ export default function () {{
     }},
   }};
   const res = http.get('{target_url}', params);
-  check(res, {{
+  const ok = check(res, {{
     'HTTP 200': (r) => r.status === 200{size_check}
   }});
+
+  if (!ok && __ITER < 5) {{
+    console.error(`[ERR] HTTP ${{res.status}} | URL: {target_url} | Body: ${{res.body ? res.body.substring(0, 150) : ''}}`);
+  }}
 {sleep_block}
 }}
 
@@ -526,9 +571,12 @@ with tab_single:
                 st.success("✅ Token 取得成功！")
 
                 # Step 2: 執行壓測
+                _sd = cfg.get('single_test_defaults', {})
                 script = generate_k6_script(
                     full_url, s_vus, s_duration, s_sleep,
-                    20 if s_size_limit else None
+                    20 if s_size_limit else None,
+                    ramp_up_duration=_sd.get('ramp_up_duration', '10s'),
+                    ramp_down_duration='10s',
                 )
 
                 log_placeholder = st.empty()
@@ -595,29 +643,30 @@ with tab_sla:
     st.markdown('<p class="section-title">📋 符合規格測試 — SLA/SLO 自動驗證</p>', unsafe_allow_html=True)
     st.caption("依照專案規格書自動設定壓測參數，測試完成後自動輸出 PASS/FAIL 判定。")
 
+    # ── 從 config.yaml 讀取 SLA 情境 ──────────────────────
+    _sla1 = cfg["sla"]["sla1"]
+    _sla2 = cfg["sla"]["sla2"]
+
     sla_option = st.radio(
         "選擇驗證情境",
-        [
-            "SLA 規格 1：靜/動態資料 <= 20Kbit（5,000 VU / 每 5 秒 / 1 小時）",
-            "SLA 規格 2：其它 API 服務（500 VU / 平均 < 3 秒）",
-        ],
+        [_sla1["label"], _sla2["label"]],
         key="sla_choice",
     )
 
-    if "規格 1" in sla_option:
-        sla_vus       = 5000
-        sla_duration  = "1h"
-        sla_sleep     = 5.0
-        sla_size      = 20
-        sla_rt_ms     = 3000
-        sla_label     = "SLA 規格 1：5,000 VU | 1 小時 | <= 20Kbit"
+    if sla_option == _sla1["label"]:
+        sla_vus      = _sla1["vus"]
+        sla_duration = _sla1["duration"]
+        sla_sleep    = _sla1["sleep_sec"]
+        sla_size     = _sla1["payload_limit_kbit"]
+        sla_rt_ms    = _sla1["avg_rt_threshold_ms"]
+        sla_label    = _sla1["label"]
     else:
-        sla_vus       = 500
-        sla_duration  = "5m"
-        sla_sleep     = 1.0
-        sla_size      = None
-        sla_rt_ms     = 3000
-        sla_label     = "SLA 規格 2：500 VU | 5 分鐘"
+        sla_vus      = _sla2["vus"]
+        sla_duration = _sla2["duration"]
+        sla_sleep    = _sla2["sleep_sec"]
+        sla_size     = _sla2["payload_limit_kbit"]  # None
+        sla_rt_ms    = _sla2["avg_rt_threshold_ms"]
+        sla_label    = _sla2["label"]
 
     st.markdown(f"""
     <div class="sla-info-box">
@@ -646,7 +695,11 @@ with tab_sla:
             if token2:
                 st.success("✅ Token 取得成功！")
 
-                script2 = generate_k6_script(full_url, sla_vus, sla_duration, sla_sleep, sla_size)
+                script2 = generate_k6_script(
+                    full_url, sla_vus, sla_duration, sla_sleep, sla_size,
+                    ramp_up_duration=(_sla1 if sla_option == _sla1['label'] else _sla2).get('ramp_up_duration', '1m'),
+                    ramp_down_duration=(_sla1 if sla_option == _sla1['label'] else _sla2).get('ramp_down_duration', '30s'),
+                )
 
                 log_placeholder2 = st.empty()
                 status_bar2 = st.progress(0, text="⏳ SLA 壓測執行中...")

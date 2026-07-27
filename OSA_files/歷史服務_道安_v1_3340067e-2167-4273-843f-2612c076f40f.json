@@ -1,0 +1,2404 @@
+{
+  "openapi": "3.0.4",
+  "info": {
+    "title": "道安",
+    "description": "本平臺提供涵蓋全國尺度之交通旅運資料服務API，歡迎各產政學單位介接使用。\n#### ◃ 本資料使用注意事項 ▹\n1. Swagger上的API僅供預覽測試用途 (預設查詢筆數為 30，上限數值為 100，意即 `$top` 參數上限為 100)。 若需要取得更完整資料，請至平臺申請以獲取相關使用權限。\n2. 大部分API必須事先選定日期範圍，日期範圍選取越廣資料便越多，需等待API回應，或選定較小的日前範圍。\n\n<br>計費方式：\n<br>計次：10次/1點\n<br>計量：20MB/1點\n---\n##### API使用說明與注意事項：\n1. 如您尚未註冊平臺會員帳號，或未以帳號登入，您將僅能以「訪客模式」使用平臺服務，包含：限以瀏覽器存取，限使用`【基礎服務】`，且限制每個呼叫來源端IP每日存取至多20次。。\n2. 如您已註冊平臺會員帳號，請務必確保在存取服務(包含瀏覽器、程式呼叫API)時帶入您的API金鑰，方能以「會員模式」使用完整平臺服務，包含平臺各類資料服務，如`【基礎服務】`、`【進階服務】`、`【加值服務】`、`【歷史服務】`、`【圖資服務】`、`【第三方服務】`等。\n3. 建議您立即[註冊平臺會員帳號](/register)，依您用量需求訂閱服務方案，並於[【會員中心->資料服務->API金鑰】](/user/dataservice/key)取得API金鑰(即Client Id和Client Secret資訊)。\n4. 會員訂閱服務方案之級別不同，將決定其API金鑰之存取頻率有不同限制，各個方案的存取頻率限制說明請參考[訂閱收費](/pricing)。\n5. 以瀏覽器帶入API金鑰之操作方式：請點選Swagger UI上的Authorize按鈕，依指示填入Client Id和Client Secret資訊並進行驗證，驗證完成後可開始於Swagger UI使用API。\n6. 以程式呼叫API帶入API金鑰之操作方式：請參考[範例程式](https://github.com/tdxmotc/SampleCode)。\n7. 不論您是以瀏覽器或是以程式呼叫API，所有服務存取行為均將被記錄並定期檢視，以確保系統資源使用的合理分配與避免遭受濫用。\n\nAPI OAS文本 :[請點我](https://tdx.transportdata.tw/webapi/File/Swagger/V3/3340067e-2167-4273-843f-2612c076f40f)",
+    "termsOfService": "https://tdx.transportdata.tw/term",
+    "contact": {
+      "name": "維運團隊 [tdc@motc.gov.tw]",
+      "email": "tdc@motc.gov.tw"
+    },
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://tdx.transportdata.tw/api/historical"
+    }
+  ],
+  "paths": {
+    "/v1/TrafficAccident/Rank/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]易肇事路口排行",
+        "description": "取得指定[縣市]易肇事路口排行",
+        "operationId": "TrafficAccidentRank",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForRank-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForRank-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForRank-format"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentRank"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"Year\": 0,\n    \"City\": \"string\",\n    \"CityCode\": \"string\",\n    \"District\": \"string\",\n    \"Rank\": 0,\n    \"RoadName\": \"string\",\n    \"Lat\": 0.0,\n    \"Lon\": 0.0,\n    \"AccidentCount\": 0,\n    \"A1Count\": 0,\n    \"A2Count\": 0,\n    \"Updatetime\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"Year\": 0,\"City\":\"string\",\"CityCode\":\"string\",\"District\":\"string\",\"Rank\": 0,\"RoadName\":\"string\",\"Lat\": 0.0,\"Lon\": 0.0,\"AccidentCount\": 0,\"A1Count\": 0,\"A2Count\": 0,\"Updatetime\":\"2026-07-27\"}\n{\"Year\": 0,\"City\":\"string\",\"CityCode\":\"string\",\"District\":\"string\",\"Rank\": 0,\"RoadName\":\"string\",\"Lat\": 0.0,\"Lon\": 0.0,\"AccidentCount\": 0,\"A1Count\": 0,\"A2Count\": 0,\"Updatetime\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "Year": {
+                      "type": "integer",
+                      "description": "資料年份(西元)",
+                      "format": "int32"
+                    },
+                    "City": {
+                      "type": "string",
+                      "description": "縣市中文名稱"
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "縣市代碼"
+                    },
+                    "District": {
+                      "type": "string",
+                      "description": "行政區中文名稱"
+                    },
+                    "Rank": {
+                      "type": "integer",
+                      "description": "排名",
+                      "format": "int32"
+                    },
+                    "RoadName": {
+                      "type": "string",
+                      "description": "路口名稱"
+                    },
+                    "Lat": {
+                      "type": "number",
+                      "description": "路口緯度",
+                      "format": "float"
+                    },
+                    "Lon": {
+                      "type": "number",
+                      "description": "路口經度",
+                      "format": "float"
+                    },
+                    "AccidentCount": {
+                      "type": "integer",
+                      "description": "事故件數",
+                      "format": "int32"
+                    },
+                    "A1Count": {
+                      "type": "integer",
+                      "description": "A1件數",
+                      "format": "int32"
+                    },
+                    "A2Count": {
+                      "type": "integer",
+                      "description": "A2件數",
+                      "format": "int32"
+                    },
+                    "Updatetime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"Year\",\"City\",\"CityCode\",\"District\",\"Rank\",\"RoadName\",\"Lat\",\"Lon\",\"AccidentCount\",\"A1Count\",\"A2Count\",\"Updatetime\"\n\"0\",\"string\",\"string\",\"string\",\"0\",\"string\",\"0.0\",\"0.0\",\"0\",\"0\",\"0\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/TrafficAccident/A1T1/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]交通事故資料A1類表一(事故主檔)",
+        "description": "提供指定[縣市]事故A1類(造成人員當場或二十四小時內死亡之交通事故) 表一資訊",
+        "operationId": "TrafficAccidentA1T1",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentT1"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"AccKeyID\": 0,\n    \"CaseNo\": \"string\",\n    \"NtfSeqNo\": 0,\n    \"CityKeyID\": 0,\n    \"CountyID\": \"string\",\n    \"CityCode\": \"string\",\n    \"TownKeyID\": 0,\n    \"VillageKeyID\": 0,\n    \"VillageCode\": \"string\",\n    \"AccdTp\": 0,\n    \"DealWithUnit\": \"string\",\n    \"CaseTimeAD\": 0,\n    \"CaseTime\": \"string\",\n    \"CaseSite\": \"string\",\n    \"Death\": 0,\n    \"Injured\": 0,\n    \"WeatherCode\": 0,\n    \"LightCode\": 0,\n    \"RoadCategoriesCode\": 0,\n    \"SpeedLimit\": 0,\n    \"RoadTypeCode\": 0,\n    \"AccidentLocationCode\": 0,\n    \"PavementCode\": 0,\n    \"PavementConditionCode\": 0,\n    \"PavementDefectsCode\": 0,\n    \"ObstaclesCode\": 0,\n    \"SightDistanceCode\": 0,\n    \"SignalTypeCode\": 0,\n    \"SignalActionsCode\": 0,\n    \"TrafficFacilitiesCode\": 0,\n    \"TrafficFacilitiesFastLaneCode\": 0,\n    \"TrafficFacilitiesLaneCode\": 0,\n    \"TrafficFacilitiesEdgeCode\": 0,\n    \"AccidentPatternsCode\": 0,\n    \"Lat\": 0.0,\n    \"Lon\": 0.0,\n    \"UpdateTime\": \"2026-07-27 00:00:02\",\n    \"InfoTime\": \"2026-07-27 00:00:02\",\n    \"Infodate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"AccKeyID\": 0,\"CaseNo\":\"string\",\"NtfSeqNo\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"TownKeyID\": 0,\"VillageKeyID\": 0,\"VillageCode\":\"string\",\"AccdTp\": 0,\"DealWithUnit\":\"string\",\"CaseTimeAD\": 0,\"CaseTime\":\"string\",\"CaseSite\":\"string\",\"Death\": 0,\"Injured\": 0,\"WeatherCode\": 0,\"LightCode\": 0,\"RoadCategoriesCode\": 0,\"SpeedLimit\": 0,\"RoadTypeCode\": 0,\"AccidentLocationCode\": 0,\"PavementCode\": 0,\"PavementConditionCode\": 0,\"PavementDefectsCode\": 0,\"ObstaclesCode\": 0,\"SightDistanceCode\": 0,\"SignalTypeCode\": 0,\"SignalActionsCode\": 0,\"TrafficFacilitiesCode\": 0,\"TrafficFacilitiesFastLaneCode\": 0,\"TrafficFacilitiesLaneCode\": 0,\"TrafficFacilitiesEdgeCode\": 0,\"AccidentPatternsCode\": 0,\"Lat\": 0.0,\"Lon\": 0.0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"Infodate\":\"2026-07-27\"}\n{\"AccKeyID\": 0,\"CaseNo\":\"string\",\"NtfSeqNo\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"TownKeyID\": 0,\"VillageKeyID\": 0,\"VillageCode\":\"string\",\"AccdTp\": 0,\"DealWithUnit\":\"string\",\"CaseTimeAD\": 0,\"CaseTime\":\"string\",\"CaseSite\":\"string\",\"Death\": 0,\"Injured\": 0,\"WeatherCode\": 0,\"LightCode\": 0,\"RoadCategoriesCode\": 0,\"SpeedLimit\": 0,\"RoadTypeCode\": 0,\"AccidentLocationCode\": 0,\"PavementCode\": 0,\"PavementConditionCode\": 0,\"PavementDefectsCode\": 0,\"ObstaclesCode\": 0,\"SightDistanceCode\": 0,\"SignalTypeCode\": 0,\"SignalActionsCode\": 0,\"TrafficFacilitiesCode\": 0,\"TrafficFacilitiesFastLaneCode\": 0,\"TrafficFacilitiesLaneCode\": 0,\"TrafficFacilitiesEdgeCode\": 0,\"AccidentPatternsCode\": 0,\"Lat\": 0.0,\"Lon\": 0.0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"Infodate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "AccKeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseNo": {
+                      "type": "string",
+                      "description": "案件編號",
+                      "nullable": true
+                    },
+                    "NtfSeqNo": {
+                      "type": "integer",
+                      "description": "交通事故主表",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CityKeyID": {
+                      "type": "integer",
+                      "description": "縣市識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CountyID": {
+                      "type": "string",
+                      "description": "縣市代碼",
+                      "nullable": true
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "所屬縣市簡碼",
+                      "nullable": true
+                    },
+                    "TownKeyID": {
+                      "type": "integer",
+                      "description": "鄉縣市區識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VillageKeyID": {
+                      "type": "integer",
+                      "description": "村里識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VillageCode": {
+                      "type": "string",
+                      "description": "里代碼",
+                      "nullable": true
+                    },
+                    "AccdTp": {
+                      "type": "integer",
+                      "description": "事故類(A1、A2...An)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DealWithUnit": {
+                      "type": "string",
+                      "description": "處理單位代碼",
+                      "nullable": true
+                    },
+                    "CaseTimeAD": {
+                      "type": "integer",
+                      "description": "案件時間(西元)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseTime": {
+                      "type": "string",
+                      "description": "案件時間(民國)",
+                      "nullable": true
+                    },
+                    "CaseSite": {
+                      "type": "string",
+                      "description": "發生地點",
+                      "nullable": true
+                    },
+                    "Death": {
+                      "type": "integer",
+                      "description": "死亡人數",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Injured": {
+                      "type": "integer",
+                      "description": "受傷人數(含2~30日內死亡)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "WeatherCode": {
+                      "type": "integer",
+                      "description": "天氣識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "LightCode": {
+                      "type": "integer",
+                      "description": "光線識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "RoadCategoriesCode": {
+                      "type": "integer",
+                      "description": "道路類別識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SpeedLimit": {
+                      "type": "integer",
+                      "description": "速限",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "RoadTypeCode": {
+                      "type": "integer",
+                      "description": "道路型態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccidentLocationCode": {
+                      "type": "integer",
+                      "description": "事故位置識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementCode": {
+                      "type": "integer",
+                      "description": "路面鋪裝識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementConditionCode": {
+                      "type": "integer",
+                      "description": "路面狀態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementDefectsCode": {
+                      "type": "integer",
+                      "description": "路面缺陷識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ObstaclesCode": {
+                      "type": "integer",
+                      "description": "障礙物視距識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SightDistanceCode": {
+                      "type": "integer",
+                      "description": "視距識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SignalTypeCode": {
+                      "type": "integer",
+                      "description": "號誌種類識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SignalActionsCode": {
+                      "type": "integer",
+                      "description": "號誌動作識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesCode": {
+                      "type": "integer",
+                      "description": "車道劃分設施-分向設施識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesFastLaneCode": {
+                      "type": "integer",
+                      "description": "快車道或一般車道間識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesLaneCode": {
+                      "type": "integer",
+                      "description": "快慢車道間識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesEdgeCode": {
+                      "type": "integer",
+                      "description": "路面邊線識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccidentPatternsCode": {
+                      "type": "integer",
+                      "description": "事故類型及型態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Lat": {
+                      "type": "number",
+                      "description": "緯度",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "Lon": {
+                      "type": "number",
+                      "description": "經度",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "Infodate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"AccKeyID\",\"CaseNo\",\"NtfSeqNo\",\"CityKeyID\",\"CountyID\",\"CityCode\",\"TownKeyID\",\"VillageKeyID\",\"VillageCode\",\"AccdTp\",\"DealWithUnit\",\"CaseTimeAD\",\"CaseTime\",\"CaseSite\",\"Death\",\"Injured\",\"WeatherCode\",\"LightCode\",\"RoadCategoriesCode\",\"SpeedLimit\",\"RoadTypeCode\",\"AccidentLocationCode\",\"PavementCode\",\"PavementConditionCode\",\"PavementDefectsCode\",\"ObstaclesCode\",\"SightDistanceCode\",\"SignalTypeCode\",\"SignalActionsCode\",\"TrafficFacilitiesCode\",\"TrafficFacilitiesFastLaneCode\",\"TrafficFacilitiesLaneCode\",\"TrafficFacilitiesEdgeCode\",\"AccidentPatternsCode\",\"Lat\",\"Lon\",\"UpdateTime\",\"InfoTime\",\"Infodate\"\n\"0\",\"string\",\"0\",\"0\",\"string\",\"string\",\"0\",\"0\",\"string\",\"0\",\"string\",\"0\",\"string\",\"string\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0.0\",\"0.0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/TrafficAccident/A2T1/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]交通事故資料A2類表一(事故主檔)",
+        "description": "提供指定[縣市]事故A2類(造成人員受傷或超過二十四小時死亡之交通事故)表一資訊",
+        "operationId": "TrafficAccidentA2T1",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentT1"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"AccKeyID\": 0,\n    \"CaseNo\": \"string\",\n    \"NtfSeqNo\": 0,\n    \"CityKeyID\": 0,\n    \"CountyID\": \"string\",\n    \"CityCode\": \"string\",\n    \"TownKeyID\": 0,\n    \"VillageKeyID\": 0,\n    \"VillageCode\": \"string\",\n    \"AccdTp\": 0,\n    \"DealWithUnit\": \"string\",\n    \"CaseTimeAD\": 0,\n    \"CaseTime\": \"string\",\n    \"CaseSite\": \"string\",\n    \"Death\": 0,\n    \"Injured\": 0,\n    \"WeatherCode\": 0,\n    \"LightCode\": 0,\n    \"RoadCategoriesCode\": 0,\n    \"SpeedLimit\": 0,\n    \"RoadTypeCode\": 0,\n    \"AccidentLocationCode\": 0,\n    \"PavementCode\": 0,\n    \"PavementConditionCode\": 0,\n    \"PavementDefectsCode\": 0,\n    \"ObstaclesCode\": 0,\n    \"SightDistanceCode\": 0,\n    \"SignalTypeCode\": 0,\n    \"SignalActionsCode\": 0,\n    \"TrafficFacilitiesCode\": 0,\n    \"TrafficFacilitiesFastLaneCode\": 0,\n    \"TrafficFacilitiesLaneCode\": 0,\n    \"TrafficFacilitiesEdgeCode\": 0,\n    \"AccidentPatternsCode\": 0,\n    \"Lat\": 0.0,\n    \"Lon\": 0.0,\n    \"UpdateTime\": \"2026-07-27 00:00:02\",\n    \"InfoTime\": \"2026-07-27 00:00:02\",\n    \"Infodate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"AccKeyID\": 0,\"CaseNo\":\"string\",\"NtfSeqNo\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"TownKeyID\": 0,\"VillageKeyID\": 0,\"VillageCode\":\"string\",\"AccdTp\": 0,\"DealWithUnit\":\"string\",\"CaseTimeAD\": 0,\"CaseTime\":\"string\",\"CaseSite\":\"string\",\"Death\": 0,\"Injured\": 0,\"WeatherCode\": 0,\"LightCode\": 0,\"RoadCategoriesCode\": 0,\"SpeedLimit\": 0,\"RoadTypeCode\": 0,\"AccidentLocationCode\": 0,\"PavementCode\": 0,\"PavementConditionCode\": 0,\"PavementDefectsCode\": 0,\"ObstaclesCode\": 0,\"SightDistanceCode\": 0,\"SignalTypeCode\": 0,\"SignalActionsCode\": 0,\"TrafficFacilitiesCode\": 0,\"TrafficFacilitiesFastLaneCode\": 0,\"TrafficFacilitiesLaneCode\": 0,\"TrafficFacilitiesEdgeCode\": 0,\"AccidentPatternsCode\": 0,\"Lat\": 0.0,\"Lon\": 0.0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"Infodate\":\"2026-07-27\"}\n{\"AccKeyID\": 0,\"CaseNo\":\"string\",\"NtfSeqNo\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"TownKeyID\": 0,\"VillageKeyID\": 0,\"VillageCode\":\"string\",\"AccdTp\": 0,\"DealWithUnit\":\"string\",\"CaseTimeAD\": 0,\"CaseTime\":\"string\",\"CaseSite\":\"string\",\"Death\": 0,\"Injured\": 0,\"WeatherCode\": 0,\"LightCode\": 0,\"RoadCategoriesCode\": 0,\"SpeedLimit\": 0,\"RoadTypeCode\": 0,\"AccidentLocationCode\": 0,\"PavementCode\": 0,\"PavementConditionCode\": 0,\"PavementDefectsCode\": 0,\"ObstaclesCode\": 0,\"SightDistanceCode\": 0,\"SignalTypeCode\": 0,\"SignalActionsCode\": 0,\"TrafficFacilitiesCode\": 0,\"TrafficFacilitiesFastLaneCode\": 0,\"TrafficFacilitiesLaneCode\": 0,\"TrafficFacilitiesEdgeCode\": 0,\"AccidentPatternsCode\": 0,\"Lat\": 0.0,\"Lon\": 0.0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"Infodate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "AccKeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseNo": {
+                      "type": "string",
+                      "description": "案件編號",
+                      "nullable": true
+                    },
+                    "NtfSeqNo": {
+                      "type": "integer",
+                      "description": "交通事故主表",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CityKeyID": {
+                      "type": "integer",
+                      "description": "縣市識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CountyID": {
+                      "type": "string",
+                      "description": "縣市代碼",
+                      "nullable": true
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "所屬縣市簡碼",
+                      "nullable": true
+                    },
+                    "TownKeyID": {
+                      "type": "integer",
+                      "description": "鄉縣市區識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VillageKeyID": {
+                      "type": "integer",
+                      "description": "村里識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VillageCode": {
+                      "type": "string",
+                      "description": "里代碼",
+                      "nullable": true
+                    },
+                    "AccdTp": {
+                      "type": "integer",
+                      "description": "事故類(A1、A2...An)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DealWithUnit": {
+                      "type": "string",
+                      "description": "處理單位代碼",
+                      "nullable": true
+                    },
+                    "CaseTimeAD": {
+                      "type": "integer",
+                      "description": "案件時間(西元)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseTime": {
+                      "type": "string",
+                      "description": "案件時間(民國)",
+                      "nullable": true
+                    },
+                    "CaseSite": {
+                      "type": "string",
+                      "description": "發生地點",
+                      "nullable": true
+                    },
+                    "Death": {
+                      "type": "integer",
+                      "description": "死亡人數",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Injured": {
+                      "type": "integer",
+                      "description": "受傷人數(含2~30日內死亡)",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "WeatherCode": {
+                      "type": "integer",
+                      "description": "天氣識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "LightCode": {
+                      "type": "integer",
+                      "description": "光線識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "RoadCategoriesCode": {
+                      "type": "integer",
+                      "description": "道路類別識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SpeedLimit": {
+                      "type": "integer",
+                      "description": "速限",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "RoadTypeCode": {
+                      "type": "integer",
+                      "description": "道路型態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccidentLocationCode": {
+                      "type": "integer",
+                      "description": "事故位置識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementCode": {
+                      "type": "integer",
+                      "description": "路面鋪裝識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementConditionCode": {
+                      "type": "integer",
+                      "description": "路面狀態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "PavementDefectsCode": {
+                      "type": "integer",
+                      "description": "路面缺陷識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ObstaclesCode": {
+                      "type": "integer",
+                      "description": "障礙物視距識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SightDistanceCode": {
+                      "type": "integer",
+                      "description": "視距識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SignalTypeCode": {
+                      "type": "integer",
+                      "description": "號誌種類識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "SignalActionsCode": {
+                      "type": "integer",
+                      "description": "號誌動作識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesCode": {
+                      "type": "integer",
+                      "description": "車道劃分設施-分向設施識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesFastLaneCode": {
+                      "type": "integer",
+                      "description": "快車道或一般車道間識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesLaneCode": {
+                      "type": "integer",
+                      "description": "快慢車道間識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TrafficFacilitiesEdgeCode": {
+                      "type": "integer",
+                      "description": "路面邊線識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccidentPatternsCode": {
+                      "type": "integer",
+                      "description": "事故類型及型態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Lat": {
+                      "type": "number",
+                      "description": "緯度",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "Lon": {
+                      "type": "number",
+                      "description": "經度",
+                      "format": "double",
+                      "nullable": true
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "Infodate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"AccKeyID\",\"CaseNo\",\"NtfSeqNo\",\"CityKeyID\",\"CountyID\",\"CityCode\",\"TownKeyID\",\"VillageKeyID\",\"VillageCode\",\"AccdTp\",\"DealWithUnit\",\"CaseTimeAD\",\"CaseTime\",\"CaseSite\",\"Death\",\"Injured\",\"WeatherCode\",\"LightCode\",\"RoadCategoriesCode\",\"SpeedLimit\",\"RoadTypeCode\",\"AccidentLocationCode\",\"PavementCode\",\"PavementConditionCode\",\"PavementDefectsCode\",\"ObstaclesCode\",\"SightDistanceCode\",\"SignalTypeCode\",\"SignalActionsCode\",\"TrafficFacilitiesCode\",\"TrafficFacilitiesFastLaneCode\",\"TrafficFacilitiesLaneCode\",\"TrafficFacilitiesEdgeCode\",\"AccidentPatternsCode\",\"Lat\",\"Lon\",\"UpdateTime\",\"InfoTime\",\"Infodate\"\n\"0\",\"string\",\"0\",\"0\",\"string\",\"string\",\"0\",\"0\",\"string\",\"0\",\"string\",\"0\",\"string\",\"string\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0.0\",\"0.0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/TrafficAccident/A1T2/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]交通事故資料A1類表二(當事人資料檔)",
+        "description": "提供指定[縣市]事故A1類(造成人員當場或二十四小時內死亡之交通事故)表二資訊",
+        "operationId": "TrafficAccidentA1T2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentT2"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"AccDetailKeyID\": 0,\n    \"AccKeyID\": 0,\n    \"CaseNo\": \"string\",\n    \"PersonNo\": 0,\n    \"GenderCode\": 0,\n    \"Age\": 0,\n    \"CityKeyID\": 0,\n    \"CountyID\": \"string\",\n    \"CityCode\": \"string\",\n    \"InjuredLevelCode\": 0,\n    \"MainInjuredCode\": 0,\n    \"ProtectiveGearCode\": 0,\n    \"CellHaveCode\": 0,\n    \"DistiguishCode\": 0,\n    \"VehicleUsegeCode\": 0,\n    \"ActionStatusCode\": 0,\n    \"DrivingEligibilityCode\": 0,\n    \"LicenseTypeCode\": 0,\n    \"DrinkingCode\": 0,\n    \"ImpactFirstCode\": 0,\n    \"ImpactOtherCode\": 0,\n    \"CauseJudgeCode\": 0,\n    \"CauseReasonCode\": 0,\n    \"HitOutCode\": 0,\n    \"JobCode\": 0,\n    \"TripPurposeCode\": 0,\n    \"UpdateTime\": \"2026-07-27 00:00:02\",\n    \"InfoTime\": \"2026-07-27 00:00:02\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}\n{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "AccDetailKeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccKeyID": {
+                      "type": "integer",
+                      "description": "交通事故案件(Acc)資料表之識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseNo": {
+                      "type": "string",
+                      "description": "案件編號",
+                      "nullable": true
+                    },
+                    "PersonNo": {
+                      "type": "integer",
+                      "description": "當事人序號",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "GenderCode": {
+                      "type": "integer",
+                      "description": "性別識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Age": {
+                      "type": "integer",
+                      "description": "事故當時年齡",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CityKeyID": {
+                      "type": "integer",
+                      "description": "縣市識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CountyID": {
+                      "type": "string",
+                      "description": "縣市代碼",
+                      "nullable": true
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "所屬縣市簡碼",
+                      "nullable": true
+                    },
+                    "InjuredLevelCode": {
+                      "type": "integer",
+                      "description": "受傷程度識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "MainInjuredCode": {
+                      "type": "integer",
+                      "description": "主要傷處識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ProtectiveGearCode": {
+                      "type": "integer",
+                      "description": "保護裝備識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CellHaveCode": {
+                      "type": "integer",
+                      "description": "行動電話持有識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DistiguishCode": {
+                      "type": "integer",
+                      "description": "當事者區分識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VehicleUsegeCode": {
+                      "type": "integer",
+                      "description": "車輛用途識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ActionStatusCode": {
+                      "type": "integer",
+                      "description": "當事者行動狀態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrivingEligibilityCode": {
+                      "type": "integer",
+                      "description": "駕駛資格識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "LicenseTypeCode": {
+                      "type": "integer",
+                      "description": "駕駛執照種類識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrinkingCode": {
+                      "type": "integer",
+                      "description": "飲酒情形識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactFirstCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(最初)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactOtherCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(其他)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseJudgeCode": {
+                      "type": "integer",
+                      "description": "肇因研判",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseReasonCode": {
+                      "type": "integer",
+                      "description": "肇事原因識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "HitOutCode": {
+                      "type": "integer",
+                      "description": "肇事逃逸識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "JobCode": {
+                      "type": "integer",
+                      "description": "職業識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TripPurposeCode": {
+                      "type": "integer",
+                      "description": "旅次目地識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"AccDetailKeyID\",\"AccKeyID\",\"CaseNo\",\"PersonNo\",\"GenderCode\",\"Age\",\"CityKeyID\",\"CountyID\",\"CityCode\",\"InjuredLevelCode\",\"MainInjuredCode\",\"ProtectiveGearCode\",\"CellHaveCode\",\"DistiguishCode\",\"VehicleUsegeCode\",\"ActionStatusCode\",\"DrivingEligibilityCode\",\"LicenseTypeCode\",\"DrinkingCode\",\"ImpactFirstCode\",\"ImpactOtherCode\",\"CauseJudgeCode\",\"CauseReasonCode\",\"HitOutCode\",\"JobCode\",\"TripPurposeCode\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"0\",\"0\",\"string\",\"0\",\"0\",\"0\",\"0\",\"string\",\"string\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/TrafficAccident/A2T2/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]交通事故資料A2類表二(當事人資料檔)",
+        "description": "提供指定[縣市]事故A2類(造成人員受傷或超過二十四小時死亡之交通事故)表二資訊",
+        "operationId": "TrafficAccidentA2T2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentT2"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"AccDetailKeyID\": 0,\n    \"AccKeyID\": 0,\n    \"CaseNo\": \"string\",\n    \"PersonNo\": 0,\n    \"GenderCode\": 0,\n    \"Age\": 0,\n    \"CityKeyID\": 0,\n    \"CountyID\": \"string\",\n    \"CityCode\": \"string\",\n    \"InjuredLevelCode\": 0,\n    \"MainInjuredCode\": 0,\n    \"ProtectiveGearCode\": 0,\n    \"CellHaveCode\": 0,\n    \"DistiguishCode\": 0,\n    \"VehicleUsegeCode\": 0,\n    \"ActionStatusCode\": 0,\n    \"DrivingEligibilityCode\": 0,\n    \"LicenseTypeCode\": 0,\n    \"DrinkingCode\": 0,\n    \"ImpactFirstCode\": 0,\n    \"ImpactOtherCode\": 0,\n    \"CauseJudgeCode\": 0,\n    \"CauseReasonCode\": 0,\n    \"HitOutCode\": 0,\n    \"JobCode\": 0,\n    \"TripPurposeCode\": 0,\n    \"UpdateTime\": \"2026-07-27 00:00:02\",\n    \"InfoTime\": \"2026-07-27 00:00:02\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}\n{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "AccDetailKeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccKeyID": {
+                      "type": "integer",
+                      "description": "交通事故案件(Acc)資料表之識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseNo": {
+                      "type": "string",
+                      "description": "案件編號",
+                      "nullable": true
+                    },
+                    "PersonNo": {
+                      "type": "integer",
+                      "description": "當事人序號",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "GenderCode": {
+                      "type": "integer",
+                      "description": "性別識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Age": {
+                      "type": "integer",
+                      "description": "事故當時年齡",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CityKeyID": {
+                      "type": "integer",
+                      "description": "縣市識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CountyID": {
+                      "type": "string",
+                      "description": "縣市代碼",
+                      "nullable": true
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "所屬縣市簡碼",
+                      "nullable": true
+                    },
+                    "InjuredLevelCode": {
+                      "type": "integer",
+                      "description": "受傷程度識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "MainInjuredCode": {
+                      "type": "integer",
+                      "description": "主要傷處識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ProtectiveGearCode": {
+                      "type": "integer",
+                      "description": "保護裝備識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CellHaveCode": {
+                      "type": "integer",
+                      "description": "行動電話持有識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DistiguishCode": {
+                      "type": "integer",
+                      "description": "當事者區分識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VehicleUsegeCode": {
+                      "type": "integer",
+                      "description": "車輛用途識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ActionStatusCode": {
+                      "type": "integer",
+                      "description": "當事者行動狀態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrivingEligibilityCode": {
+                      "type": "integer",
+                      "description": "駕駛資格識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "LicenseTypeCode": {
+                      "type": "integer",
+                      "description": "駕駛執照種類識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrinkingCode": {
+                      "type": "integer",
+                      "description": "飲酒情形識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactFirstCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(最初)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactOtherCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(其他)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseJudgeCode": {
+                      "type": "integer",
+                      "description": "肇因研判",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseReasonCode": {
+                      "type": "integer",
+                      "description": "肇事原因識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "HitOutCode": {
+                      "type": "integer",
+                      "description": "肇事逃逸識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "JobCode": {
+                      "type": "integer",
+                      "description": "職業識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TripPurposeCode": {
+                      "type": "integer",
+                      "description": "旅次目地識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"AccDetailKeyID\",\"AccKeyID\",\"CaseNo\",\"PersonNo\",\"GenderCode\",\"Age\",\"CityKeyID\",\"CountyID\",\"CityCode\",\"InjuredLevelCode\",\"MainInjuredCode\",\"ProtectiveGearCode\",\"CellHaveCode\",\"DistiguishCode\",\"VehicleUsegeCode\",\"ActionStatusCode\",\"DrivingEligibilityCode\",\"LicenseTypeCode\",\"DrinkingCode\",\"ImpactFirstCode\",\"ImpactOtherCode\",\"CauseJudgeCode\",\"CauseReasonCode\",\"HitOutCode\",\"JobCode\",\"TripPurposeCode\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"0\",\"0\",\"string\",\"0\",\"0\",\"0\",\"0\",\"string\",\"string\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/TrafficAccident/A30T2/{CityCode}/DateFilter/{DateFilter}": {
+      "get": {
+        "tags": [
+          "TrafficAccident"
+        ],
+        "summary": "取得指定[縣市]交通事故資料A30類表二(當事人資料檔)",
+        "description": "提供指定[縣市]事故A30類(造成人員三十日內死亡之交通事故)表二資訊",
+        "operationId": "TrafficAccidentA30T2",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForA30-CityCode"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForA30-DateFilter"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForA30-format"
+          },
+          {
+            "$ref": "#/components/parameters/CityWithDatesQueryAPIForA30-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficAccidentT2"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"AccDetailKeyID\": 0,\n    \"AccKeyID\": 0,\n    \"CaseNo\": \"string\",\n    \"PersonNo\": 0,\n    \"GenderCode\": 0,\n    \"Age\": 0,\n    \"CityKeyID\": 0,\n    \"CountyID\": \"string\",\n    \"CityCode\": \"string\",\n    \"InjuredLevelCode\": 0,\n    \"MainInjuredCode\": 0,\n    \"ProtectiveGearCode\": 0,\n    \"CellHaveCode\": 0,\n    \"DistiguishCode\": 0,\n    \"VehicleUsegeCode\": 0,\n    \"ActionStatusCode\": 0,\n    \"DrivingEligibilityCode\": 0,\n    \"LicenseTypeCode\": 0,\n    \"DrinkingCode\": 0,\n    \"ImpactFirstCode\": 0,\n    \"ImpactOtherCode\": 0,\n    \"CauseJudgeCode\": 0,\n    \"CauseReasonCode\": 0,\n    \"HitOutCode\": 0,\n    \"JobCode\": 0,\n    \"TripPurposeCode\": 0,\n    \"UpdateTime\": \"2026-07-27 00:00:02\",\n    \"InfoTime\": \"2026-07-27 00:00:02\",\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}\n{\"AccDetailKeyID\": 0,\"AccKeyID\": 0,\"CaseNo\":\"string\",\"PersonNo\": 0,\"GenderCode\": 0,\"Age\": 0,\"CityKeyID\": 0,\"CountyID\":\"string\",\"CityCode\":\"string\",\"InjuredLevelCode\": 0,\"MainInjuredCode\": 0,\"ProtectiveGearCode\": 0,\"CellHaveCode\": 0,\"DistiguishCode\": 0,\"VehicleUsegeCode\": 0,\"ActionStatusCode\": 0,\"DrivingEligibilityCode\": 0,\"LicenseTypeCode\": 0,\"DrinkingCode\": 0,\"ImpactFirstCode\": 0,\"ImpactOtherCode\": 0,\"CauseJudgeCode\": 0,\"CauseReasonCode\": 0,\"HitOutCode\": 0,\"JobCode\": 0,\"TripPurposeCode\": 0,\"UpdateTime\":\"2026-07-27 00:00:02\",\"InfoTime\":\"2026-07-27 00:00:02\",\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "AccDetailKeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "AccKeyID": {
+                      "type": "integer",
+                      "description": "交通事故案件(Acc)資料表之識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CaseNo": {
+                      "type": "string",
+                      "description": "案件編號",
+                      "nullable": true
+                    },
+                    "PersonNo": {
+                      "type": "integer",
+                      "description": "當事人序號",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "GenderCode": {
+                      "type": "integer",
+                      "description": "性別識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Age": {
+                      "type": "integer",
+                      "description": "事故當時年齡",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CityKeyID": {
+                      "type": "integer",
+                      "description": "縣市識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CountyID": {
+                      "type": "string",
+                      "description": "縣市代碼",
+                      "nullable": true
+                    },
+                    "CityCode": {
+                      "type": "string",
+                      "description": "所屬縣市簡碼",
+                      "nullable": true
+                    },
+                    "InjuredLevelCode": {
+                      "type": "integer",
+                      "description": "受傷程度識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "MainInjuredCode": {
+                      "type": "integer",
+                      "description": "主要傷處識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ProtectiveGearCode": {
+                      "type": "integer",
+                      "description": "保護裝備識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CellHaveCode": {
+                      "type": "integer",
+                      "description": "行動電話持有識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DistiguishCode": {
+                      "type": "integer",
+                      "description": "當事者區分識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "VehicleUsegeCode": {
+                      "type": "integer",
+                      "description": "車輛用途識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ActionStatusCode": {
+                      "type": "integer",
+                      "description": "當事者行動狀態識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrivingEligibilityCode": {
+                      "type": "integer",
+                      "description": "駕駛資格識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "LicenseTypeCode": {
+                      "type": "integer",
+                      "description": "駕駛執照種類識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DrinkingCode": {
+                      "type": "integer",
+                      "description": "飲酒情形識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactFirstCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(最初)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "ImpactOtherCode": {
+                      "type": "integer",
+                      "description": "車輛撞擊部位(其他)識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseJudgeCode": {
+                      "type": "integer",
+                      "description": "肇因研判",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "CauseReasonCode": {
+                      "type": "integer",
+                      "description": "肇事原因識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "HitOutCode": {
+                      "type": "integer",
+                      "description": "肇事逃逸識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "JobCode": {
+                      "type": "integer",
+                      "description": "職業識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "TripPurposeCode": {
+                      "type": "integer",
+                      "description": "旅次目地識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "UpdateTime": {
+                      "type": "string",
+                      "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoTime": {
+                      "type": "string",
+                      "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+                      "format": "date-time"
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date"
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"AccDetailKeyID\",\"AccKeyID\",\"CaseNo\",\"PersonNo\",\"GenderCode\",\"Age\",\"CityKeyID\",\"CountyID\",\"CityCode\",\"InjuredLevelCode\",\"MainInjuredCode\",\"ProtectiveGearCode\",\"CellHaveCode\",\"DistiguishCode\",\"VehicleUsegeCode\",\"ActionStatusCode\",\"DrivingEligibilityCode\",\"LicenseTypeCode\",\"DrinkingCode\",\"ImpactFirstCode\",\"ImpactOtherCode\",\"CauseJudgeCode\",\"CauseReasonCode\",\"HitOutCode\",\"JobCode\",\"TripPurposeCode\",\"UpdateTime\",\"InfoTime\",\"InfoDate\"\n\"0\",\"0\",\"string\",\"0\",\"0\",\"0\",\"0\",\"string\",\"string\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    },
+    "/v1/AccidentBasic/TrafficEventCode": {
+      "get": {
+        "tags": [
+          "AccidentBasic"
+        ],
+        "summary": "取得事故代碼對應表",
+        "description": "提供建立人識別碼、修改人識別碼、代碼別、代碼、名稱…等資訊",
+        "operationId": "TrafficEventCode",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/NoRestrictAPI-format"
+          },
+          {
+            "$ref": "#/components/parameters/NoRestrictAPI-top"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json, application/stream+json;q=0.7, text/csv;charset=UTF-8;q=0.3": {
+                "schema": {
+                  "$ref": "#/components/schemas/TrafficEventCode"
+                },
+                "examples": {
+                  "JSON": {
+                    "value": "[\n  {\n    \"KeyID\": 0,\n    \"CodeTYPE\": \"string\",\n    \"Code\": \"string\",\n    \"CodeName\": \"string\",\n    \"CodeVar\": 0,\n    \"BuildDateTime\": \"2026-07-27 00:00:02\",\n    \"UpdateDateTime\": \"2026-07-27 00:00:02\",\n    \"BuildUser\": 0,\n    \"UpdateUser\": 0,\n    \"DataStatus\": \"string\",\n    \"DeletedDateTime\": \"2026-07-27 00:00:02\",\n    \"DeletedUser\": 0,\n    \"Seqno\": 0,\n    \"InfoDate\": \"2026-07-27\"\n  }\n]"
+                  },
+                  "JSON Lines": {
+                    "value": "{\"KeyID\": 0,\"CodeTYPE\":\"string\",\"Code\":\"string\",\"CodeName\":\"string\",\"CodeVar\": 0,\"BuildDateTime\":\"2026-07-27 00:00:02\",\"UpdateDateTime\":\"2026-07-27 00:00:02\",\"BuildUser\": 0,\"UpdateUser\": 0,\"DataStatus\":\"string\",\"DeletedDateTime\":\"2026-07-27 00:00:02\",\"DeletedUser\": 0,\"Seqno\": 0,\"InfoDate\":\"2026-07-27\"}\n{\"KeyID\": 0,\"CodeTYPE\":\"string\",\"Code\":\"string\",\"CodeName\":\"string\",\"CodeVar\": 0,\"BuildDateTime\":\"2026-07-27 00:00:02\",\"UpdateDateTime\":\"2026-07-27 00:00:02\",\"BuildUser\": 0,\"UpdateUser\": 0,\"DataStatus\":\"string\",\"DeletedDateTime\":\"2026-07-27 00:00:02\",\"DeletedUser\": 0,\"Seqno\": 0,\"InfoDate\":\"2026-07-27\"}"
+                  }
+                }
+              },
+              "text/csv;charset=UTF-8, application/stream+json;q=0.7, application/json;q=0.3": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "KeyID": {
+                      "type": "integer",
+                      "description": "識別碼",
+                      "format": "int32"
+                    },
+                    "CodeTYPE": {
+                      "type": "string",
+                      "description": "代碼別",
+                      "nullable": true
+                    },
+                    "Code": {
+                      "type": "string",
+                      "description": "代碼",
+                      "nullable": true
+                    },
+                    "CodeName": {
+                      "type": "string",
+                      "description": "名稱",
+                      "nullable": true
+                    },
+                    "CodeVar": {
+                      "type": "integer",
+                      "description": "次分類",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "BuildDateTime": {
+                      "type": "string",
+                      "description": "資料建立(匯入)時間",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "UpdateDateTime": {
+                      "type": "string",
+                      "description": "修改時間",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "BuildUser": {
+                      "type": "integer",
+                      "description": "建立人識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "UpdateUser": {
+                      "type": "integer",
+                      "description": "修改人識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "DataStatus": {
+                      "type": "string",
+                      "description": "N=正常; D=刪除",
+                      "nullable": true
+                    },
+                    "DeletedDateTime": {
+                      "type": "string",
+                      "description": "刪除日期",
+                      "format": "date-time",
+                      "nullable": true
+                    },
+                    "DeletedUser": {
+                      "type": "integer",
+                      "description": "刪除人識別碼",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "Seqno": {
+                      "type": "integer",
+                      "description": "順序",
+                      "format": "int32",
+                      "nullable": true
+                    },
+                    "InfoDate": {
+                      "type": "string",
+                      "description": "資料代表日期(yyyy-MM-dd)",
+                      "format": "date",
+                      "nullable": true
+                    }
+                  }
+                },
+                "examples": {
+                  "CSV": {
+                    "value": "\"KeyID\",\"CodeTYPE\",\"Code\",\"CodeName\",\"CodeVar\",\"BuildDateTime\",\"UpdateDateTime\",\"BuildUser\",\"UpdateUser\",\"DataStatus\",\"DeletedDateTime\",\"DeletedUser\",\"Seqno\",\"InfoDate\"\n\"0\",\"string\",\"string\",\"string\",\"0\",\"2026-07-27 00:00:02\",\"2026-07-27 00:00:02\",\"0\",\"0\",\"string\",\"2026-07-27 00:00:02\",\"0\",\"0\",\"2026-07-27\""
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/GeneralErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "TrafficAccidentRank": {
+        "type": "object",
+        "properties": {
+          "Year": {
+            "type": "integer",
+            "description": "資料年份(西元)",
+            "format": "int32"
+          },
+          "City": {
+            "type": "string",
+            "description": "縣市中文名稱"
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "縣市代碼"
+          },
+          "District": {
+            "type": "string",
+            "description": "行政區中文名稱"
+          },
+          "Rank": {
+            "type": "integer",
+            "description": "排名",
+            "format": "int32"
+          },
+          "RoadName": {
+            "type": "string",
+            "description": "路口名稱"
+          },
+          "Lat": {
+            "type": "number",
+            "description": "路口緯度",
+            "format": "float"
+          },
+          "Lon": {
+            "type": "number",
+            "description": "路口經度",
+            "format": "float"
+          },
+          "AccidentCount": {
+            "type": "integer",
+            "description": "事故件數",
+            "format": "int32"
+          },
+          "A1Count": {
+            "type": "integer",
+            "description": "A1件數",
+            "format": "int32"
+          },
+          "A2Count": {
+            "type": "integer",
+            "description": "A2件數",
+            "format": "int32"
+          },
+          "Updatetime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date"
+          }
+        }
+      },
+      "ErrorModel": {
+        "type": "object",
+        "properties": {
+          "HttpStatusCode": {
+            "type": "integer",
+            "description": "HTTP 狀態碼",
+            "format": "int32"
+          },
+          "HttpStatusType": {
+            "type": "string",
+            "description": "HTTP 狀態類別"
+          },
+          "ErrorMessage": {
+            "type": "string",
+            "description": "錯誤訊息",
+            "nullable": true
+          }
+        }
+      },
+      "TrafficAccidentT1": {
+        "type": "object",
+        "properties": {
+          "AccKeyID": {
+            "type": "integer",
+            "description": "識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CaseNo": {
+            "type": "string",
+            "description": "案件編號",
+            "nullable": true
+          },
+          "NtfSeqNo": {
+            "type": "integer",
+            "description": "交通事故主表",
+            "format": "int32",
+            "nullable": true
+          },
+          "CityKeyID": {
+            "type": "integer",
+            "description": "縣市識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CountyID": {
+            "type": "string",
+            "description": "縣市代碼",
+            "nullable": true
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "所屬縣市簡碼",
+            "nullable": true
+          },
+          "TownKeyID": {
+            "type": "integer",
+            "description": "鄉縣市區識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "VillageKeyID": {
+            "type": "integer",
+            "description": "村里識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "VillageCode": {
+            "type": "string",
+            "description": "里代碼",
+            "nullable": true
+          },
+          "AccdTp": {
+            "type": "integer",
+            "description": "事故類(A1、A2...An)",
+            "format": "int32",
+            "nullable": true
+          },
+          "DealWithUnit": {
+            "type": "string",
+            "description": "處理單位代碼",
+            "nullable": true
+          },
+          "CaseTimeAD": {
+            "type": "integer",
+            "description": "案件時間(西元)",
+            "format": "int32",
+            "nullable": true
+          },
+          "CaseTime": {
+            "type": "string",
+            "description": "案件時間(民國)",
+            "nullable": true
+          },
+          "CaseSite": {
+            "type": "string",
+            "description": "發生地點",
+            "nullable": true
+          },
+          "Death": {
+            "type": "integer",
+            "description": "死亡人數",
+            "format": "int32",
+            "nullable": true
+          },
+          "Injured": {
+            "type": "integer",
+            "description": "受傷人數(含2~30日內死亡)",
+            "format": "int32",
+            "nullable": true
+          },
+          "WeatherCode": {
+            "type": "integer",
+            "description": "天氣識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "LightCode": {
+            "type": "integer",
+            "description": "光線識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "RoadCategoriesCode": {
+            "type": "integer",
+            "description": "道路類別識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "SpeedLimit": {
+            "type": "integer",
+            "description": "速限",
+            "format": "int32",
+            "nullable": true
+          },
+          "RoadTypeCode": {
+            "type": "integer",
+            "description": "道路型態識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "AccidentLocationCode": {
+            "type": "integer",
+            "description": "事故位置識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "PavementCode": {
+            "type": "integer",
+            "description": "路面鋪裝識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "PavementConditionCode": {
+            "type": "integer",
+            "description": "路面狀態識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "PavementDefectsCode": {
+            "type": "integer",
+            "description": "路面缺陷識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "ObstaclesCode": {
+            "type": "integer",
+            "description": "障礙物視距識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "SightDistanceCode": {
+            "type": "integer",
+            "description": "視距識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "SignalTypeCode": {
+            "type": "integer",
+            "description": "號誌種類識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "SignalActionsCode": {
+            "type": "integer",
+            "description": "號誌動作識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrafficFacilitiesCode": {
+            "type": "integer",
+            "description": "車道劃分設施-分向設施識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrafficFacilitiesFastLaneCode": {
+            "type": "integer",
+            "description": "快車道或一般車道間識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrafficFacilitiesLaneCode": {
+            "type": "integer",
+            "description": "快慢車道間識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "TrafficFacilitiesEdgeCode": {
+            "type": "integer",
+            "description": "路面邊線識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "AccidentPatternsCode": {
+            "type": "integer",
+            "description": "事故類型及型態識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "Lat": {
+            "type": "number",
+            "description": "緯度",
+            "format": "double",
+            "nullable": true
+          },
+          "Lon": {
+            "type": "number",
+            "description": "經度",
+            "format": "double",
+            "nullable": true
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time",
+            "nullable": true
+          },
+          "InfoTime": {
+            "type": "string",
+            "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "Infodate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date"
+          }
+        }
+      },
+      "TrafficAccidentT2": {
+        "type": "object",
+        "properties": {
+          "AccDetailKeyID": {
+            "type": "integer",
+            "description": "識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "AccKeyID": {
+            "type": "integer",
+            "description": "交通事故案件(Acc)資料表之識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CaseNo": {
+            "type": "string",
+            "description": "案件編號",
+            "nullable": true
+          },
+          "PersonNo": {
+            "type": "integer",
+            "description": "當事人序號",
+            "format": "int32",
+            "nullable": true
+          },
+          "GenderCode": {
+            "type": "integer",
+            "description": "性別識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "Age": {
+            "type": "integer",
+            "description": "事故當時年齡",
+            "format": "int32",
+            "nullable": true
+          },
+          "CityKeyID": {
+            "type": "integer",
+            "description": "縣市識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CountyID": {
+            "type": "string",
+            "description": "縣市代碼",
+            "nullable": true
+          },
+          "CityCode": {
+            "type": "string",
+            "description": "所屬縣市簡碼",
+            "nullable": true
+          },
+          "InjuredLevelCode": {
+            "type": "integer",
+            "description": "受傷程度識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "MainInjuredCode": {
+            "type": "integer",
+            "description": "主要傷處識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "ProtectiveGearCode": {
+            "type": "integer",
+            "description": "保護裝備識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CellHaveCode": {
+            "type": "integer",
+            "description": "行動電話持有識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "DistiguishCode": {
+            "type": "integer",
+            "description": "當事者區分識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "VehicleUsegeCode": {
+            "type": "integer",
+            "description": "車輛用途識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "ActionStatusCode": {
+            "type": "integer",
+            "description": "當事者行動狀態識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "DrivingEligibilityCode": {
+            "type": "integer",
+            "description": "駕駛資格識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "LicenseTypeCode": {
+            "type": "integer",
+            "description": "駕駛執照種類識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "DrinkingCode": {
+            "type": "integer",
+            "description": "飲酒情形識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "ImpactFirstCode": {
+            "type": "integer",
+            "description": "車輛撞擊部位(最初)識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "ImpactOtherCode": {
+            "type": "integer",
+            "description": "車輛撞擊部位(其他)識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "CauseJudgeCode": {
+            "type": "integer",
+            "description": "肇因研判",
+            "format": "int32",
+            "nullable": true
+          },
+          "CauseReasonCode": {
+            "type": "integer",
+            "description": "肇事原因識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "HitOutCode": {
+            "type": "integer",
+            "description": "肇事逃逸識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "JobCode": {
+            "type": "integer",
+            "description": "職業識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "TripPurposeCode": {
+            "type": "integer",
+            "description": "旅次目地識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "UpdateTime": {
+            "type": "string",
+            "description": "本平台資料更新時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoTime": {
+            "type": "string",
+            "description": "資料代表時間(yyyy-MM-dd HH:mm:ss)",
+            "format": "date-time"
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date"
+          }
+        }
+      },
+      "TrafficEventCode": {
+        "type": "object",
+        "properties": {
+          "KeyID": {
+            "type": "integer",
+            "description": "識別碼",
+            "format": "int32"
+          },
+          "CodeTYPE": {
+            "type": "string",
+            "description": "代碼別",
+            "nullable": true
+          },
+          "Code": {
+            "type": "string",
+            "description": "代碼",
+            "nullable": true
+          },
+          "CodeName": {
+            "type": "string",
+            "description": "名稱",
+            "nullable": true
+          },
+          "CodeVar": {
+            "type": "integer",
+            "description": "次分類",
+            "format": "int32",
+            "nullable": true
+          },
+          "BuildDateTime": {
+            "type": "string",
+            "description": "資料建立(匯入)時間",
+            "format": "date-time",
+            "nullable": true
+          },
+          "UpdateDateTime": {
+            "type": "string",
+            "description": "修改時間",
+            "format": "date-time",
+            "nullable": true
+          },
+          "BuildUser": {
+            "type": "integer",
+            "description": "建立人識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "UpdateUser": {
+            "type": "integer",
+            "description": "修改人識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "DataStatus": {
+            "type": "string",
+            "description": "N=正常; D=刪除",
+            "nullable": true
+          },
+          "DeletedDateTime": {
+            "type": "string",
+            "description": "刪除日期",
+            "format": "date-time",
+            "nullable": true
+          },
+          "DeletedUser": {
+            "type": "integer",
+            "description": "刪除人識別碼",
+            "format": "int32",
+            "nullable": true
+          },
+          "Seqno": {
+            "type": "integer",
+            "description": "順序",
+            "format": "int32",
+            "nullable": true
+          },
+          "InfoDate": {
+            "type": "string",
+            "description": "資料代表日期(yyyy-MM-dd)",
+            "format": "date",
+            "nullable": true
+          }
+        }
+      }
+    },
+    "responses": {
+      "GeneralErrorResponse": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorModel"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "CityWithDatesQueryAPIForRank-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "CityWithDatesQueryAPIForRank-DateFilter": {
+        "name": "DateFilter",
+        "in": "path",
+        "description": "查詢日期參數(年: yyyy);本歷史資料提供範圍為2025年",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "minimum": 2025.0,
+          "pattern": "[0-9]{4}$",
+          "type": "integer",
+          "format": "int32",
+          "example": 2025
+        }
+      },
+      "CityWithDatesQueryAPI-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "CityWithDatesQueryAPI-top": {
+        "name": "$top",
+        "in": "query",
+        "description": "取前幾筆",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maximum": 100.0,
+          "minimum": 1.0,
+          "type": "integer",
+          "format": "int32",
+          "default": 30,
+          "example": 30
+        }
+      },
+      "NoRestrictAPI-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "CityWithDatesQueryAPIForA30-format": {
+        "name": "$format",
+        "in": "query",
+        "description": "指定來源格式",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "json",
+            "jsonl",
+            "csv"
+          ],
+          "type": "string",
+          "default": "json"
+        }
+      },
+      "NoRestrictAPI-top": {
+        "name": "$top",
+        "in": "query",
+        "description": "取前幾筆",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maximum": 100.0,
+          "minimum": 1.0,
+          "type": "integer",
+          "format": "int32",
+          "default": 30,
+          "example": 30
+        }
+      },
+      "CityWithDatesQueryAPIForA30-CityCode": {
+        "name": "CityCode",
+        "in": "path",
+        "description": "縣市簡碼",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "TPE",
+            "NWT",
+            "TAO",
+            "TXG",
+            "TNN",
+            "KHH",
+            "KEE",
+            "HSZ",
+            "HSQ",
+            "MIA",
+            "CHA",
+            "NAN",
+            "YUN",
+            "CYQ",
+            "CYI",
+            "PIF",
+            "ILA",
+            "HUA",
+            "TTT",
+            "PEN",
+            "KIN"
+          ],
+          "type": "string",
+          "default": "TPE"
+        }
+      },
+      "CityWithDatesQueryAPIForRank-CityCode": {
+        "name": "CityCode",
+        "in": "path",
+        "description": "縣市簡碼",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "TPE",
+            "NWT",
+            "TAO",
+            "TXG",
+            "TNN",
+            "KHH",
+            "KEE",
+            "HSZ",
+            "HSQ",
+            "MIA",
+            "CHA",
+            "NAN",
+            "YUN",
+            "CYQ",
+            "CYI",
+            "PIF",
+            "ILA",
+            "HUA",
+            "TTT",
+            "PEN",
+            "KIN",
+            "LIE"
+          ],
+          "type": "string",
+          "default": "TPE"
+        }
+      },
+      "CityWithDatesQueryAPI-DateFilter": {
+        "name": "DateFilter",
+        "in": "path",
+        "description": "查詢日期參數(月: yyyy-MM; 年: yyyy)",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maxLength": 7,
+          "minLength": 4,
+          "pattern": "([0-9]{4}$)|([0-9]{4}(-[01][0-9])$)",
+          "type": "string",
+          "example": "2019-06"
+        }
+      },
+      "CityWithDatesQueryAPIForA30-DateFilter": {
+        "name": "DateFilter",
+        "in": "path",
+        "description": "查詢日期參數(月: yyyy-MM; 年: yyyy);本歷史資料提供範圍為2022年",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maxLength": 7,
+          "minLength": 4,
+          "pattern": "([0-9]{4}$)|([0-9]{4}(-[01][0-9])$)",
+          "type": "string",
+          "example": "2022-01"
+        }
+      },
+      "CityWithDatesQueryAPI-CityCode": {
+        "name": "CityCode",
+        "in": "path",
+        "description": "縣市簡碼",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "enum": [
+            "TPE",
+            "NWT",
+            "TAO",
+            "TXG",
+            "TNN",
+            "KHH",
+            "KEE",
+            "HSZ",
+            "HSQ",
+            "MIA",
+            "CHA",
+            "NAN",
+            "YUN",
+            "CYQ",
+            "CYI",
+            "PIF",
+            "ILA",
+            "HUA",
+            "TTT",
+            "PEN",
+            "KIN",
+            "LIE"
+          ],
+          "type": "string",
+          "default": "TPE"
+        },
+        "x-enum": {
+          "TPE": "臺北市",
+          "NWT": "新北市",
+          "TAO": "桃園市",
+          "TXG": "臺中市",
+          "TNN": "臺南市",
+          "KHH": "高雄市",
+          "KEE": "基隆市",
+          "HSZ": "新竹市",
+          "HSQ": "新竹縣",
+          "MIA": "苗栗縣",
+          "CHA": "彰化縣",
+          "NAN": "南投縣",
+          "YUN": "雲林縣",
+          "CYQ": "嘉義縣",
+          "CYI": "嘉義市",
+          "PIF": "屏東縣",
+          "ILA": "宜蘭縣",
+          "HUA": "花蓮縣",
+          "TTT": "臺東縣",
+          "KIN": "金門縣",
+          "PEN": "澎湖縣",
+          "LIE": "連江縣"
+        }
+      },
+      "CityWithDatesQueryAPIForA30-top": {
+        "name": "$top",
+        "in": "query",
+        "description": "取前幾筆",
+        "required": true,
+        "allowReserved": true,
+        "schema": {
+          "maximum": 100.0,
+          "minimum": 1.0,
+          "type": "integer",
+          "format": "int32",
+          "default": 30,
+          "example": 30
+        }
+      }
+    },
+    "securitySchemes": {
+      "TDX": {
+        "type": "oauth2",
+        "description": "TDX會員可至【會員專區-資料服務-服務金鑰】功能頁面，從預設金鑰(或建立新的金鑰)取得Client Id和Client Secret資訊，分別輸入至下方client_id和client_secret欄位、按下Authorize按鈕，即可開始於Swagger介面呼叫TDX API。",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "https://tdx.transportdata.tw/auth/realms/TDXConnect/protocol/openid-connect/token",
+            "scopes": { }
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "TDX": [ ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "TrafficAccident",
+      "description": "交通事故資料"
+    },
+    {
+      "name": "AccidentBasic",
+      "description": "事故基礎資料"
+    }
+  ]
+}
